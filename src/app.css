@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Special Elite', 'Courier New', Courier, monospace;
+  background-image: url("/ep_naturalwhite.png");
+  background-repeat: repeat;
+}
