@@ -1,26 +1,25 @@
-import type { Job } from '../db';
+import type { Job, JobType } from './db';
 
-export const detective: Job = {
-	name: 'Detective',
-	health: 2
-};
+export const jobHealth: Record<JobType, number> = {
+	"Detective": 2,
+	"Liaison": 2,
+	"Specialist": 3,
+	"Hot Shot": 1,
+	"Sage": 1,
+}
 
-export const liason: Job = {
-	name: 'Liason',
-	health: 2
-};
+const jobFactory = (type: JobType): Job => ({ name: type, health: jobHealth[type] })
 
-export const specialist: Job = {
-	name: 'Specialist',
-	health: 3
-};
+export const detective: Job = jobFactory('Detective');
+export const Liaison: Job = jobFactory('Liaison');
+export const specialist: Job = jobFactory('Specialist');
+export const hotShot: Job = jobFactory('Hot Shot');
+export const sage: Job = jobFactory('Sage');
 
-export const hotShot: Job = {
-	name: 'Hot Shot',
-	health: 1
-};
-
-export const sage: Job = {
-	name: 'Sage',
-	health: 1
-};
+export const jobAbbreviations: Record<JobType, string> = {
+	"Detective": "Det.",
+	"Liaison": "Lias.",
+	"Specialist": "Spec.",
+	"Hot Shot": "Hot",
+	"Sage": "Sage",
+}

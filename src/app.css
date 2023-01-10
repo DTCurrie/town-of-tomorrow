@@ -3,7 +3,11 @@
 @tailwind utilities;
 
 body {
-  font-family: 'Special Elite', 'Courier New', Courier, monospace;
   background-image: url("/ep_naturalwhite.png");
   background-repeat: repeat;
+  font-family: sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Special Elite', 'Courier New', Courier, monospace;
 }

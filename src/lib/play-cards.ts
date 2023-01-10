@@ -1,5 +1,6 @@
-import type { PlayCard } from '../db';
-import { detective, hotShot, liason, sage, specialist } from './jobs';
+import { getColorClass, type Color } from './color';
+import type { Job, PlayCard, PlayCards } from './db';
+import { detective, hotShot, Liaison, sage, specialist } from './jobs';
 
 export const marshal: PlayCard = {
 	name: 'Marshal',
@@ -64,7 +65,7 @@ export const investigator: PlayCard = {
 
 export const researcher: PlayCard = {
 	name: 'Researcher',
-	job: liason,
+	job: Liaison,
 	bonuses: ['Research', 'Field Study', 'A Private Lab'],
 	pitfall: 'You are a by-the-book academic and never want to break the rules.',
 	unlockables: [
@@ -84,7 +85,7 @@ export const researcher: PlayCard = {
 
 export const agent: PlayCard = {
 	name: 'Agent',
-	job: liason,
+	job: Liaison,
 	bonuses: ['Inspection', 'Debate', 'A Standard-Issue Sidearm'],
 	pitfall: 'You put up the “red tape” that slows progress at the Establishment.',
 	unlockables: [
@@ -104,7 +105,7 @@ export const agent: PlayCard = {
 
 export const corporate: PlayCard = {
 	name: 'Corporate',
-	job: liason,
+	job: Liaison,
 	bonuses: ['Negotiation', 'Mediation', 'An Executive Assistant'],
 	pitfall: 'You judge by “who would buy this” instead of “who does this help.”',
 	unlockables: [
@@ -301,7 +302,7 @@ export const politician: PlayCard = {
 	]
 };
 
-export const playCards = [
+export const standardPlayCards = [
 	marshal,
 	intelligence,
 	investigator,
@@ -318,3 +319,31 @@ export const playCards = [
 	proprietor,
 	politician
 ];
+
+export const getOthers = (
+	playCards: PlayCards | undefined,
+	index: number
+): [PlayCard | null, PlayCard | null, PlayCard | null] => {
+	const others = [...(playCards ?? [null, null, null, null])];
+	return others.filter((_, i) => i !== index) as [PlayCard | null, PlayCard | null, PlayCard | null];
+};
+
+export const standardJobColors: Record<string, Color> = {
+	"Detective": 'sky',
+	"Liaison": 'amber',
+	"Specialist": 'emerald',
+	"Hot Shot": 'pink',
+	"Sage": 'violet',
+};
+
+export const getJobColor = (job: string): Color => {
+	if (standardJobColors[job]) {
+		return standardJobColors[job];
+	}
+
+	return 'teal';
+}
+
+export type JobColorShade = '300' | '500' | '700';
+export const getJobColorClass = (setting: string, job: Job, shade: JobColorShade = '500') =>
+	getColorClass(setting, getJobColor(job.name), shade);

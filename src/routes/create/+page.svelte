@@ -1,133 +1,400 @@
 <script lang="ts">
-	import { fly, fade } from 'svelte/transition';
-	import { db, type PlayCard } from '../../db';
-	import PlayCardInput from '../../components/PlayCardInput.svelte';
+	import classNames from 'classnames';
+	import { goto } from '$app/navigation';
+	import {
+		db,
+		type Armor,
+		type Character,
+		type PlayCard,
+		type PlayCards,
+		type Rapport,
+		type Unlockable,
+		type Weapon
+	} from '$lib/db';
+	import PlayCardInput from '$lib/components/PlayCardInput.svelte';
+	import Button from '$lib/components/Button.svelte';
+	import WeaponList from '$lib/components/WeaponList.svelte';
+	import NewWeapon from '$lib/components/NewWeapon.svelte';
+	import ArmorList from '$lib/components/ArmorList.svelte';
+	import NewArmor from '$lib/components/NewArmor.svelte';
+	import { getOthers, standardPlayCards } from '$lib/play-cards';
+	import { log } from '$lib/logs';
+	import DamageInfo from '$lib/components/DamageInfo.svelte';
+	import TextInput from '$lib/components/inputs/TextInput.svelte';
+	import Textarea from '$lib/components/inputs/Textarea.svelte';
+	import Select from '$lib/components/inputs/Select.svelte';
+	import UrlInput from '$lib/components/inputs/UrlInput.svelte';
 
 	let status = '';
-	let hasError = false;
-	let isSuccessVisible = false;
-	let submitted = false;
 
 	let name = '';
 	let description = '';
 	let pitfall = '';
 	let customPitfall = '';
 	let avatar = '';
-	let firstPlayCard: PlayCard | null;
-	let secondPlayCard: PlayCard | null;
-	let thirdPlayCard: PlayCard | null;
 
-	async function addCharacter() {
+	let allPlayCards: PlayCards = [null, null, null, null];
+
+	let unlockable: Unlockable | null;
+
+	let fieldOfStudy: string;
+
+	let ally: Rapport = { name: '', value: 2, overflow: false };
+	let rival: Rapport = { name: '', value: -2, overflow: false };
+
+	let weapons: Weapon[] = [];
+	let armor: Armor[] = [];
+
+	$: selectedCards = allPlayCards.reduce<PlayCard[]>(
+		(array, card) => (card ? [...array, card] : array),
+		[]
+	);
+
+	$: pitfalls = selectedCards.map(({ pitfall }) => [pitfall, pitfall]) as [string, any];
+
+	const handleUnlockable = () => {
+		log('create handleUnlockable', false, { allPlayCards, unlockable });
+		for (const card of allPlayCards) {
+			if (!card) {
+				continue;
+			}
+
+			for (const unlock of card.unlockables) {
+				if (unlock.name === unlockable?.name) {
+					unlockable.unlocked = true;
+					return;
+				}
+			}
+		}
+	};
+
+	const validate = () => {
+		log('create validate', false, {
+			allPlayCards,
+			name,
+			description,
+			pitfall,
+			customPitfall,
+			ally,
+			rival,
+			status
+		});
+
+		if (!allPlayCards.some((card) => !card)) {
+			return (status = 'Select all of your Play Cards in step 1!');
+		}
+
+		if (!name || !description) {
+			return (status = 'Name and describe your Character in step 2!');
+		}
+
+		if (!pitfall) {
+			return (status = 'Select a Pitfall from one of your Play Cards in step 3!');
+		}
+
+		if (!customPitfall) {
+			return (status = 'Create an additional Pitfall in step 4!');
+		}
+
+		if (!ally) {
+			return (status = 'Create an Ally in step 9!');
+		}
+
+		if (!rival) {
+			return (status = 'Create a Rival in step 9!');
+		}
+
+		return (status = '');
+	};
+
+	const addCharacter = async () => {
 		try {
-			// Add the new friend!
-			const id = await db.characters.add({
+			validate();
+
+			if (status) {
+				return;
+			}
+
+			handleUnlockable();
+
+			for (const card of allPlayCards) {
+				if (!card) {
+					continue;
+				}
+
+				card.merits = 0;
+				card.faults = 0;
+			}
+
+			const character: Character = {
+				playCards: allPlayCards,
 				name,
 				description,
 				pitfall,
 				customPitfall,
-				playCards: [firstPlayCard, secondPlayCard, thirdPlayCard, null],
-				createdOn: new Date(Date.now()),
+				rapport: [ally, rival],
+				fieldOfStudy,
+				weapons,
+				armor,
 				avatar,
-				damage: 0
-			});
+				damage: 0,
+				xp: 0,
+				notes: '',
+				createdOn: new Date(Date.now())
+			};
 
-			status = `Character ${name} successfully added`;
+			log('create addCharacter', false, { character });
 
-			// Reset form:
-			name = '';
-			description = '';
-			pitfall = '';
-			customPitfall = '';
-			avatar = '';
+			// Add the new character
+			const id = await db.characters.add(character);
 
-			firstPlayCard = null;
-			secondPlayCard = null;
-			thirdPlayCard = null;
+			goto(`/characters/${id}`);
 		} catch (error) {
 			status = `Failed to add ${name}: ${error}`;
 		}
-	}
-
-	let firstOthers: [PlayCard | null, PlayCard | null];
-	let secondOthers: [PlayCard | null, PlayCard | null];
-	let thirdOthers: [PlayCard | null, PlayCard | null];
-
-	let pitfalls: string[] = [];
-
-	$: {
-		firstOthers = [secondPlayCard, thirdPlayCard];
-		secondOthers = [firstPlayCard, thirdPlayCard];
-		thirdOthers = [firstPlayCard, secondPlayCard];
-
-		pitfalls = [firstPlayCard, secondPlayCard, thirdPlayCard]
-			.filter((card) => card !== null)
-			.map((card, index) => card?.pitfall ?? `Select Play Card ${index + 1}`);
-	}
+	};
 </script>
 
 <h1 class="text-2xl font-bold">Make a Character</h1>
 <p>Follow these steps to create your Character.</p>
-<fieldset class="mt-2">
-	<legend><h2 class="text-xl">1. Pick Your Play Cards</h2></legend>
 
-	<div class="flex flex-col lg:flex-row gap-2">
-		<PlayCardInput slot="1" bind:playCard={firstPlayCard} bind:others={firstOthers} />
-		<PlayCardInput slot="2" bind:playCard={secondPlayCard} bind:others={secondOthers} />
-		<PlayCardInput slot="3" bind:playCard={thirdPlayCard} bind:others={thirdOthers} />
-	</div>
-</fieldset>
-<fieldset class="mt-2">
-	<legend><h2 class="text-xl">2. Name and Describe Your Character</h2></legend>
+<form on:submit={addCharacter}>
+	<fieldset class="mt-2">
+		<legend><h2 class="text-xl">1. Pick Your Play Cards</h2></legend>
 
-	<div class="flex flex-col lg:flex-row gap-2 items-center">
-		<label class="flex p-2 w-1/3">
-			Name:
-			<input type="text" class="border ml-2 grow" bind:value={name} maxlength="30" />
-		</label>
-		<label class="flex p-2 w-2/3 items-center">
-			Description:
-			<textarea class="border ml-2 grow" bind:value={description} maxlength="240" />
-		</label>
-	</div>
-</fieldset>
-<fieldset class="mt-2">
-	<legend><h2 class="text-xl">3. Choose a Pitfall</h2></legend>
-
-	<label>
-		Pitfall:
-		<select
-			bind:value={pitfall}
-			class="block w-full p-1 bg-white border border-black rounded-none text-sm focus:ring-black focus:border-black"
-		>
-			<option value={''}>Select a Pitfall</option>
-			{#each pitfalls as option}
-				<option value={option}>{option}</option>
-			{/each}
-		</select>
-	</label>
-</fieldset>
-<fieldset class="mt-2">
-	<label class="flex p-2 w-full items-center">
-		Custom Pitfall:
-		<textarea class="border ml-2 grow" bind:value={customPitfall} maxlength="240" />
-	</label>
-	<label>
-		Avatar:
-		<p class="text-sm text-gray-500">
-			This must be a URL to the image, the image will not be hosted here
+		<p class="text-sm my-1">
+			Pick three Play Cards to use, choosing from the available ones or working with the Director to
+			create your own.
 		</p>
-		<input type="url" bind:value={avatar} />
 
-		{#if avatar}
-			<img
-				alt="avatar preview"
-				class="w-20 h-20 object-cover rounded-full border-2 border-indigo-500"
-				src={avatar}
+		<div class="flex flex-col lg:flex-row gap-2">
+			<PlayCardInput
+				playCard={allPlayCards[0]}
+				others={getOthers(allPlayCards, 0)}
+				on:select={({ detail }) => (allPlayCards[0] = detail)}
 			/>
+			<PlayCardInput
+				playCard={allPlayCards[1]}
+				others={getOthers(allPlayCards, 1)}
+				on:select={({ detail }) => (allPlayCards[1] = detail)}
+			/>
+			<PlayCardInput
+				playCard={allPlayCards[2]}
+				others={getOthers(allPlayCards, 2)}
+				on:select={({ detail }) => (allPlayCards[2] = detail)}
+			/>
+		</div>
+	</fieldset>
+
+	<fieldset class="mt-2">
+		<legend><h2 class="text-xl">2. Name and Describe Your Character</h2></legend>
+
+		<p class="text-sm my-1">
+			Name your Character, and share it with the Group. You should think of some distinct
+			characteristics to tell them apart from other people. Maybe it’s something about their
+			appearance, the clothes they wear, or how they carry themselves.
+		</p>
+
+		<div class="flex flex-col lg:flex-row gap-2 items-center">
+			<!-- svelte-ignore a11y-label-has-associated-control -->
+			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/3">
+				Name:
+				<TextInput
+					type="text"
+					class="w-full border border-black text-sm grow lg:ml-2"
+					bind:value={name}
+					maxlength="25"
+					required
+				/>
+			</label>
+			<!-- svelte-ignore a11y-label-has-associated-control -->
+			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-2/3 ">
+				Description:
+				<Textarea bind:value={description} maxlength="240" />
+			</label>
+		</div>
+	</fieldset>
+
+	<fieldset class="mt-2">
+		<legend><h2 class="text-xl">3. Choose a Pitfall</h2></legend>
+
+		<p class="text-sm my-1">
+			Each Play Card comes with a Pitfall. Choose one to use for your Character.
+		</p>
+
+		<!-- svelte-ignore a11y-label-has-associated-control -->
+		<label>
+			Pitfall:
+			<Select bind:value={pitfall} placeholder="Select a Pitfall" options={pitfalls} required />
+		</label>
+	</fieldset>
+
+	<fieldset class="mt-2">
+		<legend><h2 class="text-xl">4. Create an Additional Pitfall</h2></legend>
+
+		<p class="text-sm my-1">
+			Write another Pitfall for your Character. Don’t overthink it; even a simple flaw can present
+			itself in many ways. Write it in the second person, for example:”You tend to get lost in your
+			own thoughts leading you to make careless mistakes.”
+		</p>
+
+		<!-- svelte-ignore a11y-label-has-associated-control -->
+		<label class="flex flex-col w-full">
+			Custom Pitfall:
+			<Textarea classes="lg:ml-2" bind:value={customPitfall} maxlength="240" required />
+		</label>
+	</fieldset>
+
+	<fieldset class="mt-2">
+		<legend><h2 class="text-xl">5. Determine Your Health</h2></legend>
+
+		<p class="text-sm my-1">
+			Your Character has a Health to the total of their Play Card’s Health. Add the Health from all
+			of your Play Cards and mark that as your Character’s Health by drawing a vertical line after
+			the corresponding checkbox on your Character Sheet. If you exceed this line, your Character is
+			in serious trouble.
+		</p>
+
+		<DamageInfo playCards={allPlayCards} />
+	</fieldset>
+
+	<fieldset class="mt-2">
+		<legend><h2 class="text-xl">6. Choose An Unlockable</h2></legend>
+
+		<p class="text-sm my-1">Select one Unlockable from one of your Play Cards to start.</p>
+
+		<div class="w-full flex flex-row gap-1 mt-4">
+			<ul class="list-none">
+				{#each selectedCards as card}
+					{#each card.unlockables as option}
+						<li>
+							<label>
+								<input
+									type="radio"
+									name="unlockable"
+									bind:group={unlockable}
+									value={option}
+									required
+								/>
+								<span class="font-bold">{option.name}</span>
+							</label>
+							<p class="pl-4 text-sm">
+								{option.description}
+							</p>
+						</li>
+					{/each}
+				{/each}
+			</ul>
+		</div>
+	</fieldset>
+
+	<fieldset class="mt-2">
+		<legend><h2 class="text-xl">7. Establish Rapport</h2></legend>
+
+		<p class="text-sm my-1">
+			At the start of the game, each Player will assign the following Rapport stat scores that their
+			Character has toward the other Characters:
+		</p>
+
+		<ul class="list-disc pl-8 text-sm">
+			<li>+2 for the one they know best.</li>
+			<li>-1 for the one they know least.</li>
+			<li>+1 for all others.</li>
+		</ul>
+
+		<p class="font-bold text-sm pt-1">
+			You can update your Rapport after you save your Character Sheet
+		</p>
+	</fieldset>
+
+	<fieldset class="mt-2">
+		<legend><h2 class="text-xl">8. Pick an Optional Field of Study</h2></legend>
+
+		<p class="text-sm my-1">
+			If your Character is or was a scientist, decide what their field of study is or if they have
+			multiple.
+		</p>
+
+		<!-- svelte-ignore a11y-label-has-associated-control -->
+		<label class="flex flex-col lg:flex-row p-2 w-full lg:items-center lg:w-1/3">
+			Field of Study:
+			<TextInput bind:value={fieldOfStudy} maxlength="25" />
+		</label>
+	</fieldset>
+
+	<fieldset class="mt-2">
+		<legend><h2 class="text-xl">9. Create Ally and Rival NPCs</h2></legend>
+
+		<p class="text-sm my-1">
+			Your Character should be a member of the Town’s community and have established relationships.
+			Create an ally NPC, then create a rival NPC. Think about who the NPC is, what role they play
+			in the Town, and your history with him.
+		</p>
+
+		<div class="flex flex-col lg:flex-row gap-2 items-center">
+			<!-- svelte-ignore a11y-label-has-associated-control -->
+			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
+				Ally:
+				<TextInput bind:value={ally.name} maxlength="25" required />
+			</label>
+			<!-- svelte-ignore a11y-label-has-associated-control -->
+			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
+				Rival:
+				<TextInput bind:value={rival.name} maxlength="25" required />
+			</label>
+		</div>
+	</fieldset>
+
+	<fieldset class="mt-2">
+		<legend><h2 class="text-xl">10. Pick Some Starting Gear</h2></legend>
+
+		<p class="text-sm my-1">
+			At the start of the game, determine what kind of gear your Character may carry on them. Decide
+			with the Director if they have any particular effect, and consider creating a custom Move for
+			them when applicable.
+		</p>
+
+		<h3 class="text-lg">Weapons:</h3>
+
+		<WeaponList bind:weapons />
+		<NewWeapon
+			on:create={(event) => {
+				weapons = [...weapons, event.detail];
+			}}
+		/>
+
+		<h3 class="text-lg">Armor:</h3>
+
+		<ArmorList bind:armor />
+		<NewArmor
+			on:create={(event) => {
+				armor = [...armor, event.detail];
+			}}
+		/>
+	</fieldset>
+	<fieldset class="mt-2">
+		<legend><h2 class="text-xl">11. Add an Optional Character Avatar</h2></legend>
+
+		<p class="text-sm my-1">
+			This must be an URL to the image. The image will <em>not</em> be hosted here.
+		</p>
+
+		<!-- svelte-ignore a11y-label-has-associated-control -->
+		<label>
+			Avatar:
+			<UrlInput bind:value={avatar} />
+
+			{#if avatar}
+				<img alt="avatar preview" class="w-20 h-20 object-cover rounded-full" src={avatar} />
+			{/if}
+		</label>
+	</fieldset>
+	<div class="flex flex-col w-full mt-8">
+		{#if status}
+			<p class="bg-red-700 text-white p-2 mb-2">{status}</p>
 		{/if}
-	</label>
-	<button on:click={addCharacter}>Add Character</button>
-	{#if status}
-		<p>{status}</p>
-	{/if}
-</fieldset>
+		<Button type="submit" classes="w-64 ml-auto" color="lime" on:click={addCharacter}
+			>Save Character Sheet</Button
+		>
+	</div>
+</form>
