@@ -3,6 +3,9 @@ module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
     extend: {
+      backgroundImage: {
+        'pattern': "url('/ep_naturalwhite.png')"
+      },
       fontFamily: {
         'display': "'Special Elite', 'Courier New', Courier, monospace",
       }

@@ -2,14 +2,30 @@
 	import Button from '$lib/components/Button.svelte';
 	import PlayCardInfo from '$lib/components/PlayCardInfo.svelte';
 	import PlayCardInput from '$lib/components/PlayCardInput.svelte';
-	import type { Character, Fault, Merit, PlayCard, PlayCards, Unlockable } from '$lib/db';
+	import type {
+		Character,
+		Fault,
+		Merit,
+		PlayCard,
+		PlayCardIndex,
+		PlayCards,
+		Unlockable
+	} from '$lib/db';
 	import { getOthers } from '$lib/play-cards';
 
 	export let character: Character;
 
 	export let setUnlocked: (character: Character, unlock: Unlockable) => Promise<void>;
-	export let setMerits: (character: Character, index: number, merits: Merit) => Promise<void>;
-	export let setFaults: (character: Character, index: number, faults: Fault) => Promise<void>;
+	export let setMerits: (
+		character: Character,
+		index: PlayCardIndex,
+		merits: Merit
+	) => Promise<void>;
+	export let setFaults: (
+		character: Character,
+		index: PlayCardIndex,
+		faults: Fault
+	) => Promise<void>;
 	export let removePlayCard: (character: Character, playCardName: string) => Promise<void>;
 
 	export let addPlayCard: (
@@ -20,6 +36,8 @@
 
 	let addingPlayCard = [false, false, false, false];
 	let playCardsToAdd: PlayCards = [null, null, null, null];
+
+	let getIndex = (i: number): PlayCardIndex => i as PlayCardIndex;
 </script>
 
 <h2 class="text-xl mt-2">Play Cards:</h2>
@@ -35,13 +53,12 @@
 				showFaults
 				showRemove
 				on:unlock={({ detail }) => setUnlocked(character, detail)}
-				on:set-merits={({ detail }) => setMerits(character, i, detail)}
-				on:set-faults={({ detail }) => setFaults(character, i, detail)}
+				on:set-merits={({ detail }) => setMerits(character, getIndex(i), detail)}
+				on:set-faults={({ detail }) => setFaults(character, getIndex(i), detail)}
 				on:remove-play-card={({ detail }) => removePlayCard(character, detail)}
 			/>
 		{:else if addingPlayCard[i]}
 			<PlayCardInput
-				position={`${i}`}
 				others={getOthers(character.playCards, i)}
 				{playCard}
 				on:select={(event) => (playCardsToAdd[i] = event.detail)}

@@ -88,13 +88,14 @@
 		</ul>
 	</div>
 
-	<div class="mt-auto w-full border-t-4">
-		<div
-			class={classNames(
-				'flex flex-row justify-evenly p-1 pt-0',
-				getJobColorClass('border', playCard.job)
-			)}
-		>
+	<div
+		class={classNames(
+			'mt-auto w-full',
+			(showMerits || showFaults || showRemove) &&
+				playCard && ['border-t-4', getJobColorClass('border', playCard.job)]
+		)}
+	>
+		<div class="flex flex-row justify-evenly p-1 pt-0">
 			{#if showMerits}
 				<Merits merits={playCard.merits ?? 0} on:set-merits={({ detail }) => setMerits(detail)} />
 			{/if}

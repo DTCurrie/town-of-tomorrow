@@ -42,7 +42,7 @@
 
 <div class="flex flex-col">
 	<button
-		class="flex w-full p-1 justify-between underline"
+		class="flex w-full justify-between underline"
 		on:click|preventDefault={() => (expanded = !expanded)}
 	>
 		New Weapon: <span
@@ -56,45 +56,43 @@
 
 	<div
 		class={classNames(
-			'flex flex-col w-full p-1 transition-all duration-[250ms] ease-out overflow-hidden',
+			'flex flex-col gap-1 lg:gap-2 w-full transition-all duration-[250ms] ease-out overflow-hidden',
 			{
-				'h-[344px] lg:h-36': expanded,
-				'h-0': !expanded
+				'h-[344px] lg:h-40 py-1': expanded,
+				'h-0 p-0': !expanded
 			}
 		)}
 	>
-		<div class="flex flex-col lg:flex-row gap-1 items-center">
+		<div class="flex flex-col lg:flex-row gap-1 lg:gap-2 items-center">
 			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/3">
+			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
 				Name:
-				<TextInput bind:value={newWeaponName} maxlength="25" />
+				<TextInput bind:value={newWeaponName} classes="lg:ml-2" maxlength="25" />
 			</label>
 
 			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/3">
+			<label class="flex flex-col lg:flex-row lg:shrink-0 lg:items-center lg:w-24">
 				Rating:
-				<NumberInput
-					type="number"
-					class="w-full border border-black p-1 text-sm grow lg:ml-2"
-					bind:value={newWeaponRating}
-					min="0"
-					max="6"
+				<NumberInput type="number" bind:value={newWeaponRating} classes="lg:ml-2" min="0" max="6" />
+			</label>
+
+			<!-- svelte-ignore a11y-label-has-associated-control -->
+			<label class="flex flex-col lg:flex-row lg:items-center w-72">
+				Type:
+				<Select
+					bind:value={newWeaponType}
+					classes="lg:ml-2"
+					options={weaponTypes.map((key) => [key, key])}
 				/>
 			</label>
-
-			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/3">
-				Type:
-				<Select bind:value={newWeaponType} options={weaponTypes.map((key) => [key, key])} />
-			</label>
-
-			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<label class="flex flex-col lg:flex-row w-full lg:items-center">
-				Description:
-				<Textarea bind:value={newWeaponDescription} maxlength="240" />
-			</label>
-
-			<Button classes="w-32 ml-auto mt-1" color="lime" on:click={addWeapon}>Add Weapon</Button>
 		</div>
+
+		<!-- svelte-ignore a11y-label-has-associated-control -->
+		<label class="flex flex-col lg:flex-row w-full lg:items-center">
+			Description:
+			<Textarea bind:value={newWeaponDescription} classes="lg:ml-2" maxlength="240" />
+		</label>
+
+		<Button classes="w-32 ml-auto" color="lime" on:click={addWeapon}>Add Weapon</Button>
 	</div>
 </div>

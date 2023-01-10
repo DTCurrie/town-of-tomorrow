@@ -21,12 +21,13 @@
 	}) as Observable<Character[]>;
 </script>
 
-<div class="flex flex-row w-full h-full overflow-hidden">
+<div class="relative flex flex-row w-full h-full overflow-hidden">
+	<div class="absolute bg-pattern bg-repeat w-full h-full z-0 opacity-50" />
 	<div class="fixed h-screen flex flex-col flex-shrink-0 flex-grow antialiased z-50">
 		<div
 			id="sidebar"
 			class={classnames(
-				'flex flex-col top-0 left-0 w-auto lg:w-64 bg-white lg:bg-opacity-20 h-full border-r shadow-xl transition-all duration-[250ms] ease-out',
+				'flex flex-col top-0 left-0 w-auto lg:w-64 bg-pattern h-full border-r shadow-lg shadow-slate-400 transition-all duration-[250ms] ease-out',
 				{
 					'max-md:w-64': expanded
 				}
@@ -34,7 +35,7 @@
 			aria-expanded={expanded ? 'true' : false}
 		>
 			<div class="overflow-y-auto overflow-x-hidden flex-grow">
-				<ul class="flex flex-col gap-1">
+				<ul class="flex flex-col gap-1 py-2 lg:py-4">
 					<li class="lg:hidden">
 						<button
 							class="relative flex flex-row items-center px-2 lg:px-4 h-11 border-l-4 border-transparent hover:border-gray-800"
@@ -177,7 +178,7 @@
 			</div>
 		</div>
 	</div>
-	<main class="flex flex-col w-full p-2 lg:p-4 pl-[4.75rem] lg:pl-[17rem]">
+	<main class="flex flex-col w-full p-2 lg:p-4 pl-[4.75rem] lg:pl-[17rem] z-10">
 		<slot />
 	</main>
 </div>

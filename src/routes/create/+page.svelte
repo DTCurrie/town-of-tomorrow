@@ -195,20 +195,14 @@
 			appearance, the clothes they wear, or how they carry themselves.
 		</p>
 
-		<div class="flex flex-col lg:flex-row gap-2 items-center">
+		<div class="flex flex-col gap-2">
 			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/3">
+			<label class="flex flex-col lg:flex-row w-full items-center lg:w-1/2">
 				Name:
-				<TextInput
-					type="text"
-					class="w-full border border-black text-sm grow lg:ml-2"
-					bind:value={name}
-					maxlength="25"
-					required
-				/>
+				<TextInput type="text" bind:value={name} classes="lg:ml-2" maxlength="25" required />
 			</label>
 			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-2/3 ">
+			<label class="flex flex-col w-full  ">
 				Description:
 				<Textarea bind:value={description} maxlength="240" />
 			</label>
@@ -241,7 +235,7 @@
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label class="flex flex-col w-full">
 			Custom Pitfall:
-			<Textarea classes="lg:ml-2" bind:value={customPitfall} maxlength="240" required />
+			<Textarea bind:value={customPitfall} maxlength="240" required />
 		</label>
 	</fieldset>
 
@@ -316,8 +310,8 @@
 		</p>
 
 		<!-- svelte-ignore a11y-label-has-associated-control -->
-		<label class="flex flex-col lg:flex-row p-2 w-full lg:items-center lg:w-1/3">
-			Field of Study:
+		<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
+			<p class="w-36">Field of Study:</p>
 			<TextInput bind:value={fieldOfStudy} maxlength="25" />
 		</label>
 	</fieldset>
@@ -335,12 +329,12 @@
 			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
 				Ally:
-				<TextInput bind:value={ally.name} maxlength="25" required />
+				<TextInput bind:value={ally.name} classes="lg:ml-2" maxlength="25" required />
 			</label>
 			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
 				Rival:
-				<TextInput bind:value={rival.name} maxlength="25" required />
+				<TextInput bind:value={rival.name} classes="lg:ml-2" maxlength="25" required />
 			</label>
 		</div>
 	</fieldset>

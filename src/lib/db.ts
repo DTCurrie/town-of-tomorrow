@@ -1,11 +1,6 @@
 import Dexie, { type Table } from 'dexie';
 
-export type JobType =
-	"Detective" |
-	"Liaison" |
-	"Specialist" |
-	"Hot Shot" |
-	"Sage";
+export type JobType = 'Detective' | 'Liaison' | 'Specialist' | 'Hot Shot' | 'Sage';
 
 export interface Job {
 	name: JobType;
@@ -33,7 +28,9 @@ export interface PlayCard {
 	faults?: Fault;
 }
 
-export type PlayCards = [PlayCard | null, PlayCard | null, PlayCard | null, PlayCard | null];
+export type PlayCardIndex = 0 | 1 | 2 | 3;
+export type PlayCards = [PlayCard | null, PlayCard | null, PlayCard | null, PlayCard | null] &
+	Record<PlayCardIndex, PlayCard | null>;
 
 export type RapportValue = -3 | -2 | -1 | 0 | 1 | 2 | 3;
 export interface Rapport {
@@ -48,7 +45,7 @@ export interface Gear {
 	description: string;
 }
 
-export type WeaponType = 'Unarmed' | 'Light' | 'Medium' | 'Heavy'
+export type WeaponType = 'Unarmed' | 'Light' | 'Medium' | 'Heavy';
 export const weaponTypes = ['Unarmed', 'Light', 'Medium', 'Heavy'];
 
 export interface Weapon extends Gear {

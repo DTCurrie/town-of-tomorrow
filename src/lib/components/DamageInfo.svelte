@@ -37,7 +37,7 @@
 <div>
 	<p class="font-bold">Damage:</p>
 	<div class="w-full flex flex-col md:flex-row gap-1 mt-2">
-		<div class="flex flex-rol w-full gap-1">
+		<div class="flex flex-row gap-1">
 			{#each healthBoxes() as box}
 				<input
 					type="checkbox"
