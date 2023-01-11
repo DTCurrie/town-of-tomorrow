@@ -2,6 +2,10 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { Weapon } from '../db';
 	import Button from './Button.svelte';
+	import NumberInput from './inputs/NumberInput.svelte';
+	import Select from './inputs/Select.svelte';
+	import Textarea from './inputs/Textarea.svelte';
+	import TextInput from './inputs/TextInput.svelte';
 	import WeaponInfo from './WeaponInfo.svelte';
 
 	export let weapons: Weapon[];
@@ -46,56 +50,43 @@
 	};
 </script>
 
-<ul class="grid grid-cols-1 lg:grid-cols-3 gap-2">
+<ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
 	{#each weapons as weapon, i}
 		<li class="flex flex-col bg-white items-start rounded-lg shadow-lg">
 			{#if editing === i}
 				<div class="flex flex-col gap-0.5 w-full items-center p-2">
+					<!-- svelte-ignore a11y-label-has-associated-control -->
 					<label class="w-full">
 						<span class="absolute w-[1px] h-[1px] transparent z-0 text-[0px]"> Name:</span>
-						<input
-							type="text"
-							class="w-full border border-black p-1 text-sm grow"
-							value={weaponName}
-							maxlength="25"
-							placeholder="Name"
-							on:input={() => (weaponName = weaponName.trim())}
-						/>
+						<TextInput bind:value={weaponName} maxlength="25" placeholder="Name" required />
 					</label>
 					<div class="grid grid-cols-2 w-full gap-0.5">
+						<!-- svelte-ignore a11y-label-has-associated-control -->
 						<label class="w-full">
 							<span class="absolute w-[1px] h-[1px] transparent z-0 text-[0px]">Rating:</span>
-							<input
-								type="number"
-								class="w-full border border-black p-1 text-sm grow"
+							<NumberInput
 								bind:value={weaponRating}
 								min="0"
 								max="6"
 								placeholder="Rating"
+								required
 							/>
 						</label>
+						<!-- svelte-ignore a11y-label-has-associated-control -->
 						<label class="w-full">
 							<span class="absolute w-[1px] h-[1px] transparent z-0 text-[0px]">Type:</span>
-							<select
+							<Select
 								bind:value={weaponType}
-								class="block w-full p-1 h-[30px] lg:items-center bg-white border border-black rounded-none text-sm focus:ring-black focus:border-black"
-							>
-								<option value="Unarmed">Unarmed</option>
-								<option value="Light">Light</option>
-								<option value="Medium">Medium</option>
-								<option value="Heavy">Heavy</option>
-							</select>
+								options={['Unarmed', 'Light', 'Medium', 'Heavy'].map((key) => [key, key])}
+								placeholder={null}
+								required
+							/>
 						</label>
 					</div>
+					<!-- svelte-ignore a11y-label-has-associated-control -->
 					<label class="w-full">
 						<span class="absolute w-[1px] h-[1px] transparent z-0 text-[0px]">Description:</span>
-						<textarea
-							class="w-full h-[86px] lg:h-[151px] border border-black p-1 text-sm grow"
-							bind:value={weaponDescription}
-							maxlength="240"
-							placeholder="Description"
-							on:change={() => weaponDescription}
-						/>
+						<Textarea bind:value={weaponDescription} maxlength="240" placeholder="Description" />
 					</label>
 					<div class="grid grid-cols-2 gap-0.5 ml-auto mt-auto">
 						<Button classes="w-20 ml-auto" color="rose" on:click={() => resetNewWeapon()}>

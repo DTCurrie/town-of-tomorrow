@@ -28,7 +28,7 @@
 
 <div
 	class={classNames(
-		'flex flex-col p-2 gap-0.5 w-full border-4 rounded-lg shadow-lg',
+		'flex flex-col w-full border-4 rounded-lg shadow-lg',
 		getJobColorClass('border', playCard.job),
 		classes
 	)}
@@ -44,11 +44,11 @@
 		</p>
 	{/if}
 
-	<p class="text-gray-700 font-display">
+	<p class="text-gray-700 font-display font-bold text-sm px-2 pt-2">
 		{playCard.job.name} (+{playCard.job.health} Health)
 	</p>
 
-	<div>
+	<div class="px-2">
 		<p class="font-bold">Bonuses:</p>
 		<ul class="list-disc pl-8">
 			{#each playCard.bonuses as bonus}
@@ -57,12 +57,12 @@
 		</ul>
 	</div>
 
-	<p>
+	<p class="px-2">
 		<span class="font-bold">Pitfall:</span>
 		{playCard.pitfall}
 	</p>
 
-	<div>
+	<div class="px-2 pb-2">
 		<p class="font-bold">Unlockables:</p>
 		<ul class={classNames({ 'list-disc pl-8': !showUnlocked })}>
 			{#each playCard.unlockables as unlockable}
@@ -95,7 +95,7 @@
 				playCard && ['border-t-4', getJobColorClass('border', playCard.job)]
 		)}
 	>
-		<div class="flex flex-row justify-evenly p-1 pt-0">
+		<div class="flex flex-row flex-wrap w-full justify-evenly px-2 pt-0">
 			{#if showMerits}
 				<Merits merits={playCard.merits ?? 0} on:set-merits={({ detail }) => setMerits(detail)} />
 			{/if}
@@ -105,7 +105,7 @@
 		</div>
 
 		{#if showRemove}
-			<div class="flex flex-row w-full p-2">
+			<div class="flex flex-row w-full px-2 pb-2 mt-2">
 				{#if removing}
 					<Button color="cyan" classes="w-20 ml-auto" on:click={() => (removing = false)}>
 						Cancel

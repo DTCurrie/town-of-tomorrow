@@ -348,7 +348,7 @@
 			them when applicable.
 		</p>
 
-		<h3 class="text-lg">Weapons:</h3>
+		<h3 class="text-lg mt-2">Weapons:</h3>
 
 		<WeaponList bind:weapons />
 		<NewWeapon
@@ -357,7 +357,7 @@
 			}}
 		/>
 
-		<h3 class="text-lg">Armor:</h3>
+		<h3 class="text-lg mt-2">Armor:</h3>
 
 		<ArmorList bind:armor />
 		<NewArmor
@@ -383,7 +383,7 @@
 			{/if}
 		</label>
 	</fieldset>
-	<div class="flex flex-col w-full mt-8">
+	<div class="flex flex-col w-full mt-4">
 		{#if status}
 			<p class="bg-red-700 text-white p-2 mb-2">{status}</p>
 		{/if}

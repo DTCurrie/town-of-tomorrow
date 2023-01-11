@@ -16,16 +16,19 @@
 	export let character: Character;
 
 	export let setUnlocked: (character: Character, unlock: Unlockable) => Promise<void>;
+
 	export let setMerits: (
 		character: Character,
 		index: PlayCardIndex,
 		merits: Merit
 	) => Promise<void>;
+
 	export let setFaults: (
 		character: Character,
 		index: PlayCardIndex,
 		faults: Fault
 	) => Promise<void>;
+
 	export let removePlayCard: (character: Character, playCardName: string) => Promise<void>;
 
 	export let addPlayCard: (

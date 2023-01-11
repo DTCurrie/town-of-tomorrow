@@ -4,7 +4,7 @@
 	export let value: any;
 	export let options: [string, any][];
 	export let classes = '';
-	export let placeholder = 'Select an Option';
+	export let placeholder: string | null = 'Select an Option';
 </script>
 
 <select
@@ -15,7 +15,9 @@
 	)}
 	{...$$restProps}
 >
-	<option value={''}>{placeholder}</option>
+	{#if placeholder}
+		<option value={''}>{placeholder}</option>
+	{/if}
 	{#each options as [key, value]}
 		<option {value}>{key}</option>
 	{/each}

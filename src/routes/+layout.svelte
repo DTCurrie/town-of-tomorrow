@@ -22,7 +22,7 @@
 </script>
 
 <div class="relative flex flex-row w-full h-full overflow-hidden">
-	<div class="absolute bg-pattern bg-repeat w-full h-full z-0 opacity-50" />
+	<div class="fixed bg-pattern bg-repeat w-screen h-screen z-0 opacity-50" />
 	<div class="fixed h-screen flex flex-col flex-shrink-0 flex-grow antialiased z-50">
 		<div
 			id="sidebar"

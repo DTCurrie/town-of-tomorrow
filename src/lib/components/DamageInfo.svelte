@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import type { PlayCards } from '$lib/db';
-	import classNames from 'classnames';
-	import { getJobColorClass } from '$lib/play-cards';
+	import { getJobColor } from '$lib/play-cards';
+	import Checkbox from './inputs/Checkbox.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -35,68 +35,52 @@
 </script>
 
 <div>
-	<p class="font-bold">Damage:</p>
-	<div class="w-full flex flex-col md:flex-row gap-1 mt-2">
-		<div class="flex flex-row gap-1">
+	<p class="font-display font-bold">Damage:</p>
+	<div class="w-full flex flex-col md:flex-row gap-1">
+		<div class="flex flex-row w-full gap-1 items-start">
 			{#each healthBoxes() as box}
-				<input
-					type="checkbox"
+				<Checkbox
+					color={getJobColor(box.job.name)}
 					checked={(damage ?? 0) >= box.value}
-					on:click|preventDefault={() => {
+					on:checked={() => {
 						if (!readonly) {
 							setDamage(box.value);
 						}
 					}}
 					aria-label={`Set character health to ${box.value}`}
 					{readonly}
-					aria-readonly={readonly}
-					class={classNames(
-						`appearance-none flex-shrink-0 w-5 lg:w-6 h-5 lg:h-6 border-2 overflow-x-hidden truncate`,
-						damage < box.value ? 'bg-white' : getJobColorClass('bg', box.job),
-						getJobColorClass('border', box.job)
-					)}
 				/>
 			{/each}
 		</div>
 
-		<div class="relative hidden lg:block shrink-0 w-[2px] h-7 lg:h-8 bg-black -top-1" />
+		<div class="relative hidden lg:block shrink-0 w-[2px] h-7 lg:h-8 bg-black -top-1 ml-2" />
 
-		<div class="flex flex-row gap-1 mt-2 lg:mt-0">
+		<div class="flex flex-row gap-1 lg:mt-0">
 			<span class="flex flex-col w-9 items-center">
-				<input
-					type="checkbox"
+				<Checkbox
+					color="amber"
 					checked={critical}
-					on:click|preventDefault={() => {
+					on:checked={() => {
 						if (!readonly) {
 							setCritical(!critical);
 						}
 					}}
 					aria-label={`Set character as critical to: ${!critical}`}
 					{readonly}
-					aria-readonly={readonly}
-					class={classNames(
-						`appearance-none flex-shrink-0 w-5 lg:w-6 h-5 lg:h-6 border-2 border-orange-500 overflow-x-hidden truncate`,
-						!critical ? 'bg-white' : 'bg-orange-500'
-					)}
 				/>
 				<p class="text-xs p-0.5">crit.</p>
 			</span>
 			<span class="flex flex-col w-9 items-center">
-				<input
-					type="checkbox"
+				<Checkbox
 					checked={dead}
-					on:click|preventDefault={() => {
+					color="rose"
+					on:checked={() => {
 						if (!readonly) {
 							setDead(!dead);
 						}
 					}}
 					aria-label={`Set character as dead to: ${!dead}`}
 					{readonly}
-					aria-readonly={readonly}
-					class={classNames(
-						`appearance-none flex-shrink-0 w-5 lg:w-6 h-5 lg:h-6 border-2 border-red-500 overflow-x-hidden truncate`,
-						!dead ? 'bg-white' : 'bg-red-500'
-					)}
 				/>
 				<p class="text-xs p-0.5">dead</p>
 			</span>

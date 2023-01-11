@@ -7,7 +7,7 @@ export const playCardColors = [
     'teal',
 ];
 
-export type Color = 'sky' | 'amber' | 'emerald' | 'pink' | 'violet' | 'teal' | 'rose' | 'cyan' | 'lime';
+export type Color = 'sky' | 'amber' | 'emerald' | 'pink' | 'violet' | 'teal' | 'rose' | 'cyan' | 'lime' | 'gray';
 export const colors = [
     'rose',
     'cyan',

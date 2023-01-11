@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
 	import DamageInfo from '$lib/components/DamageInfo.svelte';
+	import Select from '$lib/components/inputs/Select.svelte';
+	import Textarea from '$lib/components/inputs/Textarea.svelte';
 	import XpInfo from '$lib/components/XpInfo.svelte';
 	import type { Character, Xp } from '$lib/db';
 	import classNames from 'classnames';
@@ -29,9 +31,16 @@
 	$: customPitfallChanged = character?.customPitfall !== newCustomPitfall?.trim();
 	$: notesChanged = character?.notes !== newNotes?.trim();
 
-	$: pitfallOptions = character.playCards.reduce<string[]>((arr, cur) => {
-		if (cur && cur.pitfall !== newPitfall) {
-			arr.push(cur.pitfall);
+	$: pitfallOptions = character.playCards.reduce<[string, string][]>((arr, cur) => {
+		if (cur) {
+			const pitfall = cur.pitfall;
+			if (pitfall === newPitfall) {
+				return [[pitfall, pitfall], ...arr];
+			}
+
+			if (pitfall !== newPitfall) {
+				return [...arr, [pitfall, pitfall]];
+			}
 		}
 
 		return arr;
@@ -39,11 +48,12 @@
 </script>
 
 <div class="flex flex-col gap-2">
+	<!-- svelte-ignore a11y-label-has-associated-control -->
 	<label class="flex flex-col w-full">
-		<p class="font-bold py-1">Description:</p>
-		<textarea
-			class={classNames(
-				'w-full max-md:focus:min-h-[10rem] md:min-h-[10rem] border border-black p-1 text-sm grow lg:ml-2',
+		<p class="font-display font-bold">Description:</p>
+		<Textarea
+			classes={classNames(
+				'max-md:focus:min-h-[10rem] md:min-h-[10rem]',
 				descriptionChanged && 'h-[10rem]'
 			)}
 			bind:value={newDescription}
@@ -61,49 +71,44 @@
 	{/if}
 </div>
 
-<p class="font-bold py-1">Pitfalls:</p>
-<ul>
-	<li class="flex flex-col w-100">
-		<select
-			bind:value={newPitfall}
-			class="block w-full p-1 bg-white border border-black rounded-none text-sm focus:ring-black focus:border-black"
-		>
-			<option value={newPitfall}>{newPitfall}</option>
-			{#each pitfallOptions as option}
-				<option value={option} selected={newPitfall === option}>{option}</option>
-			{/each}
-		</select>
-		{#if pitfallChanged}
-			<Button
-				classes="w-32 ml-auto"
-				color="lime"
-				on:click={() => setPitfall(character, newPitfall)}
-			>
-				Save Pitfall
-			</Button>
-		{/if}
-	</li>
-	<li class="flex flex-col w-100">
-		<label class="flex py-2 w-full items-center">
-			<textarea
-				class="border border-black p-1 text-sm grow lg:ml-2"
-				bind:value={newCustomPitfall}
-				maxlength="240"
-			/>
-		</label>
-		{#if customPitfallChanged}
-			<Button
-				classes="w-32 ml-auto"
-				color="lime"
-				on:click={() => setCustomPitfall(character, newDescription)}
-			>
-				Save Pitfall
-			</Button>
-		{/if}
-	</li>
-</ul>
+<p class="font-display font-bold mt-2">Pitfalls:</p>
+<div class="flex flex-col gap-2">
+	<ul class="flex flex-col gap-2">
+		<li class="flex flex-col w-100">
+			<Select bind:value={newPitfall} options={pitfallOptions} placeholder={null} />
+			{#if pitfallChanged}
+				<Button
+					classes="w-32 ml-auto"
+					color="lime"
+					on:click={() => setPitfall(character, newPitfall)}
+				>
+					Save Pitfall
+				</Button>
+			{/if}
+		</li>
+		<li class="flex flex-col w-100">
+			<!-- svelte-ignore a11y-label-has-associated-control -->
+			<label class="flex py-2 w-full items-center">
+				<Textarea
+					bind:value={newCustomPitfall}
+					classes="max-md:focus:min-h-[10rem] md:min-h-[10rem]"
+					maxlength="240"
+				/>
+			</label>
+			{#if customPitfallChanged}
+				<Button
+					classes="w-32 ml-auto"
+					color="lime"
+					on:click={() => setCustomPitfall(character, newDescription)}
+				>
+					Save Pitfall
+				</Button>
+			{/if}
+		</li>
+	</ul>
+</div>
 
-<div class="flex flex-col md:flex-row md:items-center md:justify-between py-2 gap-2">
+<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-2 max-w-[30rem]">
 	<DamageInfo
 		playCards={character.playCards}
 		damage={character.damage}
@@ -117,11 +122,12 @@
 	<XpInfo xp={character.xp} on:set-xp={({ detail }) => setXp(character, detail)} />
 </div>
 
-<div class="flex flex-col py-2 gap-2">
+<div class="flex flex-col gap-2 mt-2">
+	<!-- svelte-ignore a11y-label-has-associated-control -->
 	<label class="flex flex-col w-full">
-		<p class="font-bold">Notes:</p>
-		<textarea
-			class="w-full max-md:focus:min-h-[10rem] md:min-h-[10rem] border border-black p-1 text-sm grow lg:ml-2"
+		<p class="font-display font-bold">Notes:</p>
+		<Textarea
+			classes="max-md:focus:min-h-[10rem] md:min-h-[10rem]"
 			bind:value={newNotes}
 			maxlength="100000"
 		/>
