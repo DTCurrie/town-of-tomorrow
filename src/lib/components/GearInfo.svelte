@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { editArmor, removeArmor } from '$lib/api';
+	import { editGear, removeGear } from '$lib/api';
 	import NumberInput from '$lib/components/inputs/NumberInput.svelte';
 	import Textarea from '$lib/components/inputs/Textarea.svelte';
 	import TextInput from '$lib/components/inputs/TextInput.svelte';
-	import type { Character, Armor } from '$lib/db';
+	import type { Character, Gear } from '$lib/db';
 	import Button from './Button.svelte';
 
-	export let armor: Armor;
+	export let gear: Gear;
 	export let character: Character | undefined;
 	export let index: number;
 	export let removing: boolean = false;
@@ -16,13 +16,13 @@
 	let pieceRating = 0;
 	let pieceDescription = '';
 
-	$: newArmor = {
+	$: newGear = {
 		name: pieceName.trim(),
 		rating: pieceRating,
 		description: pieceDescription.trim()
-	} as Armor;
+	} as Gear;
 
-	const resetNewArmor = () => {
+	const resetNewGear = () => {
 		editing = false;
 		pieceName = '';
 		pieceRating = 0;
@@ -71,13 +71,13 @@
 					/>
 				</label>
 				<div class="grid grid-cols-2 w-full gap-0.5 ml-auto mt-auto p-2 border-t-4 border-cyan-700">
-					<Button classes="w-20 ml-auto" color="rose" on:click={() => resetNewArmor()}>
+					<Button classes="w-20 ml-auto" color="rose" on:click={() => resetNewGear()}>
 						Cancel
 					</Button>
 					<Button
 						classes="w-20 ml-auto"
 						color="lime"
-						on:click={() => editArmor(character, newArmor, index)}>Save</Button
+						on:click={() => editGear(character, newGear, index)}>Save</Button
 					>
 				</div>
 			</div>
@@ -86,9 +86,9 @@
 		<div class="flex w-full text-left bg-cyan-700 text-white rounded-t-lg px-2 pt-2">
 			<div class="flex flex-row w-full">
 				<span class="font-display font-bold w-40 overflow-x-hidden truncate">
-					{armor.name}
+					{gear.name}
 				</span>
-				<span class="font-display font-normal">(+{armor.rating})</span>
+				<span class="font-display font-normal">(+{gear.rating})</span>
 			</div>
 		</div>
 
@@ -96,7 +96,7 @@
 			class="flex flex-col w-full h-full transition-all duration-[250ms] ease-out overflow-hidden border-4 border-cyan-700 rounded-b-lg"
 		>
 			<div class="p-1 h-full">
-				<pre class="text-sm h-full overflow-auto whitespace-spaces">{armor.description}</pre>
+				<pre class="text-sm h-full overflow-auto whitespace-spaces">{gear.description}</pre>
 			</div>
 
 			<div
@@ -105,7 +105,7 @@
 				<Button
 					classes="w-20 ml-auto"
 					color="rose"
-					on:click={() => (removing ? removeArmor(character, index) : (removing = true))}
+					on:click={() => (removing ? removeGear(character, index) : (removing = true))}
 				>
 					{#if removing}
 						Confirm
@@ -120,9 +120,9 @@
 						classes="w-20"
 						color="cyan"
 						on:click={() => {
-							pieceName = armor.name;
-							pieceRating = armor.rating ?? 0;
-							pieceDescription = armor.description;
+							pieceName = gear.name;
+							pieceRating = gear.rating ?? 0;
+							pieceDescription = gear.description;
 							editing = true;
 						}}
 					>

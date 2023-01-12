@@ -29,7 +29,7 @@
 	$: removing = removingIndex >= 0;
 </script>
 
-<ul class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+<ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
 	{#each rapport ?? [] as person, i}
 		<li class="flex flex-col p-2 bg-white items-start rounded-lg shadow-lg">
 			<button
@@ -38,7 +38,7 @@
 					expandedIndex === i ? (expandedIndex = -1) : (expandedIndex = i)}
 			>
 				<div class="flex flex-col w-full">
-					<p class="font-bold w-64 overflow-hidden truncate">
+					<p class="font-display font-bold w-40 overflow-hidden truncate">
 						{person.name}
 					</p>
 

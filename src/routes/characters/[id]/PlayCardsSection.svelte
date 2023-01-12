@@ -45,7 +45,7 @@
 
 <h2 class="text-xl mt-2">Play Cards:</h2>
 
-<div class="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+<div class="grid w-full grid-cols-1 lg:grid-cols-2 gap-2">
 	{#each character.playCards ?? [null, null, null, null] as playCard, i}
 		{#if playCard}
 			<PlayCardInfo
@@ -62,23 +62,24 @@
 			/>
 		{:else if addingPlayCard[i]}
 			<PlayCardInput
+				bind:playCard
 				others={getOthers(character.playCards, i)}
-				{playCard}
 				on:select={(event) => (playCardsToAdd[i] = event.detail)}
-			/>
-			<div class="flex gap-1">
-				<Button
-					classes="w-full"
-					color="lime"
-					on:click={() => {
-						addPlayCard(character, playCardsToAdd[i], i);
-						addingPlayCard[i] = false;
-					}}>Confirm</Button
-				>
-				<Button classes="w-full" color="red" on:click={() => (addingPlayCard[i] = false)}>
-					Cancel
-				</Button>
-			</div>
+			>
+				<div class="flex gap-1 p-2 mt-auto">
+					<Button
+						classes="w-24 ml-auto"
+						color="lime"
+						on:click={() => {
+							addPlayCard(character, playCardsToAdd[i], i);
+							addingPlayCard[i] = false;
+						}}>Confirm</Button
+					>
+					<Button classes="w-24" color="red" on:click={() => (addingPlayCard[i] = false)}>
+						Cancel
+					</Button>
+				</div>
+			</PlayCardInput>
 		{:else}
 			<button
 				class="flex flex-col flex-grow justify-center items-center border border-black w-full"

@@ -1,47 +1,47 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { Weapon } from '$lib/db';
+	import type { Gear } from '$lib/db';
 	import Button from './Button.svelte';
-	import Chevron from './icons/Chevron.svelte';
 	import classNames from 'classnames';
+	import Chevron from './icons/Chevron.svelte';
 	import TextInput from './inputs/TextInput.svelte';
 	import NumberInput from './inputs/NumberInput.svelte';
 	import Textarea from './inputs/Textarea.svelte';
 
 	const dispatch = createEventDispatcher();
 
-	export let create = () => dispatch('create', newWeapon);
+	export let create = () => dispatch('create', newGear);
 
-	let newWeaponName = '';
-	let newWeaponRating = 0;
-	let newWeaponDescription = '';
+	let newGearName = '';
+	let newGearRating = 0;
+	let newGearDescription = '';
 
 	let expanded = false;
 
-	const resetNewWeapon = () => {
-		newWeaponName = '';
-		newWeaponRating = 0;
-		newWeaponDescription = '';
+	const resetNewGear = () => {
+		newGearName = '';
+		newGearRating = 0;
+		newGearDescription = '';
 	};
 
-	const addWeapon = () => {
+	const addGear = () => {
 		create();
-		resetNewWeapon();
+		resetNewGear();
 	};
 
-	$: newWeapon = {
-		name: newWeaponName,
-		rating: newWeaponRating,
-		description: newWeaponDescription
-	} as Weapon;
+	$: newGear = {
+		name: newGearName,
+		rating: newGearRating,
+		description: newGearDescription
+	} as Gear;
 </script>
 
-<form class="flex flex-col" on:submit|preventDefault={addWeapon}>
+<form class="flex flex-col" on:submit|preventDefault={addGear}>
 	<button
 		class="flex w-full justify-between underline border border-black p-2"
 		on:click|preventDefault={() => (expanded = !expanded)}
 	>
-		New Weapon:
+		New Gear:
 		<span
 			class={classNames('w-6 h-6 ml-auto transition-all duration-[250ms] ease-out', {
 				'rotate-180': !expanded
@@ -60,33 +60,26 @@
 			}
 		)}
 	>
-		<div class="flex flex-col lg:flex-row gap-2 items-center">
+		<div class="flex flex-col lg:flex-row gap-1 lg:gap-2 items-center">
 			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
 				Name:
-				<TextInput bind:value={newWeaponName} classes="lg:ml-2" maxlength="25" required />
+				<TextInput bind:value={newGearName} classes="lg:ml-2" maxlength="25" required />
 			</label>
 
 			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-32">
+			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-24">
 				Rating:
-				<NumberInput
-					type="number"
-					bind:value={newWeaponRating}
-					classes="lg:ml-2"
-					min="0"
-					max="6"
-					required
-				/>
+				<NumberInput bind:value={newGearRating} classes="lg:ml-2" min="0" max="6" required />
 			</label>
 		</div>
 
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label class="flex flex-col w-full">
 			Description:
-			<Textarea bind:value={newWeaponDescription} classes="lg:ml-2" maxlength="240" />
+			<Textarea bind:value={newGearDescription} maxlength="240" />
 		</label>
 
-		<Button type="submit" classes="w-32 ml-auto mt-1" color="lime">Add Weapon</Button>
+		<Button type="submit" classes="w-32 ml-auto mt-1" color="lime">Add Gear</Button>
 	</div>
 </form>

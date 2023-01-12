@@ -1,20 +1,32 @@
 <script lang="ts">
 	import ArmorList from '$lib/components/ArmorList.svelte';
+	import GearList from '$lib/components/GearList.svelte';
 	import NewArmor from '$lib/components/NewArmor.svelte';
+	import NewGear from '$lib/components/NewGear.svelte';
 	import NewWeapon from '$lib/components/NewWeapon.svelte';
 	import WeaponList from '$lib/components/WeaponList.svelte';
-	import type { Armor, Character, Weapon } from '$lib/db';
+	import type { Armor, Character, Gear, Weapon } from '$lib/db';
 
 	export let character: Character;
+
+	export let createGear: (character: Character, gear: Gear) => Promise<void>;
 
 	export let editWeapon: (character: Character, weapon: Weapon, index: number) => Promise<void>;
 	export let removeWeapon: (character: Character, index: number) => Promise<void>;
 	export let createWeapon: (character: Character, weapon: Weapon) => Promise<void>;
 
-	export let editArmor: (character: Character, armor: Armor, index: number) => Promise<void>;
-	export let removeArmor: (character: Character, index: number) => Promise<void>;
 	export let createArmor: (character: Character, armor: Armor) => Promise<void>;
+
+	export let selectGear: (detail: { piece: Gear; index: number }) => void;
+	export let selectArmor: (detail: { piece: Armor; index: number }) => void;
 </script>
+
+<h3 class="text-lg mt-2">Gear:</h3>
+
+<div class="flex flex-col gap-2">
+	<GearList bind:gear={character.gear} on:select-gear={({ detail }) => selectGear(detail)} />
+	<NewGear on:create={({ detail }) => createGear(character, detail)} />
+</div>
 
 <h3 class="text-lg mt-2">Weapons:</h3>
 
@@ -30,10 +42,6 @@
 <h3 class="text-lg mt-2">Armor:</h3>
 
 <div class="flex flex-col gap-2">
-	<ArmorList
-		bind:armor={character.armor}
-		on:edit-armor={({ detail: { piece, index } }) => editArmor(character, piece, index)}
-		on:remove-armor={({ detail }) => removeArmor(character, detail)}
-	/>
+	<ArmorList bind:armor={character.armor} on:select-armor={({ detail }) => selectArmor(detail)} />
 	<NewArmor on:create={({ detail }) => createArmor(character, detail)} />
 </div>

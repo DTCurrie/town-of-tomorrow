@@ -21,31 +21,31 @@
 	}) as Observable<Character[]>;
 </script>
 
-<div class="relative flex flex-row w-full h-full overflow-hidden">
+<div class="relative flex flex-row w-full h-full overflow-hidden antialiased">
 	<div class="fixed bg-pattern bg-repeat w-screen h-screen z-0 opacity-50" />
 	<div class="fixed h-screen flex flex-col flex-shrink-0 flex-grow antialiased z-50">
 		<div
 			id="sidebar"
 			class={classnames(
-				'flex flex-col top-0 left-0 w-auto lg:w-64 bg-pattern h-full border-r shadow-lg shadow-slate-400 transition-all duration-[250ms] ease-out',
+				'flex flex-col top-0 left-0 w-auto bg-pattern h-full border-r shadow-lg shadow-slate-400 transition-all duration-[250ms] ease-out',
 				{
-					'max-md:w-64': expanded
+					'w-64': expanded
 				}
 			)}
 			aria-expanded={expanded ? 'true' : false}
 		>
 			<div class="overflow-y-auto overflow-x-hidden flex-grow">
 				<ul class="flex flex-col gap-1 py-2 lg:py-4">
-					<li class="lg:hidden">
+					<li>
 						<button
-							class="relative flex flex-row items-center px-2 lg:px-4 h-11 border-l-4 border-transparent hover:border-gray-800"
+							class="relative flex flex-row items-center px-2 lg:px-4 w-full h-11 border-l-4 border-transparent hover:border-gray-800"
 							on:click|preventDefault={() => (expanded = !expanded)}
 							aria-label="expand"
 							aria-controls="sidebar"
 						>
 							<span
 								class={classnames(
-									'w-11 h-11 inline-flex justify-center items-center transition-all duration-[250ms] ease-out',
+									'w-11 h-11 ml-auto inline-flex justify-center items-center transition-all duration-[250ms] ease-out',
 									{
 										'-rotate-90': expanded,
 										'rotate-90': !expanded
@@ -71,12 +71,8 @@
 								<People />
 							</span>
 							<span
-								class="hidden lg:inline-block ml-2 font-display font-bold text-sm tracking-wide truncate"
-								>Your Characters</span
-							>
-							<span
 								class={classnames(
-									'lg:hidden ml-2 font-display font-bold text-sm tracking-wide truncate transition-all duration-[250ms] ease-out',
+									'ml-2 font-display font-bold text-sm tracking-wide truncate transition-all duration-[250ms] ease-out',
 									{
 										hidden: !expanded
 									}
@@ -99,12 +95,8 @@
 								<AddPerson color="lime" />
 							</span>
 							<span
-								class="hidden lg:inline-block ml-2 font-display font-bold text-sm tracking-wide truncate"
-								>Make a Character</span
-							>
-							<span
 								class={classnames(
-									'lg:hidden ml-2 font-display font-bold text-sm tracking-wide truncate transition-all duration-[250ms] ease-out',
+									'ml-2 font-display font-bold text-sm tracking-wide truncate transition-all duration-[250ms] ease-out',
 									{
 										hidden: !expanded
 									}
@@ -159,12 +151,8 @@
 										</div>
 									</span>
 									<span
-										class="hidden lg:inline-block ml-2 font-display font-bold text-sm tracking-wide truncate"
-										>{character.name}</span
-									>
-									<span
 										class={classnames(
-											'lg:hidden ml-2 font-display font-bold text-sm tracking-wide truncate transition-all duration-[250ms] ease-out',
+											'ml-2 font-display font-bold text-sm tracking-wide truncate transition-all duration-[250ms] ease-out',
 											{
 												hidden: !expanded
 											}
@@ -178,7 +166,9 @@
 			</div>
 		</div>
 	</div>
-	<main class="flex flex-col w-full p-2 lg:p-4 pl-[4.75rem] lg:pl-[17rem] z-10">
+	<main
+		class="block w-full h-full max-w-screen-xl ml-auto mr-auto p-2 lg:p-4 pl-[72px] lg:pl-[96px] z-10"
+	>
 		<slot />
 	</main>
 </div>

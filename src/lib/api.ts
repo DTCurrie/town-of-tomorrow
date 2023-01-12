@@ -313,6 +313,44 @@ export const removeArmor = async (character: Character | undefined, index: numbe
 	await editCharacter(character.id, next);
 };
 
+export const createGear = async (character: Character | undefined, gear: Armor) => {
+	log('api createGear', false, { character, gear });
+	if (!character || !character.id) {
+		error('api createGear invalid character', false, { character });
+		return;
+	}
+
+	const next = { gear: [...character.gear, gear] };
+
+	await editCharacter(character.id, next);
+};
+
+export const editGear = async (character: Character | undefined, piece: Armor, index: number) => {
+	log('api editGear', false, { character, piece, index });
+	if (!character || !character.id) {
+		error('api editGear invalid character', false, { character });
+		return;
+	}
+
+	const next = { gear: [...character.gear] };
+	next.gear[index] = piece;
+
+	await editCharacter(character.id, next);
+};
+
+export const removeGear = async (character: Character | undefined, index: number) => {
+	log('api removeGear', false, { character, index });
+	if (!character || !character.id) {
+		error('api removeGear invalid character', false, { character });
+		return;
+	}
+
+	const next = { gear: [...character.gear] };
+	next.gear.splice(index, 1);
+
+	await editCharacter(character.id, next);
+};
+
 export const setRapport = async (character: Character | undefined, rapport: Rapport) => {
 	log('api setRapport', false, { character, rapport });
 	if (!character || !character.id) {

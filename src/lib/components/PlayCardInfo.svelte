@@ -26,17 +26,11 @@
 	let removing = false;
 </script>
 
-<div
-	class={classNames(
-		'flex flex-col w-full border-4 rounded-lg shadow-lg',
-		getJobColorClass('border', playCard.job),
-		classes
-	)}
->
+<div class={classNames('flex flex-col w-full h-full rounded-lg shadow-lg', classes)}>
 	{#if showName}
 		<p
 			class={classNames(
-				'text-white p-1 font-display font-bold',
+				'text-white px-2 pt-2 pb-0.5 font-display font-bold rounded-t-lg',
 				getJobColorClass('bg', playCard.job)
 			)}
 		>
@@ -44,81 +38,99 @@
 		</p>
 	{/if}
 
-	<p class="text-gray-700 font-display font-bold text-sm px-2 pt-2">
-		{playCard.job.name} (+{playCard.job.health} Health)
-	</p>
-
-	<div class="px-2">
-		<p class="font-bold">Bonuses:</p>
-		<ul class="list-disc pl-8">
-			{#each playCard.bonuses as bonus}
-				<li class="list-item">{bonus}</li>
-			{/each}
-		</ul>
-	</div>
-
-	<p class="px-2">
-		<span class="font-bold">Pitfall:</span>
-		{playCard.pitfall}
-	</p>
-
-	<div class="px-2 pb-2">
-		<p class="font-bold">Unlockables:</p>
-		<ul class={classNames({ 'list-disc pl-8': !showUnlocked })}>
-			{#each playCard.unlockables as unlockable}
-				<li>
-					{#if showUnlocked}
-						<label>
-							<input
-								type="checkbox"
-								checked={unlockable.unlocked}
-								on:change|preventDefault={() => unlock(unlockable)}
-								on:click|preventDefault={() => unlock(unlockable)}
-								on:input|preventDefault={() => unlock(unlockable)}
-							/>
-							<span class="font-bold">{unlockable.name}</span>
-						</label>
-						<p>{unlockable.description}</p>
-					{:else}
-						<span class="font-bold">{unlockable.name}:</span>
-						{unlockable.description}
-					{/if}
-				</li>
-			{/each}
-		</ul>
-	</div>
-
 	<div
 		class={classNames(
-			'mt-auto w-full',
-			(showMerits || showFaults || showRemove) &&
-				playCard && ['border-t-4', getJobColorClass('border', playCard.job)]
+			'flex flex-col h-full border-4 rounded-b-lg',
+			getJobColorClass('border', playCard.job)
 		)}
 	>
-		<div class="flex flex-row flex-wrap w-full justify-evenly px-2 pt-0">
-			{#if showMerits}
-				<Merits merits={playCard.merits ?? 0} on:set-merits={({ detail }) => setMerits(detail)} />
-			{/if}
-			{#if showFaults}
-				<Faults faults={playCard.faults ?? 0} on:set-faults={({ detail }) => setFaults(detail)} />
-			{/if}
+		<div>
+			<p class="text-gray-700 font-display font-bold px-2 pt-2">
+				{playCard.job.name} (+{playCard.job.health} Health)
+			</p>
+
+			<div class="px-2">
+				<p class="font-bold">Bonuses:</p>
+				<ul class="list-disc pl-8">
+					{#each playCard.bonuses as bonus}
+						<li class="list-item">{bonus}</li>
+					{/each}
+				</ul>
+			</div>
+
+			<p class="px-2">
+				<span class="font-bold">Pitfall:</span>
+				{playCard.pitfall}
+			</p>
+
+			<div class="px-2 pb-2">
+				<p class="font-bold">Unlockables:</p>
+				<ul class={classNames({ 'list-disc pl-8': !showUnlocked, 'pl-3': showUnlocked })}>
+					{#each playCard.unlockables as unlockable}
+						<li>
+							{#if showUnlocked}
+								<label>
+									<input
+										type="checkbox"
+										checked={unlockable.unlocked}
+										on:change|preventDefault={() => unlock(unlockable)}
+										on:click|preventDefault={() => unlock(unlockable)}
+										on:input|preventDefault={() => unlock(unlockable)}
+									/>
+									<span class="font-bold">{unlockable.name}:</span>
+								</label>
+								<span>{unlockable.description}</span>
+							{:else}
+								<span class="font-bold">{unlockable.name}:</span>
+								{unlockable.description}
+							{/if}
+						</li>
+					{/each}
+				</ul>
+			</div>
 		</div>
 
-		{#if showRemove}
-			<div class="flex flex-row w-full px-2 pb-2 mt-2">
-				{#if removing}
-					<Button color="cyan" classes="w-20 ml-auto" on:click={() => (removing = false)}>
-						Cancel
-					</Button>
-					<Button color="rose" classes="w-20 ml-2" on:click={() => removePlayCard(playCard.name)}>
-						Confirm
-					</Button>
-				{:else}
-					<Button color="rose" classes="w-20 ml-auto" on:click={() => (removing = true)}
-						>Remove</Button
-					>
-				{/if}
-			</div>
-		{/if}
+		<div
+			class={classNames(
+				'mt-auto rounded-b-lg border-t-4',
+				getJobColorClass('border', playCard.job)
+			)}
+		>
+			{#if showMerits || showFaults}
+				<div class="flex flex-row flex-wrap w-full justify-evenly px-2 pt-0">
+					{#if showMerits}
+						<Merits
+							merits={playCard.merits ?? 0}
+							on:set-merits={({ detail }) => setMerits(detail)}
+						/>
+					{/if}
+					{#if showFaults}
+						<Faults
+							faults={playCard.faults ?? 0}
+							on:set-faults={({ detail }) => setFaults(detail)}
+						/>
+					{/if}
+				</div>
+			{/if}
+
+			{#if showRemove}
+				<div class="flex flex-row w-full px-2 pb-2 mt-2">
+					{#if removing}
+						<Button color="cyan" classes="w-20 ml-auto" on:click={() => (removing = false)}>
+							Cancel
+						</Button>
+						<Button color="rose" classes="w-20 ml-2" on:click={() => removePlayCard(playCard.name)}>
+							Confirm
+						</Button>
+					{:else}
+						<Button color="rose" classes="w-20 ml-auto" on:click={() => (removing = true)}
+							>Remove</Button
+						>
+					{/if}
+				</div>
+			{/if}
+
+			<slot />
+		</div>
 	</div>
 </div>

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import classNames from 'classnames';
 	import { goto } from '$app/navigation';
 	import {
 		db,
 		type Armor,
 		type Character,
+		type Gear,
 		type PlayCard,
 		type PlayCards,
 		type Rapport,
@@ -17,13 +17,15 @@
 	import NewWeapon from '$lib/components/NewWeapon.svelte';
 	import ArmorList from '$lib/components/ArmorList.svelte';
 	import NewArmor from '$lib/components/NewArmor.svelte';
-	import { getOthers, standardPlayCards } from '$lib/play-cards';
+	import { getOthers } from '$lib/play-cards';
 	import { log } from '$lib/logs';
 	import DamageInfo from '$lib/components/DamageInfo.svelte';
 	import TextInput from '$lib/components/inputs/TextInput.svelte';
 	import Textarea from '$lib/components/inputs/Textarea.svelte';
 	import Select from '$lib/components/inputs/Select.svelte';
 	import UrlInput from '$lib/components/inputs/UrlInput.svelte';
+	import GearList from '$lib/components/GearList.svelte';
+	import NewGear from '$lib/components/NewGear.svelte';
 
 	let status = '';
 
@@ -42,6 +44,7 @@
 	let ally: Rapport = { name: '', value: 2, overflow: false };
 	let rival: Rapport = { name: '', value: -2, overflow: false };
 
+	let gear: Gear[] = [];
 	let weapons: Weapon[] = [];
 	let armor: Armor[] = [];
 
@@ -51,6 +54,15 @@
 	);
 
 	$: pitfalls = selectedCards.map(({ pitfall }) => [pitfall, pitfall]) as [string, any];
+	$: avatarUrl = `https://api.dicebear.com/5.x/lorelei/svg?seed=${encodeURIComponent(
+		name
+	)}?size=96`;
+
+	$: {
+		if (name && !avatar) {
+			avatar = avatarUrl;
+		}
+	}
 
 	const handleUnlockable = () => {
 		log('create handleUnlockable', false, { allPlayCards, unlockable });
@@ -96,11 +108,11 @@
 			return (status = 'Create an additional Pitfall in step 4!');
 		}
 
-		if (!ally) {
+		if (!ally.name) {
 			return (status = 'Create an Ally in step 9!');
 		}
 
-		if (!rival) {
+		if (!rival.name) {
 			return (status = 'Create a Rival in step 9!');
 		}
 
@@ -134,6 +146,7 @@
 				customPitfall,
 				rapport: [ally, rival],
 				fieldOfStudy,
+				gear,
 				weapons,
 				armor,
 				avatar,
@@ -158,7 +171,7 @@
 <h1 class="text-2xl font-bold">Make a Character</h1>
 <p>Follow these steps to create your Character.</p>
 
-<form on:submit={addCharacter}>
+<form on:submit|preventDefault={addCharacter}>
 	<fieldset class="mt-2">
 		<legend><h2 class="text-xl">1. Pick Your Play Cards</h2></legend>
 
@@ -167,7 +180,7 @@
 			create your own.
 		</p>
 
-		<div class="flex flex-col lg:flex-row gap-2">
+		<div class="grid lg:grid-cols-3 gap-2">
 			<PlayCardInput
 				playCard={allPlayCards[0]}
 				others={getOthers(allPlayCards, 0)}
@@ -348,23 +361,38 @@
 			them when applicable.
 		</p>
 
+		<h3 class="text-lg mt-2">Gear:</h3>
+
+		<div class="flex flex-col w-full gap-2">
+			<GearList bind:gear />
+			<NewGear
+				on:create={(event) => {
+					gear = [...gear, event.detail];
+				}}
+			/>
+		</div>
+
 		<h3 class="text-lg mt-2">Weapons:</h3>
 
-		<WeaponList bind:weapons />
-		<NewWeapon
-			on:create={(event) => {
-				weapons = [...weapons, event.detail];
-			}}
-		/>
+		<div class="flex flex-col w-full gap-2">
+			<WeaponList bind:weapons />
+			<NewWeapon
+				on:create={(event) => {
+					weapons = [...weapons, event.detail];
+				}}
+			/>
+		</div>
 
 		<h3 class="text-lg mt-2">Armor:</h3>
 
-		<ArmorList bind:armor />
-		<NewArmor
-			on:create={(event) => {
-				armor = [...armor, event.detail];
-			}}
-		/>
+		<div class="flex flex-col w-full gap-2">
+			<ArmorList bind:armor />
+			<NewArmor
+				on:create={(event) => {
+					armor = [...armor, event.detail];
+				}}
+			/>
+		</div>
 	</fieldset>
 	<fieldset class="mt-2">
 		<legend><h2 class="text-xl">11. Add an Optional Character Avatar</h2></legend>
@@ -376,11 +404,16 @@
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label>
 			Avatar:
-			<UrlInput bind:value={avatar} />
+			<UrlInput
+				bind:value={avatar}
+				on:blur={() => {
+					if (!avatar) {
+						avatar = avatarUrl;
+					}
+				}}
+			/>
 
-			{#if avatar}
-				<img alt="avatar preview" class="w-20 h-20 object-cover rounded-full" src={avatar} />
-			{/if}
+			<img alt="avatar preview" class="w-20 h-20 object-cover rounded-full" src={avatarUrl} />
 		</label>
 	</fieldset>
 	<div class="flex flex-col w-full mt-4">

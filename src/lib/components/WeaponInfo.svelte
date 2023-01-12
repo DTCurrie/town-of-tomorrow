@@ -14,35 +14,42 @@
 	export let expand: () => void;
 </script>
 
-<div class="grid w-full p-2 gap-0.5">
-	<button class="flex w-full text-left" on:click|preventDefault={expand}>
-		<div class="flex flex-col w-full">
-			<p class="font-bold w-64 overflow-x-hidden truncate">{weapon.name}</p>
-			<p class="text-gray-700">({weapon.type} +{weapon.rating})</p>
+<div class="w-full">
+	<button
+		class="flex w-full text-left bg-rose-700 text-white rounded-t-lg px-2 pt-2"
+		on:click|preventDefault={expand}
+	>
+		<div class="flex flex-row w-full">
+			<span class="font-display font-bold w-40 overflow-x-hidden truncate">
+				{weapon.name}
+			</span>
+			<span class="font-display font-normal">(+{weapon.rating})</span>
 		</div>
 		<span
 			class={classNames('w-6 h-6 ml-auto transition-all duration-[250ms] ease-out', {
 				'rotate-180': !expanded
 			})}
 		>
-			<Chevron />
+			<Chevron color="white" />
 		</span>
 	</button>
 
 	<div
 		class={classNames(
-			'flex flex-col w-full transition-all duration-[250ms] ease-out overflow-hidden',
+			'flex flex-col w-full transition-all duration-[250ms] ease-out overflow-hidden border-4 border-rose-700 rounded-b-lg',
 			{
-				'h-36': expanded,
+				'h-40': expanded,
 				'h-0': !expanded
 			}
 		)}
 	>
-		<pre class="text-sm h-24 break-all overflow-auto whitespace-pre-wrap border border-black p-0.5">
-		    {weapon.description}
-        </pre>
+		<div class="p-1 h-full">
+			<pre class="text-sm h-full overflow-auto whitespace-spaces">{weapon.description}</pre>
+		</div>
 
-		<div class="grid grid-cols-2 gap-0.5 ml-auto mt-auto">
+		<div
+			class="grid grid-cols-2 w-full gap-0.5 ml-auto mt-auto border-t-4 border-rose-700 p-2 shrink-0"
+		>
 			<Button classes="w-20 ml-auto" color="rose" on:click={remove}>
 				{#if removing}
 					Confirm

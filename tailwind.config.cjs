@@ -8,8 +8,8 @@ module.exports = {
       },
       fontFamily: {
         'display': "'Special Elite', 'Courier New', Courier, monospace",
-      }
-    }
+      },
+    },
   },
   plugins: [],
   safelist: [
