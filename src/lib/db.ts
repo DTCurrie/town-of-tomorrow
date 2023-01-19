@@ -11,9 +11,9 @@ export interface Job {
 }
 
 export type Bonuses = [
-	string, // max-length 30
-	string, // max-length 30
-	string // max-length 30
+	string, // max-length 25
+	string, // max-length 25
+	string // max-length 25
 ];
 
 export interface Unlockable {
@@ -22,15 +22,19 @@ export interface Unlockable {
 	unlocked: boolean;
 }
 
+export type Unlockables = [Unlockable, Unlockable];
+
 export type Merit = 0 | 1 | 2 | 3;
 export type Fault = 0 | 1 | 2 | 3;
 
 export interface PlayCard {
-	name: string; // max-length 30
+	id?: number;
+	name: string; // max-length 25
 	job: Job;
 	bonuses: Bonuses;
-	pitfall: string; // max-length 240, point-of-view second person
-	unlockables: [Unlockable, Unlockable];
+	bonusQuestions: [string, string, string]; // max-length 240
+	bonusExamples: [string, string, string]; // max-length 80
+	unlockables: Unlockables;
 	merits?: Merit;
 	faults?: Fault;
 }
@@ -41,13 +45,14 @@ export type PlayCards = [PlayCard | null, PlayCard | null, PlayCard | null, Play
 
 export type RapportValue = -3 | -2 | -1 | 0 | 1 | 2 | 3;
 export interface Rapport {
-	name: string; // max-length 30
+	name: string; // max-length 25
+	description: string; // max-length 
 	value: RapportValue;
 	overflow: boolean;
 }
 
 export interface Gear {
-	name: string; // max-length 30
+	name: string; // max-length 25
 	description: string; // max-length 240
 	rating?: number; // min 0
 }
@@ -59,10 +64,9 @@ export type Xp = 0 | 1 | 2 | 3 | 4 | 5;
 
 export interface Character {
 	id?: number;
-	name: string; // max-length 30
+	name: string; // max-length 25
 	description: string; // max-length 240
-	pitfall: string; // max-length 240
-	customPitfall: string; // max-length 240, point-of-view second person
+	pitfall: string; // max-length 240, point-of-view second person
 	playCards: PlayCards;
 	avatar?: string; // max-length 480
 	createdOn: Date;
@@ -70,7 +74,7 @@ export interface Character {
 	critical?: boolean;
 	dead?: boolean;
 	rapport: Rapport[];
-	fieldOfStudy?: string; // max-length 30
+	fieldOfStudy?: string; // max-length 25
 	gear: Gear[];
 	weapons: Weapon[];
 	armor: Armor[];
@@ -80,11 +84,13 @@ export interface Character {
 
 export class MySubClassedDexie extends Dexie {
 	characters!: Table<Character>;
+	customPlayCards!: Table<PlayCard>;
 
 	constructor() {
 		super('town-of-tomorrow');
 		this.version(1).stores({
-			characters: '++id, name, description' // Primary key and indexed props
+			characters: '++id, name, description', // Primary key and indexed props
+			customPlayCards: '++id, name' // Primary key and indexed props
 		});
 	}
 }

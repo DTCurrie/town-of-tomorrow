@@ -1,16 +1,8 @@
 <script lang="ts">
-	import classNames from 'classnames';
+	import { inputClasses } from './utils';
 
 	export let value: any;
 	export let classes = '';
 </script>
 
-<input
-	bind:value
-	type="number"
-	{...$$restProps}
-	class={classNames(
-		'w-full border border-black px-1 py-0.5 h-8 focus:border-cyan-500 focus:outline-none',
-		classes
-	)}
-/>
+<input bind:value type="number" class={inputClasses(classes)} {...$$restProps} />

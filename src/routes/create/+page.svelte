@@ -1,16 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import {
-		db,
-		type Armor,
-		type Character,
-		type Gear,
-		type PlayCard,
-		type PlayCards,
-		type Rapport,
-		type Unlockable,
-		type Weapon
-	} from '$lib/db';
+	import type { Armor, Gear, PlayCard, PlayCards, Rapport, Unlockable, Weapon } from '$lib/db';
 	import PlayCardInput from '$lib/components/PlayCardInput.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import WeaponList from '$lib/components/WeaponList.svelte';
@@ -22,27 +12,26 @@
 	import DamageInfo from '$lib/components/DamageInfo.svelte';
 	import TextInput from '$lib/components/inputs/TextInput.svelte';
 	import Textarea from '$lib/components/inputs/Textarea.svelte';
-	import Select from '$lib/components/inputs/Select.svelte';
 	import UrlInput from '$lib/components/inputs/UrlInput.svelte';
 	import GearList from '$lib/components/GearList.svelte';
 	import NewGear from '$lib/components/NewGear.svelte';
+	import { createCharacter } from '$lib/api/characters';
 
 	let status = '';
 
 	let name = '';
 	let description = '';
+	let fieldOfStudy = '';
 	let pitfall = '';
-	let customPitfall = '';
 	let avatar = '';
 
+	let playCardSlots: [PlayCard | null, PlayCard | null, PlayCard | null] = [null, null, null];
 	let allPlayCards: PlayCards = [null, null, null, null];
 
 	let unlockable: Unlockable | null;
 
-	let fieldOfStudy: string;
-
-	let ally: Rapport = { name: '', value: 2, overflow: false };
-	let rival: Rapport = { name: '', value: -2, overflow: false };
+	let ally: Rapport = { name: '', value: 2, description: '', overflow: false };
+	let rival: Rapport = { name: '', value: -2, description: '', overflow: false };
 
 	let gear: Gear[] = [];
 	let weapons: Weapon[] = [];
@@ -53,7 +42,6 @@
 		[]
 	);
 
-	$: pitfalls = selectedCards.map(({ pitfall }) => [pitfall, pitfall]) as [string, any];
 	$: avatarUrl = `https://api.dicebear.com/5.x/lorelei/svg?seed=${encodeURIComponent(
 		name
 	)}?size=96`;
@@ -80,13 +68,28 @@
 		}
 	};
 
+	const hasCardChanged = (current: PlayCard | null, original: PlayCard | null) => {
+		log('create hasCardChanged', false, { current, original });
+		if (!current || !original) {
+			return false;
+		}
+
+		for (let i = 0; i < current.bonuses.length; i++) {
+			const originalBonus = original.bonuses[i];
+			if (current.bonuses[i] !== originalBonus) {
+				return true;
+			}
+		}
+
+		return false;
+	};
+
 	const validate = () => {
 		log('create validate', false, {
 			allPlayCards,
 			name,
 			description,
 			pitfall,
-			customPitfall,
 			ally,
 			rival,
 			status
@@ -96,24 +99,37 @@
 			return (status = 'Select all of your Play Cards in step 1!');
 		}
 
+		for (let i = 0; i < playCardSlots.length; i++) {
+			const card = playCardSlots[i];
+			if (hasCardChanged(card, allPlayCards[i])) {
+				return (status = `You have unsaved changes to your ${card?.name} Play Card in slot #${
+					i + 1
+				}`);
+			}
+		}
+
 		if (!name || !description) {
 			return (status = 'Name and describe your Character in step 2!');
 		}
 
 		if (!pitfall) {
-			return (status = 'Select a Pitfall from one of your Play Cards in step 3!');
-		}
-
-		if (!customPitfall) {
-			return (status = 'Create an additional Pitfall in step 4!');
+			return (status = 'Create a Pitfall in step 4!');
 		}
 
 		if (!ally.name) {
-			return (status = 'Create an Ally in step 9!');
+			return (status = 'Create an Ally in step 8!');
+		}
+
+		if (!ally.description) {
+			return (status = 'Describe your Ally in step 8!');
 		}
 
 		if (!rival.name) {
-			return (status = 'Create a Rival in step 9!');
+			return (status = 'Create a Rival in step 8!');
+		}
+
+		if (!rival.description) {
+			return (status = 'Describe your Rival in step 8!');
 		}
 
 		return (status = '');
@@ -138,12 +154,11 @@
 				card.faults = 0;
 			}
 
-			const character: Character = {
+			const id = await createCharacter({
 				playCards: allPlayCards,
 				name,
 				description,
-				pitfall,
-				customPitfall,
+				pitfall: pitfall,
 				rapport: [ally, rival],
 				fieldOfStudy,
 				gear,
@@ -154,14 +169,13 @@
 				xp: 0,
 				notes: '',
 				createdOn: new Date(Date.now())
-			};
+			});
 
-			log('create addCharacter', false, { character });
-
-			// Add the new character
-			const id = await db.characters.add(character);
-
-			goto(`/characters/${id}`);
+			if (id >= 0) {
+				goto(`/characters/${id}`);
+			} else {
+				status = 'Your character could not be created, please try again!';
+			}
 		} catch (error) {
 			status = `Failed to add ${name}: ${error}`;
 		}
@@ -177,25 +191,28 @@
 
 		<p class="text-sm my-1">
 			Pick three Play Cards to use, choosing from the available ones or working with the Director to
-			create your own.
+			create your own. Make sure to answer all of the questions on each Play Card to establish your
+			Bonuses.
 		</p>
 
 		<div class="grid lg:grid-cols-3 gap-2">
-			<PlayCardInput
-				playCard={allPlayCards[0]}
-				others={getOthers(allPlayCards, 0)}
-				on:select={({ detail }) => (allPlayCards[0] = detail)}
-			/>
-			<PlayCardInput
-				playCard={allPlayCards[1]}
-				others={getOthers(allPlayCards, 1)}
-				on:select={({ detail }) => (allPlayCards[1] = detail)}
-			/>
-			<PlayCardInput
-				playCard={allPlayCards[2]}
-				others={getOthers(allPlayCards, 2)}
-				on:select={({ detail }) => (allPlayCards[2] = detail)}
-			/>
+			{#each playCardSlots as _, i}
+				<PlayCardInput
+					bind:playCard={playCardSlots[i]}
+					others={getOthers(allPlayCards, i)}
+					on:saved={({ detail }) => (allPlayCards[i] = { ...detail })}
+				>
+					<Button
+						type="submit"
+						classes="w-32"
+						color="lime"
+						disabled={Boolean(allPlayCards[i]) &&
+							!hasCardChanged(playCardSlots[i], allPlayCards[i])}
+					>
+						{allPlayCards[i] ? 'Save' : 'Add'} Play Card
+					</Button>
+				</PlayCardInput>
+			{/each}
 		</div>
 	</fieldset>
 
@@ -223,50 +240,38 @@
 	</fieldset>
 
 	<fieldset class="mt-2">
-		<legend><h2 class="text-xl">3. Choose a Pitfall</h2></legend>
+		<legend><h2 class="text-xl">3. Pick an Optional Field of Study</h2></legend>
 
 		<p class="text-sm my-1">
-			Each Play Card comes with a Pitfall. Choose one to use for your Character.
+			If your Character is or was a scientist, decide what their field of study is or if they have
+			multiple.
 		</p>
 
 		<!-- svelte-ignore a11y-label-has-associated-control -->
-		<label>
-			Pitfall:
-			<Select bind:value={pitfall} placeholder="Select a Pitfall" options={pitfalls} required />
+		<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
+			<p class="w-36">Field of Study:</p>
+			<TextInput bind:value={fieldOfStudy} maxlength="25" />
 		</label>
 	</fieldset>
 
 	<fieldset class="mt-2">
-		<legend><h2 class="text-xl">4. Create an Additional Pitfall</h2></legend>
+		<legend><h2 class="text-xl">4. Create a Pitfall</h2></legend>
 
 		<p class="text-sm my-1">
-			Write another Pitfall for your Character. Don’t overthink it; even a simple flaw can present
-			itself in many ways. Write it in the second person, for example:”You tend to get lost in your
-			own thoughts leading you to make careless mistakes.”
+			Write a Pitfall for your Character. Don’t overthink it; even simple flaws can present
+			themselves in many ways. Write it in the second person, for example:”You tend to get lost in
+			your own thoughts, leading you to make careless mistakes.”
 		</p>
 
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label class="flex flex-col w-full">
 			Custom Pitfall:
-			<Textarea bind:value={customPitfall} maxlength="240" required />
+			<Textarea bind:value={pitfall} maxlength="240" required />
 		</label>
 	</fieldset>
 
 	<fieldset class="mt-2">
-		<legend><h2 class="text-xl">5. Determine Your Health</h2></legend>
-
-		<p class="text-sm my-1">
-			Your Character has a Health to the total of their Play Card’s Health. Add the Health from all
-			of your Play Cards and mark that as your Character’s Health by drawing a vertical line after
-			the corresponding checkbox on your Character Sheet. If you exceed this line, your Character is
-			in serious trouble.
-		</p>
-
-		<DamageInfo playCards={allPlayCards} />
-	</fieldset>
-
-	<fieldset class="mt-2">
-		<legend><h2 class="text-xl">6. Choose An Unlockable</h2></legend>
+		<legend><h2 class="text-xl">5. Choose An Unlockable</h2></legend>
 
 		<p class="text-sm my-1">Select one Unlockable from one of your Play Cards to start.</p>
 
@@ -296,64 +301,20 @@
 	</fieldset>
 
 	<fieldset class="mt-2">
-		<legend><h2 class="text-xl">7. Establish Rapport</h2></legend>
+		<legend><h2 class="text-xl">6. Determine Your Health</h2></legend>
 
 		<p class="text-sm my-1">
-			At the start of the game, each Player will assign the following Rapport stat scores that their
-			Character has toward the other Characters:
+			Your Character has a Health to the total of their Play Card’s Health. Add the Health from all
+			of your Play Cards and mark that as your Character’s Health by drawing a vertical line after
+			the corresponding checkbox on your Character Sheet. If you exceed this line, your Character is
+			in serious trouble.
 		</p>
 
-		<ul class="list-disc pl-8 text-sm">
-			<li>+2 for the one they know best.</li>
-			<li>-1 for the one they know least.</li>
-			<li>+1 for all others.</li>
-		</ul>
-
-		<p class="font-bold text-sm pt-1">
-			You can update your Rapport after you save your Character Sheet
-		</p>
+		<DamageInfo playCards={allPlayCards} />
 	</fieldset>
 
 	<fieldset class="mt-2">
-		<legend><h2 class="text-xl">8. Pick an Optional Field of Study</h2></legend>
-
-		<p class="text-sm my-1">
-			If your Character is or was a scientist, decide what their field of study is or if they have
-			multiple.
-		</p>
-
-		<!-- svelte-ignore a11y-label-has-associated-control -->
-		<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
-			<p class="w-36">Field of Study:</p>
-			<TextInput bind:value={fieldOfStudy} maxlength="25" />
-		</label>
-	</fieldset>
-
-	<fieldset class="mt-2">
-		<legend><h2 class="text-xl">9. Create Ally and Rival NPCs</h2></legend>
-
-		<p class="text-sm my-1">
-			Your Character should be a member of the Town’s community and have established relationships.
-			Create an ally NPC, then create a rival NPC. Think about who the NPC is, what role they play
-			in the Town, and your history with him.
-		</p>
-
-		<div class="flex flex-col lg:flex-row gap-2 items-center">
-			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
-				Ally:
-				<TextInput bind:value={ally.name} classes="lg:ml-2" maxlength="25" required />
-			</label>
-			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
-				Rival:
-				<TextInput bind:value={rival.name} classes="lg:ml-2" maxlength="25" required />
-			</label>
-		</div>
-	</fieldset>
-
-	<fieldset class="mt-2">
-		<legend><h2 class="text-xl">10. Pick Some Starting Gear</h2></legend>
+		<legend><h2 class="text-xl">7. Pick Some Starting Gear</h2></legend>
 
 		<p class="text-sm my-1">
 			At the start of the game, determine what kind of gear your Character may carry on them. Decide
@@ -394,8 +355,68 @@
 			/>
 		</div>
 	</fieldset>
+
 	<fieldset class="mt-2">
-		<legend><h2 class="text-xl">11. Add an Optional Character Avatar</h2></legend>
+		<legend><h2 class="text-xl">8. Create Ally and Rival NPCs</h2></legend>
+
+		<p class="text-sm my-1">
+			Your Character should be a member of the Town’s community and have established relationships.
+			Create an ally NPC, then create a rival NPC. Think about who the NPC is, what role they play
+			in the Town, and your history with him.
+		</p>
+
+		<div class="flex flex-col lg:flex-row gap-2 items-center">
+			<div class="flex flex-col gap-2">
+				<p class="font-bold">Ally:</p>
+				<!-- svelte-ignore a11y-label-has-associated-control -->
+				<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
+					Name:
+					<TextInput bind:value={ally.name} classes="lg:ml-2" maxlength="25" required />
+				</label>
+				<!-- svelte-ignore a11y-label-has-associated-control -->
+				<label class="flex flex-col w-full">
+					Description:
+					<Textarea bind:value={ally.description} maxlength="240" required />
+				</label>
+			</div>
+
+			<div class="flex flex-col gap-2">
+				<p class="font-bold">Rival:</p>
+				<!-- svelte-ignore a11y-label-has-associated-control -->
+				<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
+					Name:
+					<TextInput bind:value={rival.name} classes="lg:ml-2" maxlength="25" required />
+				</label>
+				<!-- svelte-ignore a11y-label-has-associated-control -->
+				<label class="flex flex-col w-full">
+					Description:
+					<Textarea bind:value={rival.description} maxlength="240" required />
+				</label>
+			</div>
+		</div>
+	</fieldset>
+
+	<fieldset class="mt-2">
+		<legend><h2 class="text-xl">9. Establish Rapport</h2></legend>
+
+		<p class="text-sm my-1">
+			At the start of the game, each Player will assign the following Rapport stat scores that their
+			Character has toward the other Characters:
+		</p>
+
+		<ul class="list-disc pl-8 text-sm">
+			<li>+2 for the one they know best.</li>
+			<li>-1 for the one they know least.</li>
+			<li>+1 for all others.</li>
+		</ul>
+
+		<p class="font-bold text-sm pt-1">
+			You can update your Rapport after you save your Character Sheet
+		</p>
+	</fieldset>
+
+	<fieldset class="mt-2">
+		<legend><h2 class="text-xl">10. Add an Optional Character Avatar</h2></legend>
 
 		<p class="text-sm my-1">
 			This must be an URL to the image. The image will <em>not</em> be hosted here.

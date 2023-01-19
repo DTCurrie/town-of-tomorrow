@@ -6,6 +6,8 @@
 	import classNames from 'classnames';
 	import TextInput from './inputs/TextInput.svelte';
 	import NumberInput from './inputs/NumberInput.svelte';
+	import { log } from '$lib/logs';
+	import Textarea from './inputs/Textarea.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -13,22 +15,48 @@
 
 	let newRapportName = '';
 	let newRapportValue = 0;
+	let newRapportDescription = '';
 
 	let expanded = false;
+	let status = '';
 
 	const resetNewRapport = () => {
 		newRapportName = '';
+		newRapportDescription = '';
 		newRapportValue = 0;
 	};
 
+	const validate = (): string => {
+		log('NewRapport validate', false, { newRapport });
+
+		if (!newRapport.name) {
+			return (status = 'Enter a name for your Gear!');
+		}
+
+		if (!newRapport.description) {
+			return (status = 'Enter a description for your Gear!');
+		}
+
+		if (newRapport.value === undefined || newRapport.value < 0) {
+			return (status = 'Enter a rating for your Gear!');
+		}
+
+		return (status = '');
+	};
+
 	const addRapport = () => {
-		create();
-		resetNewRapport();
+		status = validate();
+
+		if (!status) {
+			create();
+			resetNewRapport();
+		}
 	};
 
 	$: newRapport = {
-		name: newRapportName,
+		name: newRapportName.trim(),
 		value: newRapportValue,
+		description: newRapportDescription.trim(),
 		overflow: false
 	} as Rapport;
 </script>
@@ -51,12 +79,12 @@
 		class={classNames(
 			'flex flex-col gap-1 lg:gap-2 px-2 w-full transition-all duration-[250ms] ease-out overflow-hidden border border-black border-t-0',
 			{
-				'h-[176px] lg:h-24 pt-2': expanded,
+				'h-auto pt-2': expanded,
 				'h-0 p-0 border-b-0': !expanded
 			}
 		)}
 	>
-		<div class="flex flex-col lg:flex-row gap-2 items-center">
+		<div class="flex flex-col lg:flex-row gap-1 lg:gap-2 items-center">
 			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
 				Name:
@@ -69,6 +97,19 @@
 				<NumberInput bind:value={newRapportValue} classes="lg:ml-2" min="-3" max="3" />
 			</label>
 		</div>
-		<Button type="submit" classes="w-32 ml-auto mt-1" color="lime">Add Rapport</Button>
+
+		<!-- svelte-ignore a11y-label-has-associated-control -->
+		<label class="flex flex-col w-full">
+			Description:
+			<Textarea bind:value={newRapportDescription} maxlength="240" />
+		</label>
+
+		<div class="flex flex-col p-2 gap-2">
+			{#if status}
+				<p class="bg-red-700 text-white p-2">{status}</p>
+			{/if}
+
+			<Button type="submit" classes="w-32 ml-auto" color="lime">Add Rapport</Button>
+		</div>
 	</div>
 </form>

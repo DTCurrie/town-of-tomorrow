@@ -5,9 +5,10 @@
 
 	export let armor: Armor[];
 
-	export let select = (piece: Armor, index: number) =>
+	export let select = (data: Armor, index: number) =>
 		dispatch('select-armor', {
-			piece,
+			component: 'armor-info',
+			data,
 			index
 		});
 

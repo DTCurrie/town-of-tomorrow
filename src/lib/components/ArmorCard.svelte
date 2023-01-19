@@ -7,7 +7,7 @@
 </script>
 
 <button
-	class="flex w-full text-left bg-lime-700 text-white rounded-lg p-2"
+	class="flex w-full text-left bg-lime-700 text-white rounded-lg p-2 shadow"
 	on:click|preventDefault={select}
 >
 	<div class="flex flex-row w-full">

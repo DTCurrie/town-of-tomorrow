@@ -5,9 +5,10 @@
 
 	export let gear: Gear[];
 
-	export let select = (piece: Gear, index: number) =>
+	export let select = (data: Gear, index: number) =>
 		dispatch('select-gear', {
-			piece,
+			component: 'gear-info',
+			data,
 			index
 		});
 

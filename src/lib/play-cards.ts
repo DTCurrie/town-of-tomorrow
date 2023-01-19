@@ -1,12 +1,23 @@
 import { getColorClass, type Color } from './color';
-import type { Job, PlayCard, PlayCards } from './db';
+import type { Job, PlayCard, PlayCardIndex, PlayCards } from './db';
 import { detective, hotShot, liaison, sage, specialist } from './jobs';
 
-export const marshal: PlayCard = {
+export type OtherPlayCards = [PlayCard | null, PlayCard | null, PlayCard | null];
+
+export const marshal = (): PlayCard => ({
 	name: 'Marshal',
 	job: detective,
-	bonuses: ['Tracking', 'Protection', 'An Offroad Vehicle'],
-	pitfall: 'You follow the letter of the law, even when it’s hard to do.',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'How do you apprehend suspects?',
+		'How do you protect others?',
+		'What make you handy in a chase?',
+	],
+	bonusExamples: [
+		'ambush, find any trail, my robo-dog companion',
+		'sixth-sense, calm under pressure, my anti-ballistic shield',
+		'athletics, situational awareness, my offroad vehicle',
+	],
 	unlockables: [
 		{
 			name: 'Take A Bullet',
@@ -20,13 +31,22 @@ export const marshal: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const intelligence: PlayCard = {
+export const intelligence = (): PlayCard => ({
 	name: 'Intelligence',
 	job: detective,
-	bonuses: ['Espionage', 'Security', 'A Fancy Spy Gadget'],
-	pitfall: 'People in the Town have difficulty trusting the “spy.”',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'What made you a great at intelligence gathering?',
+		'How do you respond to danger?',
+		'What gadgets do you have?',
+	],
+	bonusExamples: [
+		'disguises, roguish charm,  my spy-vision contacts',
+		'cool head, get out of the way, my trusty sidearm',
+		'laser watch, concealed taser, my secret comm device',
+	],
 	unlockables: [
 		{
 			name: 'Sabotage',
@@ -41,13 +61,22 @@ export const intelligence: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const investigator: PlayCard = {
+export const investigator = (): PlayCard => ({
 	name: 'Investigator',
 	job: detective,
-	bonuses: ['Investigation', 'Interrogation', 'An All-Purpose Sensor'],
-	pitfall: 'You will pursue a good lead, no matter the consequences or danger.',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'What do you use to find clues?',
+		'How do you conduct interviews?',
+		'What unusual technique do you use in your investigations?',
+	],
+	bonusExamples: [
+		'forensics, attention to detail, my all-purpose scanner',
+		'interrogation, play dumb, my trusty recorder',
+		'meditation, encylopediac knowledge, my cyber-Watson computer',
+	],
 	unlockables: [
 		{
 			name: 'And One More Thing',
@@ -61,13 +90,22 @@ export const investigator: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const researcher: PlayCard = {
+export const researcher = (): PlayCard => ({
 	name: 'Researcher',
 	job: liaison,
-	bonuses: ['Research', 'Field Study', 'A Private Lab'],
-	pitfall: 'You are a by-the-book academic and never want to break the rules.',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'What do you research?',
+		'Where is your favorite place to work?',
+		'What tools do you use?',
+	],
+	bonusExamples: [
+		'policy, scientific artifacts, my therapeutic process',
+		'library, out in the field, my private lab',
+		'sketchpad, backpacking supplies, my AI assistant',
+	],
 	unlockables: [
 		{
 			name: 'Still Got It',
@@ -81,13 +119,22 @@ export const researcher: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const agent: PlayCard = {
+export const agent = (): PlayCard => ({
 	name: 'Agent',
 	job: liaison,
-	bonuses: ['Inspection', 'Debate', 'A Standard-Issue Sidearm'],
-	pitfall: 'You put up the “red tape” that slows progress at the Establishment.',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'What is your responsibility in the Town?',
+		'What skills got you into your position?',
+		'What privileges come with the job?',
+	],
+	bonusExamples: [
+		'regulation, protecting government assets, my postal system',
+		'debate, knowing the rules, my way with people',
+		'clearance, insider knowledge, my standard issue sidearm',
+	],
 	unlockables: [
 		{
 			name: 'Eye For Detail',
@@ -101,13 +148,22 @@ export const agent: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const corporate: PlayCard = {
+export const corporate = (): PlayCard => ({
 	name: 'Corporate',
 	job: liaison,
-	bonuses: ['Negotiation', 'Mediation', 'An Executive Assistant'],
-	pitfall: 'You judge by “who would buy this” instead of “who does this help.”',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'What is your biggest strength?',
+		'What value do you add to the team?',
+		'What is your favorite thing about your role?',
+	],
+	bonusExamples: [
+		'negotiation, time management, my great attitude',
+		'efficiency, good with people, my business network',
+		'company car, access to “gizmos”, my executive assistant',
+	],
 	unlockables: [
 		{
 			name: 'Scan The Room',
@@ -121,13 +177,22 @@ export const corporate: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const military: PlayCard = {
+export const military = (): PlayCard => ({
 	name: 'Military',
 	job: specialist,
-	bonuses: ['Combat', 'Tactics', 'A Personalized Firearm'],
-	pitfall: 'You tend to get caught up with the action and take things too far.',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'What did you get specialized training in?',
+		'What special maneuver, skill, or trait did you learn?',
+		'How do you like to relax?',
+	],
+	bonusExamples: [
+		'martial arts, small-unit tactics, my firearm collection',
+		'dodge, jury-rigging equipment, my steel nerves',
+		'video games, playing baseball,  my vintage motorcycle',
+	],
 	unlockables: [
 		{
 			name: 'Ambusher',
@@ -141,13 +206,22 @@ export const military: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const security: PlayCard = {
+export const security = (): PlayCard => ({
 	name: 'Security',
 	job: specialist,
-	bonuses: ['Fighting', 'Awareness', 'Threat Assessment Device'],
-	pitfall: 'You hope someone swings first so you can enjoy defending yourself.',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'How do you deal with a fight breaking out?',
+		'What do you use to detect danger?',
+		'What qualities have you picked up over the years?',
+	],
+	bonusExamples: [
+		'deescalation, jump right in, my stun baton',
+		'instincts, keen eye, my threat assessment monocle',
+		'paranoid, can take a punch,  my poker face',
+	],
 	unlockables: [
 		{
 			name: 'Ocular Assessment',
@@ -162,13 +236,22 @@ export const security: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const ordnance: PlayCard = {
+export const ordnance = (): PlayCard => ({
 	name: 'Ordnance',
 	job: specialist,
-	bonuses: ['Shooting', 'Piloting', 'A Military Vehicle'],
-	pitfall: 'You tend to go overboard with your choice of weapons.',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'What is your favorite piece of equipment in your collection?',
+		'How do you maintain your equipment?',
+		'What is the most unexpected piece in your collection?',
+	],
+	bonusExamples: [
+		'grenade launcher, support drones, my hover-APC',
+		'repair kit, firearms workshop , my mechanic friend',
+		'rubber ducky, fancy wine, my weaponized robo-kitten',
+	],
 	unlockables: [
 		{
 			name: 'Loud And Proud',
@@ -181,13 +264,22 @@ export const ordnance: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const inventor: PlayCard = {
+export const inventor = (): PlayCard => ({
 	name: 'Inventor',
 	job: hotShot,
-	bonuses: ['Tinkering', 'Problem-Solving', 'A High-Tech Tool'],
-	pitfall: 'You let everyone know you’re the best whether or not you are.',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'What is your process for inventing?',
+		'How would you generally describe your inventions?',
+		'What is your most important invention?',
+	],
+	bonusExamples: [
+		'tinkering, careful planning, my mechanical intuition',
+		'eclectic, a junkyard of unfinished projects, my android farm',
+		'cold fusion, anti-gravity boots, my portal gun',
+	],
 	unlockables: [
 		{
 			name: 'Hands-On',
@@ -200,13 +292,22 @@ export const inventor: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const analyst: PlayCard = {
+export const analyst = (): PlayCard => ({
 	name: 'Analyst',
 	job: hotShot,
-	bonuses: ['Analysis', 'Prediction', 'A Super-Computer'],
-	pitfall: 'You think nothing is worth doing if you can’t do it correctly.',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'How do you normally conduct your analysis?',
+		'What technology do you use for your work?',
+		'What trick, skill, or quality have you picked up through your work?',
+	],
+	bonusExamples: [
+		'statistics, modeling and simulation, my predictive algorithm',
+		'notebook, machine learning, my super computer',
+		'life hacking, counting cards, my ability to solve puzzles',
+	],
 	unlockables: [
 		{
 			name: 'Spotting Patterns',
@@ -220,13 +321,22 @@ export const analyst: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const engineer: PlayCard = {
+export const engineer = (): PlayCard => ({
 	name: 'Engineer',
 	job: hotShot,
-	bonuses: ['Manufacturing', 'Software', 'A Robotic Assistant'],
-	pitfall: 'You believe getting results is all that matters.',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'What is your favorite part of the engineering process?',
+		'What is your specialty?',
+		'What makes you feel pride in your work?',
+	],
+	bonusExamples: [
+		'design, putting things together, my omnitool',
+		'MacGyvering, software engineering, my auto-fabricator',
+		'problem solving, lots of patents, my robotic assistant',
+	],
 	unlockables: [
 		{
 			name: 'Design A Clever Trap',
@@ -240,13 +350,22 @@ export const engineer: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const teacher: PlayCard = {
-	name: 'Teacher',
+export const mentor = (): PlayCard => ({
+	name: 'Mentor',
 	job: sage,
-	bonuses: ['Instruction', 'Empathy', 'A Portable Hologram Device'],
-	pitfall: 'You think science should be free of influence.',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'What kind of work do you do?',
+		'Who do you mentor?',
+		'What are you known in the Town for?',
+	],
+	bonusExamples: [
+		'school teacher, advising at the Compound, my offsite lab',
+		'math students, Dr. Eugene Putz, my niece Sara',
+		'empathy, a selection of unique outfits, my portable hologram device',
+	],
 	unlockables: [
 		{
 			name: 'Teacher’s Eye',
@@ -260,13 +379,22 @@ export const teacher: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const proprietor: PlayCard = {
+export const proprietor = (): PlayCard => ({
 	name: 'Proprietor',
 	job: sage,
-	bonuses: ['Barter', 'Gossip', 'A Local Business'],
-	pitfall: 'You always take a chance to rebel against the Government.',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'What kind of business do you operate?',
+		'How do you interact with customers?',
+		'Who or what do you rely on to succeed?',
+	],
+	bonusExamples: [
+		'mechanic, the local salon, my bar Archimedes’ Screw',
+		'gossip, let’s make a deal, my customers are family',
+		'jeweler’s tools, delivery boy Rod Hobson, my multi-function work truck',
+	],
 	unlockables: [
 		{
 			name: 'Heard It On The Grapevine',
@@ -280,13 +408,22 @@ export const proprietor: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
-export const politician: PlayCard = {
+export const politician = (): PlayCard => ({
 	name: 'Politician',
 	job: sage,
-	bonuses: ['Politics', 'Speech', 'A Political Position'],
-	pitfall: 'You tend to bloviate, especially with an audience.',
+	bonuses: ['', '', ''],
+	bonusQuestions: [
+		'How do you serve the town?',
+		'What is your platform?',
+		'Where do you prefer to work from?',
+	],
+	bonusExamples: [
+		'mayor, Government representative, my activism',
+		'workplace safety, science free from influence, my recreation initiative',
+		'town hall, the local diner, my office at the Compound',
+	],
 	unlockables: [
 		{
 			name: 'Motivational Speaker',
@@ -300,7 +437,7 @@ export const politician: PlayCard = {
 			unlocked: false
 		}
 	]
-};
+});
 
 export const standardPlayCards = [
 	marshal,
@@ -315,15 +452,37 @@ export const standardPlayCards = [
 	inventor,
 	analyst,
 	engineer,
-	teacher,
+	mentor,
 	proprietor,
 	politician
 ];
 
+export const customPlayCard: Omit<PlayCard, 'job' | 'bonuses' | 'bonusQuestions'> = {
+	name: 'Play Card Name',
+	bonusExamples: [
+		'What is your specialty? What do you do? How do you do your job?',
+		'What makes you unique? Who do work with? Where do you work?',
+		'What do you know? What traits do you have? What tools do you use?',
+	],
+	unlockables: [
+		{
+			name: 'First Unlockable',
+			description:
+				'Create a Custom Move based on your Bonuses. Common mechanics are: you can Reroll, you can convert a Miss to a Complicated Success, or you can add +1 to the Roll.',
+			unlocked: false
+		},
+		{
+			name: 'Second Unlockable',
+			description: 'Create another Custom Move based on your Bonuses or something unique about you. This could be one of the common mechanics or something special, work with the Director to make sure it makes sense.',
+			unlocked: false
+		}
+	]
+}
+
 export const getOthers = (
 	playCards: PlayCards | undefined,
 	index: number
-): [PlayCard | null, PlayCard | null, PlayCard | null] => {
+): OtherPlayCards => {
 	const others = [...(playCards ?? [null, null, null, null])];
 	return others.filter((_, i) => i !== index) as [
 		PlayCard | null,
@@ -349,5 +508,8 @@ export const getJobColor = (job: string): Color => {
 };
 
 export type JobColorShade = '300' | '500' | '700';
-export const getJobColorClass = (setting: string, job: Job, shade: JobColorShade = '500') =>
-	getColorClass(setting, getJobColor(job.name), shade);
+export const getJobColorClass = (setting: string, job?: Job, shade: JobColorShade = '500') =>
+	getColorClass(setting, getJobColor(job?.name ?? ''), shade);
+
+export const getIndex = (i: number): PlayCardIndex => i as PlayCardIndex;
+export const isValidIndex = (i: number): boolean => i >= 0 && i < 4;

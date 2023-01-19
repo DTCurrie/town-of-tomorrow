@@ -1,7 +1,9 @@
 {
     "cSpell.words": [
+        "Dexie",
         "unlockable",
         "unlockables"
     ],
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "eslint.format.enable": true,
 }

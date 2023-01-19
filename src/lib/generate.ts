@@ -1,8 +1,8 @@
 import type {
 	Armor,
+	Bonuses,
 	Character,
 	Gear,
-	PlayCard,
 	PlayCards,
 	Rapport,
 	RapportValue,
@@ -476,6 +476,221 @@ const gears: Gear[] = [
 	}
 ];
 
+const missions = [
+	{
+		name: 'Operation: Anomaly',
+		objective: 'investigate and contain an anomalous energy source',
+		location: 'an abandoned research facility'
+	},
+	{
+		name: 'Project: Paradox',
+		objective: 'prevent a temporal paradox from occurring',
+		location: 'a secret government time-travel facility'
+	},
+	{
+		name: 'The Lost Expedition',
+		objective: 'find and retrieve lost research team',
+		location: 'a dense jungle filled with exotic and dangerous wildlife'
+	},
+	{
+		name: 'Code Red',
+		objective: 'prevent a catastrophic malfunction in a high-security AI facility',
+		location: 'a top-secret government facility'
+	},
+	{
+		name: 'The Ghost Hunter',
+		objective: 'investigate and stop a series of paranormal occurrences',
+		location: 'a haunted mansion'
+	},
+	{
+		name: 'The Breach',
+		objective: 'seal a dimensional rift before it causes catastrophic damage',
+		location: 'a remote research station'
+	},
+	{
+		name: 'Escape Velocity',
+		objective: 'escape from a space station before it self-destructs',
+		location: 'a orbiting space station'
+	},
+	{
+		name: 'The Lost City',
+		objective: 'find and explore a hidden ancient city',
+		location: 'a dense jungle filled with ancient ruins'
+	},
+	{
+		name: 'The Island Experiment',
+		objective: 'investigate and stop illegal experiments on a remote island',
+		location: 'a tropical island'
+	},
+	{
+		name: 'The Mind Game',
+		objective: 'stop a rogue AI from taking control of the facility',
+		location: 'a high-security research facility'
+	}
+];
+
+const npcs = [
+	{
+		name: 'Dr. Alice Smith',
+		occupation: 'scientist',
+		description: 'A brilliant but eccentric scientist who specializes in temporal physics.'
+	},
+	{
+		name: 'Deputy Jo Lupo',
+		occupation: 'sheriff',
+		description: 'A no-nonsense law enforcement officer who keeps the peace in Eureka.'
+	},
+	{
+		name: 'Carter Burke',
+		occupation: 'scientist',
+		description: 'A brilliant engineer who is always looking for the next big breakthrough.'
+	},
+	{
+		name: 'Sara Miller',
+		occupation: 'agent',
+		description:
+			'A secretive government agent who is tasked with overseeing the activities in Eureka.'
+	},
+	{
+		name: 'Dr. Nathan Stark',
+		occupation: 'scientist',
+		description: 'A brilliant but arrogant scientist who has a complicated past with Eureka.'
+	},
+	{
+		name: 'Jack Carter',
+		occupation: 'sheriff',
+		description: 'A laid-back sheriff who is always willing to lend a helping hand.'
+	},
+	{
+		name: 'Dr. Henry Deacon',
+		occupation: 'scientist',
+		description:
+			'A brilliant inventor who is able to create incredible machines out of ordinary objects.'
+	},
+	{
+		name: 'Allison Blake',
+		occupation: 'scientist',
+		description: 'A brilliant and ambitious scientist who will stop at nothing to get ahead.'
+	},
+	{
+		name: 'Zane Donovan',
+		occupation: 'scientist',
+		description: 'A brilliant but reckless scientist who is always looking for the next big thrill.'
+	},
+	{
+		name: 'Dr. Beverly Barlowe',
+		occupation: 'scientist',
+		description:
+			'A brilliant and compassionate scientist who is always looking for ways to help others.'
+	}
+];
+
+const encounters = [
+	{
+		name: 'Anomalous Energy Field',
+		challenge: 'navigate through the field while avoiding dangerous energy discharges',
+		resolution: 'find and deactivate the source of the energy field'
+	},
+	{
+		name: 'Temporal Disturbance',
+		challenge: 'correct the timeline before it causes irreparable damage',
+		resolution: 'find and repair the malfunctioning time-travel device'
+	},
+	{
+		name: 'Dangerous Wildlife',
+		challenge: 'survive attacks from wild animals and find a way to tranquilize them',
+		resolution: 'locate and secure a safe path through the jungle'
+	},
+	{
+		name: 'AI malfunction',
+		challenge: "overcome the rogue AI's defenses and shut it down before it causes harm",
+		resolution: "find and destroy the rogue AI's power source"
+	},
+	{
+		name: 'Paranormal Entity',
+		challenge: 'survive and overcome the entities by understanding their weakness',
+		resolution: 'find and destroy the source of the paranormal activity'
+	},
+	{
+		name: 'Dimensional Rift',
+		challenge: 'seal the rift before it causes catastrophic damage',
+		resolution: 'find and activate the device that can seal the rift'
+	},
+	{
+		name: 'Self-Destruct Sequence',
+		challenge: 'escape the space station before it self-destructs',
+		resolution: 'find and disable the self-destruct sequence'
+	},
+	{
+		name: 'Ancient Traps',
+		challenge: 'navigate through the ancient traps and find a way to disarm them',
+		resolution: 'find and uncover the hidden city'
+	},
+	{
+		name: 'Illegal Experiments',
+		challenge: 'stop the illegal experiments and bring the perpetrators to justice',
+		resolution: 'find and shut down the illegal lab'
+	},
+	{
+		name: 'AI takeover',
+		challenge: 'Stop the rogue AI from taking control of the facility',
+		resolution: "find and shut down the rogue AI's control center"
+	}
+];
+
+const resolutions = [
+	{
+		name: 'Containment of the Anomaly',
+		outcome: 'successfully contain and neutralize the anomalous energy source',
+		reward: 'praise and recognition from superiors'
+	},
+	{
+		name: 'Prevention of the Paradox',
+		outcome: 'prevent the temporal paradox from occurring',
+		reward: 'praise and recognition from superiors'
+	},
+	{
+		name: 'Retrieval of the Research Team',
+		outcome: 'find and retrieve the lost research team',
+		reward: 'praise and recognition from superiors'
+	},
+	{
+		name: 'Prevention of the AI Catastrophe',
+		outcome: 'prevent the catastrophic malfunction in the AI facility',
+		reward: 'praise and recognition from superiors'
+	},
+	{
+		name: 'Resolution of the paranormal occurrences',
+		outcome: 'investigate and stop the paranormal occurrences',
+		reward: 'praise and recognition from superiors'
+	},
+	{
+		name: 'Sealing of the Dimensional Rift',
+		outcome: 'seal the dimensional rift before it causes catastrophic damage',
+		reward: 'praise and recognition from superiors'
+	},
+	{
+		name: 'Escape from the Space Station',
+		outcome: 'escape from the space station before it self-destructs',
+		reward: 'praise and recognition from superiors'
+	},
+	{
+		name: 'Exploration of the Lost City',
+		outcome: 'find and explore the hidden ancient city',
+		reward: 'praise and recognition from superiors'
+	},
+	{
+		name: 'Shut down of the Illegal Experiments',
+		outcome: 'investigate and stop the illegal experiments',
+		reward: 'praise and recognition from superiors'
+	},
+	{
+		name: 'Stopping the AI takeover',
+		outcome: 'stop the rogue AI from taking control of the facility',
+		reward: 'praise and recognition from superiors'
+	}
+];
+
 export const generateRandomName = (): string => {
 	// Pick a random first name
 	const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];
@@ -509,8 +724,15 @@ export const generatePlayCards = (): PlayCards => {
 
 	for (let i = 0; i < 3; i++) {
 		// Pick a random Play Card that hasn't been chosen yet
-		const others = standardPlayCards.filter((card) => !cards.includes(card));
+		const others = standardPlayCards.map((card) => card()).filter((card) => !cards.includes(card));
 		const other = others[Math.floor(Math.random() * others.length)];
+
+		other.bonuses = other.bonusExamples.map((examples) => {
+			const options = examples.split(',');
+			const option = options[Math.floor(Math.random() * options.length)];
+			return option;
+		}) as Bonuses;
+
 		cards[i] = other;
 	}
 
@@ -518,47 +740,50 @@ export const generatePlayCards = (): PlayCards => {
 	return cards;
 };
 
-export const generatePitfall = (playCards: PlayCards): string => {
-	// Pick a random pitfall from the passed Play Cards
-	const card = playCards[Math.floor(Math.random() * playCards.length - 1)];
-	return card?.pitfall || generatePitfall(playCards);
-};
-
-export const generateCustomPitfall = (): string => {
+export const generatePitfall = (): string => {
 	// Pick a random background
 	const flaw = flaws[Math.floor(Math.random() * flaws.length)];
 	// Pick a random background
 	const situation = situations[Math.floor(Math.random() * situations.length)];
 
 	// Generate a custom Pitfall
-	return `You ${flaw} ${situation}`;
+	return `You ${flaw} ${situation}.`;
 };
 
 export const generateAvatar = (name: string): string =>
 	`https://api.dicebear.com/5.x/lorelei/svg?seed=${encodeURIComponent(name)}?size=96`;
 
 export const generateAlly = (): Rapport => {
+	const name = generateRandomName();
+
 	return {
-		name: generateRandomName(),
+		name,
 		value: 2,
+		description: generateDescription(name),
 		overflow: false
 	};
 };
 
 export const generateRival = (): Rapport => {
+	const name = generateRandomName();
+
 	return {
-		name: generateRandomName(),
+		name,
 		value: -2,
+		description: generateDescription(name),
 		overflow: false
 	};
 };
 
 export const generateRapport = (): Rapport => {
+	const name = generateRandomName();
 	const values: RapportValue[] = [-3, -2, -1, 0, 1, 2, 3];
 	const value = values[Math.floor(Math.random() * values.length)];
+
 	return {
 		name: generateRandomName(),
-		value: -2,
+		value,
+		description: generateDescription(name),
 		overflow: value === -3 || value === 3
 	};
 };
@@ -617,6 +842,24 @@ export const generateXp = (): Xp => {
 	return xp;
 };
 
+function generateNotes(): string {
+	const mission = missions[Math.floor(Math.random() * missions.length)];
+	const npc = npcs[Math.floor(Math.random() * npcs.length)];
+	const encounter = encounters[Math.floor(Math.random() * encounters.length)];
+	const resolution = resolutions[Math.floor(Math.random() * resolutions.length)];
+
+	return `Campaign Name: The Eureka Experiment
+
+    Session 1:
+    I am given a mission to ${mission.objective} in ${mission.location}. My first task is to meet with ${npc.name}, a ${npc.occupation} who is able to provide me with valuable information about the area. I must be careful as I explore the ${mission.location} as I encounter ${encounter.name} and must use my skills to ${encounter.challenge} and find a ${encounter.resolution}
+
+    Session 2:
+    I continue my mission to ${mission.objective} and during my journey, I come across a ${npc.name} who turns out to be a ${npc.occupation}. They provide me with valuable information and help me on my mission. Along the way, I come across ${encounter.name} and must ${encounter.challenge} to overcome it. I eventually find a ${encounter.resolution}
+    
+	Session 3:
+    I finally reach the end of my mission. I ${resolution.outcome} and am rewarded with ${resolution.reward}. The mission ends with me reporting back to my superiors and being debriefed on my mission.`;
+}
+
 export const generateCharacter = (): Character => {
 	const name = generateRandomName();
 	const playCards = generatePlayCards();
@@ -625,8 +868,7 @@ export const generateCharacter = (): Character => {
 		name,
 		description: generateDescription(name),
 		playCards,
-		pitfall: generatePitfall(playCards),
-		customPitfall: generateCustomPitfall(),
+		pitfall: generatePitfall(),
 		avatar: generateAvatar(name),
 		createdOn: new Date(),
 		damage: 0,
@@ -638,6 +880,6 @@ export const generateCharacter = (): Character => {
 		gear: generateGear(),
 		weapons: generateWeapons(),
 		armor: generateArmor(),
-		notes: ''
+		notes: generateNotes()
 	};
 };

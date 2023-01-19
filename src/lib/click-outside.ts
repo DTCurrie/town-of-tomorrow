@@ -1,4 +1,4 @@
-export const clickOutside = (node: Node, callback: () => void) => {
+export const clickOutside = (node: HTMLElement, callback: () => void) => {
 	const handleClick = (event: MouseEvent) => {
 		if (node && !node.contains(event.target as Node) && !event.defaultPrevented) {
 			callback();

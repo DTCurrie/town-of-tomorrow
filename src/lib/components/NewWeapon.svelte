@@ -7,6 +7,7 @@
 	import TextInput from './inputs/TextInput.svelte';
 	import NumberInput from './inputs/NumberInput.svelte';
 	import Textarea from './inputs/Textarea.svelte';
+	import { log } from '$lib/logs';
 
 	const dispatch = createEventDispatcher();
 
@@ -17,6 +18,7 @@
 	let newWeaponDescription = '';
 
 	let expanded = false;
+	let status = '';
 
 	const resetNewWeapon = () => {
 		newWeaponName = '';
@@ -24,15 +26,37 @@
 		newWeaponDescription = '';
 	};
 
+	const validate = (): string => {
+		log('NewWeapon validate', false, { newWeapon });
+
+		if (!newWeapon.name) {
+			return (status = 'Enter a name for your Weapon!');
+		}
+
+		if (!newWeapon.description) {
+			return (status = 'Enter a description for your Weapon!');
+		}
+
+		if (newWeapon.rating === undefined || newWeapon.rating < 0) {
+			return (status = 'Enter a rating for your Weapon!');
+		}
+
+		return (status = '');
+	};
+
 	const addWeapon = () => {
-		create();
-		resetNewWeapon();
+		status = validate();
+
+		if (!status) {
+			create();
+			resetNewWeapon();
+		}
 	};
 
 	$: newWeapon = {
-		name: newWeaponName,
+		name: newWeaponName.trim(),
 		rating: newWeaponRating,
-		description: newWeaponDescription
+		description: newWeaponDescription.trim()
 	} as Weapon;
 </script>
 
@@ -87,6 +111,12 @@
 			<Textarea bind:value={newWeaponDescription} classes="lg:ml-2" maxlength="240" />
 		</label>
 
-		<Button type="submit" classes="w-32 ml-auto mt-1" color="lime">Add Weapon</Button>
+		<div class="flex flex-col p-2 gap-2">
+			{#if status}
+				<p class="bg-red-700 text-white p-2">{status}</p>
+			{/if}
+
+			<Button type="submit" classes="w-32 ml-auto mt-1" color="lime">Add Weapon</Button>
+		</div>
 	</div>
 </form>

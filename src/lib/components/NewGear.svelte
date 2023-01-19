@@ -7,6 +7,7 @@
 	import TextInput from './inputs/TextInput.svelte';
 	import NumberInput from './inputs/NumberInput.svelte';
 	import Textarea from './inputs/Textarea.svelte';
+	import { log } from '$lib/logs';
 
 	const dispatch = createEventDispatcher();
 
@@ -17,6 +18,7 @@
 	let newGearDescription = '';
 
 	let expanded = false;
+	let status = '';
 
 	const resetNewGear = () => {
 		newGearName = '';
@@ -24,15 +26,37 @@
 		newGearDescription = '';
 	};
 
+	const validate = (): string => {
+		log('NewGear validate', false, { newGear });
+
+		if (!newGear.name) {
+			return (status = 'Enter a name for your Gear!');
+		}
+
+		if (!newGear.description) {
+			return (status = 'Enter a description for your Gear!');
+		}
+
+		if (newGear.rating === undefined || newGear.rating < 0) {
+			return (status = 'Enter a rating for your Gear!');
+		}
+
+		return (status = '');
+	};
+
 	const addGear = () => {
-		create();
-		resetNewGear();
+		status = validate();
+
+		if (!status) {
+			create();
+			resetNewGear();
+		}
 	};
 
 	$: newGear = {
-		name: newGearName,
+		name: newGearName.trim(),
 		rating: newGearRating,
-		description: newGearDescription
+		description: newGearDescription.trim()
 	} as Gear;
 </script>
 
@@ -55,7 +79,7 @@
 		class={classNames(
 			'flex flex-col gap-1 lg:gap-2 px-2 w-full transition-all duration-[250ms] ease-out overflow-hidden border border-black border-t-0',
 			{
-				'h-[264px] lg:h-48 pt-2': expanded,
+				'h-auto pt-2': expanded,
 				'h-0 p-0 border-b-0': !expanded
 			}
 		)}
@@ -80,6 +104,12 @@
 			<Textarea bind:value={newGearDescription} maxlength="240" />
 		</label>
 
-		<Button type="submit" classes="w-32 ml-auto mt-1" color="lime">Add Gear</Button>
+		<div class="flex flex-col p-2 gap-2">
+			{#if status}
+				<p class="bg-red-700 text-white p-2">{status}</p>
+			{/if}
+
+			<Button type="submit" classes="w-32 ml-auto" color="lime">Add Gear</Button>
+		</div>
 	</div>
 </form>

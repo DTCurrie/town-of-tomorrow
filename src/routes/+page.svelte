@@ -1,15 +1,13 @@
 <script lang="ts">
 	import { DateTime } from 'luxon';
-	import { browser } from '$app/environment';
-	import { db, type Character } from '$lib/db';
-	import { liveQuery, type Observable } from 'dexie';
 	import { getJobColorClass } from '$lib/play-cards';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import classNames from 'classnames';
+	import type { PageData } from './$types';
 
-	$: characters = liveQuery(async () => {
-		return browser ? await db.characters.toArray() : [];
-	}) as Observable<Character[]>;
+	export let data: PageData;
+
+	$: characters = data.characters;
 </script>
 
 {#if $characters}

@@ -11,6 +11,8 @@
 	export let dead = false;
 	export let playCards: PlayCards | undefined;
 	export let readonly = false;
+	export let showCritical = false;
+	export let showDead = false;
 	export let setDamage = (value: number) => dispatch('set-damage', value);
 	export let setCritical = (value: boolean) => dispatch('set-critical', value);
 	export let setDead = (value: boolean) => dispatch('set-dead', value);
@@ -53,37 +55,43 @@
 			{/each}
 		</div>
 
-		<div class="relative hidden lg:block shrink-0 w-[2px] h-7 lg:h-8 bg-black -top-1 ml-2" />
+		{#if showCritical || showDead}
+			<div class="relative hidden lg:block shrink-0 w-[2px] h-7 lg:h-8 bg-black -top-1 ml-2" />
+		{/if}
 
 		<div class="flex flex-row gap-1 lg:mt-0">
-			<span class="flex flex-col w-9 items-center">
-				<Checkbox
-					color="amber"
-					checked={critical}
-					on:checked={() => {
-						if (!readonly) {
-							setCritical(!critical);
-						}
-					}}
-					aria-label={`Set character as critical to: ${!critical}`}
-					{readonly}
-				/>
-				<p class="text-xs p-0.5">crit.</p>
-			</span>
-			<span class="flex flex-col w-9 items-center">
-				<Checkbox
-					checked={dead}
-					color="rose"
-					on:checked={() => {
-						if (!readonly) {
-							setDead(!dead);
-						}
-					}}
-					aria-label={`Set character as dead to: ${!dead}`}
-					{readonly}
-				/>
-				<p class="text-xs p-0.5">dead</p>
-			</span>
+			{#if showCritical}
+				<span class="flex flex-col w-9 items-center">
+					<Checkbox
+						color="amber"
+						checked={critical}
+						on:checked={() => {
+							if (!readonly) {
+								setCritical(!critical);
+							}
+						}}
+						aria-label={`Set character as critical to: ${!critical}`}
+						{readonly}
+					/>
+					<p class="text-xs p-0.5">crit.</p>
+				</span>
+			{/if}
+			{#if showDead}
+				<span class="flex flex-col w-9 items-center">
+					<Checkbox
+						checked={dead}
+						color="rose"
+						on:checked={() => {
+							if (!readonly) {
+								setDead(!dead);
+							}
+						}}
+						aria-label={`Set character as dead to: ${!dead}`}
+						{readonly}
+					/>
+					<p class="text-xs p-0.5">dead</p>
+				</span>
+			{/if}
 		</div>
 	</div>
 </div>

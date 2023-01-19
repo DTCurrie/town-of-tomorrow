@@ -7,6 +7,7 @@
 	import TextInput from './inputs/TextInput.svelte';
 	import NumberInput from './inputs/NumberInput.svelte';
 	import Textarea from './inputs/Textarea.svelte';
+	import { log } from '$lib/logs';
 
 	const dispatch = createEventDispatcher();
 
@@ -17,6 +18,7 @@
 	let newArmorDescription = '';
 
 	let expanded = false;
+	let status = '';
 
 	const resetNewArmor = () => {
 		newArmorName = '';
@@ -24,15 +26,37 @@
 		newArmorDescription = '';
 	};
 
+	const validate = (): string => {
+		log('NewArmor validate', false, { newArmor });
+
+		if (!newArmor.name) {
+			return (status = 'Enter a name for your Armor!');
+		}
+
+		if (!newArmor.description) {
+			return (status = 'Enter a description for your Armor!');
+		}
+
+		if (newArmor.rating === undefined || newArmor.rating < 0) {
+			return (status = 'Enter a rating for your Armor!');
+		}
+
+		return (status = '');
+	};
+
 	const addArmor = () => {
-		create();
-		resetNewArmor();
+		status = validate();
+
+		if (!status) {
+			create();
+			resetNewArmor();
+		}
 	};
 
 	$: newArmor = {
-		name: newArmorName,
+		name: newArmorName.trim(),
 		rating: newArmorRating,
-		description: newArmorDescription
+		description: newArmorDescription.trim()
 	} as Armor;
 </script>
 
@@ -55,7 +79,7 @@
 		class={classNames(
 			'flex flex-col gap-1 lg:gap-2 px-2 w-full transition-all duration-[250ms] ease-out overflow-hidden border border-black border-t-0',
 			{
-				'h-[264px] lg:h-48 pt-2': expanded,
+				'h-auto py-2': expanded,
 				'h-0 p-0 border-b-0': !expanded
 			}
 		)}
@@ -77,9 +101,15 @@
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label class="flex flex-col w-full">
 			Description:
-			<Textarea bind:value={newArmorDescription} maxlength="240" />
+			<Textarea bind:value={newArmorDescription} maxlength="240" required />
 		</label>
 
-		<Button type="submit" classes="w-32 ml-auto mt-1" color="lime">Add Armor</Button>
+		<div class="flex flex-col p-2 gap-2">
+			{#if status}
+				<p class="bg-red-700 text-white p-2">{status}</p>
+			{/if}
+
+			<Button type="submit" classes="w-32 ml-auto" color="lime">Add Armor</Button>
+		</div>
 	</div>
 </form>
