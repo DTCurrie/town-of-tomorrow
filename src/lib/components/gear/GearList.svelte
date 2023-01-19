@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { Gear } from '../db';
-	import GearCard from '$lib/components/GearCard.svelte';
+	import type { Gear } from '$lib/db';
+	import GearCard from '$lib/components/gear/GearCard.svelte';
 
 	export let gear: Gear[];
 

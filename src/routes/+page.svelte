@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { DateTime } from 'luxon';
-	import { getJobColorClass } from '$lib/play-cards';
-	import Avatar from '$lib/components/Avatar.svelte';
 	import classNames from 'classnames';
+	import { DateTime } from 'luxon';
+
+	import { getJobColorClass } from '$lib/play-cards';
+	import Avatar from '$lib/elements/Avatar.svelte';
+
 	import type { PageData } from './$types';
 
 	export let data: PageData;

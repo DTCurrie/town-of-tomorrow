@@ -1,10 +1,10 @@
 <script lang="ts">
 	import classNames from 'classnames';
-	import type { Character, PlayCard, PlayCardIndex } from '../db';
-	import Merits from './Merits.svelte';
-	import Faults from './Faults.svelte';
+	import type { Character, PlayCard, PlayCardIndex } from '$lib/db';
+	import Merits from '$lib/components/Merits.svelte';
+	import Faults from '$lib/components/Faults.svelte';
 	import { getJobColorClass } from '$lib/play-cards';
-	import Button from './Button.svelte';
+	import Button from '$lib/elements/Button.svelte';
 	import { removePlayCard, updateFaults, updateMerits, updateUnlocked } from '$lib/api/characters';
 
 	export let character: Character | undefined;

@@ -4,24 +4,26 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
-	import ArmorInfo from '$lib/components/ArmorInfo.svelte';
-	import Chevron from '$lib/components/icons/Chevron.svelte';
-	import GearInfo from '$lib/components/GearInfo.svelte';
-	import SelectedPlayCardInfo from '$lib/components/SelectedPlayCardInfo.svelte';
-	import PlayCardInput from '$lib/components/PlayCardInput.svelte';
-	import WeaponInfo from '$lib/components/WeaponInfo.svelte';
-
 	import { clickOutside } from '$lib/click-outside';
 	import type { Gear, PlayCard, Rapport } from '$lib/db';
 	import { getIndex, getOthers, type OtherPlayCards } from '$lib/play-cards';
 
-	import type { LayoutData } from './$types';
 	import { updatePlayCard } from '$lib/api/characters';
-	import NewPlayCard from '$lib/components/NewPlayCard.svelte';
 	import { createPlayCard } from '$lib/api/play-cards';
+
+	import ArmorInfo from '$lib/components/armor/ArmorInfo.svelte';
+	import GearInfo from '$lib/components/gear/GearInfo.svelte';
+	import NewPlayCard from '$lib/components/play-cards/NewPlayCard.svelte';
+	import PlayCardInput from '$lib/components/play-cards/PlayCardInput.svelte';
+	import SelectedPlayCardInfo from '$lib/components/play-cards/SelectedPlayCardInfo.svelte';
+	import RapportInfo from '$lib/components/rapport/RapportInfo.svelte';
+	import WeaponInfo from '$lib/components/weapons/WeaponInfo.svelte';
+
+	import Chevron from '$lib/elements/icons/Chevron.svelte';
+	import Button from '$lib/elements/Button.svelte';
+
 	import type { PlayCardAddData } from './utils';
-	import Button from '$lib/components/Button.svelte';
-	import RapportInfo from '$lib/components/RapportInfo.svelte';
+	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
 
@@ -138,17 +140,17 @@
 			{#if $details}
 				<div class="flex p-2 w-full h-full">
 					{#if $details.component === 'gear-info'}
-						<GearInfo bind:character={$character} {gear} {index} />
+						<GearInfo bind:character={$character} bind:gear {index} />
 					{:else if $details.component === 'weapon-info'}
-						<WeaponInfo bind:character={$character} weapon={gear} {index} />
+						<WeaponInfo bind:character={$character} bind:weapon={gear} {index} />
 					{:else if $details.component === 'armor-info'}
-						<ArmorInfo bind:character={$character} armor={gear} {index} />
+						<ArmorInfo bind:character={$character} bind:armor={gear} {index} />
 					{:else if $details.component === 'rapport-info'}
-						<RapportInfo bind:character={$character} {rapport} {index} />
+						<RapportInfo bind:character={$character} bind:rapport {index} />
 					{:else if $details.component === 'play-card-info'}
 						<SelectedPlayCardInfo
-							{playCard}
-							character={$character}
+							bind:playCard
+							bind:character={$character}
 							index={getIndex(index)}
 							showName={true}
 							showUnlocked
@@ -159,7 +161,7 @@
 					{:else if $details.component === 'play-card-add'}
 						<PlayCardInput
 							others={addPlayCard.others}
-							playCard={addPlayCard.selected}
+							bind:playCard={addPlayCard.selected}
 							on:saved={({ detail }) => {
 								updatePlayCard($character, detail, getIndex(index));
 								closeDetails();

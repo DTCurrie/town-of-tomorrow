@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { PlayCards } from '$lib/db';
 	import { getJobColor } from '$lib/play-cards';
-	import Checkbox from './inputs/Checkbox.svelte';
+	import Checkbox from '$lib/elements/inputs/Checkbox.svelte';
 
 	const dispatch = createEventDispatcher();
 

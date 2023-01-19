@@ -1,13 +1,16 @@
 <script lang="ts">
-	import classnames from 'classnames';
-	import { page } from '$app/stores';
-	import AddPerson from '$lib/components/icons/AddPerson.svelte';
-	import Chevron from '$lib/components/icons/Chevron.svelte';
-	import People from '$lib/components/icons/People.svelte';
 	import classNames from 'classnames';
-	import Avatar from '$lib/components/Avatar.svelte';
+
+	import { page } from '$app/stores';
+
 	import { getJobColorClass } from '$lib/play-cards';
-	import Pattern from '$lib/components/Pattern.svelte';
+
+	import AddPerson from '$lib/elements/icons/AddPerson.svelte';
+	import Chevron from '$lib/elements/icons/Chevron.svelte';
+	import People from '$lib/elements/icons/People.svelte';
+	import Avatar from '$lib/elements/Avatar.svelte';
+	import Pattern from '$lib/elements/Pattern.svelte';
+
 	import type { LayoutData } from './$types';
 	import '../app.css';
 
@@ -27,7 +30,7 @@
 	>
 		<div
 			id="sidebar"
-			class={classnames(
+			class={classNames(
 				'flex flex-col top-0 left-0 bg-pattern h-full border-r shadow-lg transition-all duration-[250ms] ease-out',
 				{
 					'w-64': expanded,
@@ -46,7 +49,7 @@
 							aria-controls="sidebar"
 						>
 							<span
-								class={classnames(
+								class={classNames(
 									'w-11 h-11 ml-auto inline-flex justify-center items-center transition-all duration-[250ms] ease-out',
 									{
 										'-rotate-90': expanded,
@@ -61,7 +64,7 @@
 					<li>
 						<a
 							href="/"
-							class={classnames(
+							class={classNames(
 								'relative flex flex-row items-center px-2 lg:px-4 h-11 border-l-4 border-transparent hover:border-gray-800',
 								{
 									['text-gray-800 border-gray-800']: $page.url.pathname === '/'
@@ -73,7 +76,7 @@
 								<People />
 							</span>
 							<span
-								class={classnames(
+								class={classNames(
 									'ml-2 font-display font-bold text-sm tracking-wide truncate transition-all duration-[250ms] ease-out',
 									{
 										hidden: !expanded
@@ -85,7 +88,7 @@
 					<li>
 						<a
 							href="/create"
-							class={classnames(
+							class={classNames(
 								'relative flex flex-row items-center px-2 lg:px-4 h-11 border-l-4 border-transparent hover:border-gray-800',
 								{
 									['text-gray-800 border-gray-800']: $page.url.pathname.includes('/create')
@@ -97,7 +100,7 @@
 								<AddPerson color="lime" />
 							</span>
 							<span
-								class={classnames(
+								class={classNames(
 									'ml-2 font-display font-bold text-sm tracking-wide truncate transition-all duration-[250ms] ease-out',
 									{
 										hidden: !expanded
@@ -111,7 +114,7 @@
 							<li>
 								<a
 									href={`/characters/${character.id}`}
-									class={classnames(
+									class={classNames(
 										'relative flex flex-row items-center px-2 lg:px-4 border-l-4 border-transparent hover:border-gray-800',
 										{
 											['text-gray-800 border-gray-800']: $page.url.pathname.match(
@@ -153,7 +156,7 @@
 										</div>
 									</span>
 									<span
-										class={classnames(
+										class={classNames(
 											'ml-2 font-display font-bold text-sm tracking-wide truncate transition-all duration-[250ms] ease-out',
 											{
 												hidden: !expanded

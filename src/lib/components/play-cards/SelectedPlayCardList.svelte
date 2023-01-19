@@ -2,8 +2,8 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { PlayCard, PlayCards } from '$lib/db';
 	import { getIndex, getOthers } from '$lib/play-cards';
-	import SelectedPlayCard from './SelectedPlayCard.svelte';
-	import Button from './Button.svelte';
+	import SelectedPlayCard from '$lib/components/play-cards/SelectedPlayCard.svelte';
+	import Button from '$lib/elements/Button.svelte';
 
 	export let playCards: PlayCards;
 

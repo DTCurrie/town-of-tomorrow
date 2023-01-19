@@ -1,11 +1,11 @@
 <script lang="ts">
+	import classNames from 'classnames';
 	import { updateRapport, removeRapport } from '$lib/api/characters';
-	import Textarea from '$lib/components/inputs/Textarea.svelte';
-	import TextInput from '$lib/components/inputs/TextInput.svelte';
+	import Textarea from '$lib/elements/inputs/Textarea.svelte';
+	import TextInput from '$lib/elements/inputs/TextInput.svelte';
 	import type { Character, Rapport, RapportValue } from '$lib/db';
 	import { rapportValues } from '$lib/rapport';
-	import classNames from 'classnames';
-	import Button from './Button.svelte';
+	import Button from '$lib/elements/Button.svelte';
 
 	export let rapport: Rapport | null;
 	export let character: Character | undefined;
@@ -135,7 +135,7 @@
 									`appearance-none flex-shrink-0 border-2 border-gray-500 w-4 lg:w-6 h-4 lg:h-6`,
 									rapport.value !== value ? 'bg-white' : 'bg-gray-500'
 								)}
-								on:click={() => update(value)}
+								readonly
 							/>
 							<p class="font-bold text-sm text-center">{value}</p>
 						</label>
@@ -155,6 +155,7 @@
 						`appearance-none flex-shrink-0 border-2 border-gray-500 w-4 lg:w-6 h-4 lg:h-6`,
 						!rapportOverflow ? 'bg-white' : 'bg-gray-500'
 					)}
+					readonly
 				/>
 				<span class="font-bold text-sm">Overflow?</span>
 			</label>

@@ -4,6 +4,7 @@ import { liveQuery } from 'dexie';
 
 import { browser } from '$app/environment';
 import { db } from '$lib/db';
+
 import type { LayoutLoad } from './$types';
 import type { Details } from './utils';
 

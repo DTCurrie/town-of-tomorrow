@@ -8,8 +8,8 @@
 	import { db, type PlayCard } from '$lib/db';
 	import { getJobColorClass, standardPlayCards, type OtherPlayCards } from '$lib/play-cards';
 
-	import Select from './inputs/Select.svelte';
-	import TextInput from './inputs/TextInput.svelte';
+	import Select from '$lib/elements/inputs/Select.svelte';
+	import TextInput from '$lib/elements/inputs/TextInput.svelte';
 	import { log } from '$lib/logs';
 
 	export let others: OtherPlayCards;

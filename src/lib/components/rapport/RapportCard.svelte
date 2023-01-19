@@ -1,12 +1,9 @@
 <script lang="ts">
-	import { updateRapport } from '$lib/api/characters';
 	import type { Character, Rapport } from '$lib/db';
 	import { rapportValues } from '$lib/rapport';
 	import classNames from 'classnames';
 
-	export let character: Character;
 	export let rapport: Rapport;
-	export let index: number;
 
 	export let select: () => void;
 </script>
@@ -33,8 +30,7 @@
 								`appearance-none flex-shrink-0 border-2 border-gray-500 w-4 lg:w-6 h-4 lg:h-6`,
 								rapport.value !== value ? 'bg-white' : 'bg-gray-500'
 							)}
-							on:click|stopPropagation={() =>
-								updateRapport(character, { ...rapport, value }, index)}
+							readonly
 						/>
 						<p class="font-bold text-sm text-center">{value}</p>
 					</label>

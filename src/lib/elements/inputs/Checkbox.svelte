@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { getColorClass, type Color } from '$lib/color';
 	import classNames from 'classnames';
 	import { createEventDispatcher } from 'svelte';
+	import { getColorClass, type Color } from '$lib/color';
 
 	export let color: Color = 'gray';
 	export let checked: boolean;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SelectedPlayCardList from '$lib/components/SelectedPlayCardList.svelte';
+	import SelectedPlayCardList from '$lib/components/play-cards/SelectedPlayCardList.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;

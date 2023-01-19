@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { Armor } from '../db';
-	import ArmorCard from '$lib/components/ArmorCard.svelte';
+	import type { Armor } from '$lib/db';
+	import ArmorCard from '$lib/components/armor/ArmorCard.svelte';
 
 	export let armor: Armor[];
 

@@ -1,73 +1,73 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { Rapport } from '$lib/db';
-	import Button from './Button.svelte';
-	import Chevron from './icons/Chevron.svelte';
 	import classNames from 'classnames';
-	import TextInput from './inputs/TextInput.svelte';
-	import NumberInput from './inputs/NumberInput.svelte';
+	import type { Gear } from '$lib/db';
+	import Chevron from '$lib/elements/icons/Chevron.svelte';
+	import TextInput from '$lib/elements/inputs/TextInput.svelte';
+	import NumberInput from '$lib/elements/inputs/NumberInput.svelte';
+	import Textarea from '$lib/elements/inputs/Textarea.svelte';
+	import Button from '$lib/elements/Button.svelte';
 	import { log } from '$lib/logs';
-	import Textarea from './inputs/Textarea.svelte';
 
 	const dispatch = createEventDispatcher();
 
-	export let create = () => dispatch('create', newRapport);
+	export let create = () => dispatch('create', newGear);
 
-	let newRapportName = '';
-	let newRapportValue = 0;
-	let newRapportDescription = '';
+	let newGearName = '';
+	let newGearRating = 0;
+	let newGearDescription = '';
 
 	let expanded = false;
 	let status = '';
 
-	const resetNewRapport = () => {
-		newRapportName = '';
-		newRapportDescription = '';
-		newRapportValue = 0;
+	const resetNewGear = () => {
+		newGearName = '';
+		newGearRating = 0;
+		newGearDescription = '';
 	};
 
 	const validate = (): string => {
-		log('NewRapport validate', false, { newRapport });
+		log('NewGear validate', false, { newGear });
 
-		if (!newRapport.name) {
+		if (!newGear.name) {
 			return (status = 'Enter a name for your Gear!');
 		}
 
-		if (!newRapport.description) {
+		if (!newGear.description) {
 			return (status = 'Enter a description for your Gear!');
 		}
 
-		if (newRapport.value === undefined || newRapport.value < 0) {
+		if (newGear.rating === undefined || newGear.rating < 0) {
 			return (status = 'Enter a rating for your Gear!');
 		}
 
 		return (status = '');
 	};
 
-	const addRapport = () => {
+	const addGear = () => {
 		status = validate();
 
 		if (!status) {
 			create();
-			resetNewRapport();
+			resetNewGear();
 		}
 	};
 
-	$: newRapport = {
-		name: newRapportName.trim(),
-		value: newRapportValue,
-		description: newRapportDescription.trim(),
-		overflow: false
-	} as Rapport;
+	$: newGear = {
+		name: newGearName.trim(),
+		rating: newGearRating,
+		description: newGearDescription.trim()
+	} as Gear;
 </script>
 
-<form class="flex flex-col" on:submit|preventDefault={addRapport}>
+<form class="flex flex-col" on:submit|preventDefault={addGear}>
 	<button
 		class="flex w-full justify-between underline border border-black p-2"
 		on:click|preventDefault={() => (expanded = !expanded)}
 	>
-		New Rapport: <span
-			class={classNames('w-6 h-6 ml-auto p-1 transition-all duration-[250ms] ease-out', {
+		New Gear:
+		<span
+			class={classNames('w-6 h-6 ml-auto transition-all duration-[250ms] ease-out', {
 				'rotate-180': !expanded
 			})}
 		>
@@ -88,20 +88,20 @@
 			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
 				Name:
-				<TextInput bind:value={newRapportName} classes="lg:ml-2" maxlength="25" required />
+				<TextInput bind:value={newGearName} classes="lg:ml-2" maxlength="25" required />
 			</label>
 
 			<!-- svelte-ignore a11y-label-has-associated-control -->
-			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-32">
-				Value:
-				<NumberInput bind:value={newRapportValue} classes="lg:ml-2" min="-3" max="3" />
+			<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-24">
+				Rating:
+				<NumberInput bind:value={newGearRating} classes="lg:ml-2" min="0" max="6" required />
 			</label>
 		</div>
 
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label class="flex flex-col w-full">
 			Description:
-			<Textarea bind:value={newRapportDescription} maxlength="240" />
+			<Textarea bind:value={newGearDescription} maxlength="240" />
 		</label>
 
 		<div class="flex flex-col p-2 gap-2">
@@ -109,7 +109,7 @@
 				<p class="bg-red-700 text-white p-2">{status}</p>
 			{/if}
 
-			<Button type="submit" classes="w-32 ml-auto" color="lime">Add Rapport</Button>
+			<Button type="submit" classes="w-32 ml-auto" color="lime">Add Gear</Button>
 		</div>
 	</div>
 </form>

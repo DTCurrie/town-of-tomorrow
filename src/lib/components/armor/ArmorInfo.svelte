@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { updateArmor, removeArmor } from '$lib/api/characters';
-	import NumberInput from '$lib/components/inputs/NumberInput.svelte';
-	import Textarea from '$lib/components/inputs/Textarea.svelte';
-	import TextInput from '$lib/components/inputs/TextInput.svelte';
+	import NumberInput from '$lib/elements/inputs/NumberInput.svelte';
+	import Textarea from '$lib/elements/inputs/Textarea.svelte';
+	import TextInput from '$lib/elements/inputs/TextInput.svelte';
 	import type { Character, Armor } from '$lib/db';
-	import Button from './Button.svelte';
+	import Button from '$lib/elements/Button.svelte';
 
 	export let armor: Armor | null;
 	export let character: Character | undefined;

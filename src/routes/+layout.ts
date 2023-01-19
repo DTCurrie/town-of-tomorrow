@@ -1,7 +1,10 @@
-import { browser } from '$app/environment';
-import { db } from '$lib/db';
 import { error } from '@sveltejs/kit';
 import { liveQuery } from 'dexie';
+
+import { browser } from '$app/environment';
+
+import { db } from '$lib/db';
+
 import type { LayoutLoad } from './$types';
 
 export const load = (async () => {

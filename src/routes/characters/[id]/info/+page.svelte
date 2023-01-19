@@ -1,4 +1,5 @@
 <script lang="ts">
+	import classNames from 'classnames';
 	import {
 		updateCritical,
 		updateDamage,
@@ -8,11 +9,10 @@
 		updatePitfall,
 		updateXp
 	} from '$lib/api/characters';
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$lib/elements/Button.svelte';
 	import DamageInfo from '$lib/components/DamageInfo.svelte';
-	import Textarea from '$lib/components/inputs/Textarea.svelte';
+	import Textarea from '$lib/elements/inputs/Textarea.svelte';
 	import XpInfo from '$lib/components/XpInfo.svelte';
-	import classNames from 'classnames';
 	import type { PageData } from './$types';
 
 	export let data: PageData;

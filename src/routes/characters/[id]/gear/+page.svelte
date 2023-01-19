@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { createArmor, createGear, createWeapon } from '$lib/api/characters';
-	import ArmorList from '$lib/components/ArmorList.svelte';
-	import GearList from '$lib/components/GearList.svelte';
-	import NewArmor from '$lib/components/NewArmor.svelte';
-	import NewGear from '$lib/components/NewGear.svelte';
-	import NewWeapon from '$lib/components/NewWeapon.svelte';
-	import WeaponList from '$lib/components/WeaponList.svelte';
+	import ArmorList from '$lib/components/armor/ArmorList.svelte';
+	import GearList from '$lib/components/gear/GearList.svelte';
+	import NewArmor from '$lib/components/armor/NewArmor.svelte';
+	import NewGear from '$lib/components/gear/NewGear.svelte';
+	import NewWeapon from '$lib/components/weapons/NewWeapon.svelte';
+	import WeaponList from '$lib/components/weapons/WeaponList.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;

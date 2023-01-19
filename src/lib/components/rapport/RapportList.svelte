@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import type { Character, Rapport } from '$lib/db';
-	import RapportCard from './RapportCard.svelte';
+	import RapportCard from '$lib/components/rapport/RapportCard.svelte';
 
 	export let character: Character | undefined;
 
@@ -19,7 +19,7 @@
 	{#if character}
 		{#each character.rapport ?? [] as person, i}
 			<li>
-				<RapportCard {character} rapport={person} index={i} select={() => select(person, i)} />
+				<RapportCard rapport={person} select={() => select(person, i)} />
 			</li>
 		{/each}
 	{/if}

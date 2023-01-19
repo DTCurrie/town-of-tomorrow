@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createRapport } from '$lib/api/characters';
-	import RapportList from '$lib/components/RapportList.svelte';
-	import NewRapport from '$lib/components/NewRapport.svelte';
+	import RapportList from '$lib/components/rapport/RapportList.svelte';
+	import NewRapport from '$lib/components/rapport/NewRapport.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;

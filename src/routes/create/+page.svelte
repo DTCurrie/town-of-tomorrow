@@ -1,21 +1,30 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import type { Armor, Gear, PlayCard, PlayCards, Rapport, Unlockable, Weapon } from '$lib/db';
-	import PlayCardInput from '$lib/components/PlayCardInput.svelte';
-	import Button from '$lib/components/Button.svelte';
-	import WeaponList from '$lib/components/WeaponList.svelte';
-	import NewWeapon from '$lib/components/NewWeapon.svelte';
-	import ArmorList from '$lib/components/ArmorList.svelte';
-	import NewArmor from '$lib/components/NewArmor.svelte';
-	import { getOthers } from '$lib/play-cards';
-	import { log } from '$lib/logs';
-	import DamageInfo from '$lib/components/DamageInfo.svelte';
-	import TextInput from '$lib/components/inputs/TextInput.svelte';
-	import Textarea from '$lib/components/inputs/Textarea.svelte';
-	import UrlInput from '$lib/components/inputs/UrlInput.svelte';
-	import GearList from '$lib/components/GearList.svelte';
-	import NewGear from '$lib/components/NewGear.svelte';
+
 	import { createCharacter } from '$lib/api/characters';
+
+	import type { Armor, Gear, PlayCard, PlayCards, Rapport, Unlockable, Weapon } from '$lib/db';
+
+	import ArmorList from '$lib/components/armor/ArmorList.svelte';
+	import NewArmor from '$lib/components/armor/NewArmor.svelte';
+
+	import GearList from '$lib/components/gear/GearList.svelte';
+	import NewGear from '$lib/components/gear/NewGear.svelte';
+
+	import PlayCardInput from '$lib/components/play-cards/PlayCardInput.svelte';
+
+	import NewWeapon from '$lib/components/weapons/NewWeapon.svelte';
+	import WeaponList from '$lib/components/weapons/WeaponList.svelte';
+
+	import DamageInfo from '$lib/components/DamageInfo.svelte';
+
+	import TextInput from '$lib/elements/inputs/TextInput.svelte';
+	import Textarea from '$lib/elements/inputs/Textarea.svelte';
+	import UrlInput from '$lib/elements/inputs/UrlInput.svelte';
+	import Button from '$lib/elements/Button.svelte';
+
+	import { log } from '$lib/logs';
+	import { getOthers } from '$lib/play-cards';
 
 	let status = '';
 

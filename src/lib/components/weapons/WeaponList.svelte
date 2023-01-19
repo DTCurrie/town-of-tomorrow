@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { Weapon } from '../db';
-	import WeaponCard from '$lib/components/WeaponCard.svelte';
+	import type { Weapon } from '$lib/db';
+	import WeaponCard from '$lib/components/weapons/WeaponCard.svelte';
 
 	export let weapons: Weapon[];
 

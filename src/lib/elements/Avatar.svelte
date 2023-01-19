@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { getArbitraryColorClass } from '$lib/color';
 	import classNames from 'classnames';
+	import { getArbitraryColorClass } from '$lib/color';
 
 	export let id: number;
 	export let name: string;
