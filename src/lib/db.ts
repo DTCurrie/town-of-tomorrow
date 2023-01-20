@@ -42,13 +42,18 @@ export interface PlayCard {
 }
 
 export type PlayCardIndex = 0 | 1 | 2 | 3;
-export type PlayCards = [PlayCard | undefined, PlayCard | undefined, PlayCard | undefined, PlayCard | undefined] &
+export type PlayCards = [
+	PlayCard | undefined,
+	PlayCard | undefined,
+	PlayCard | undefined,
+	PlayCard | undefined
+] &
 	Record<PlayCardIndex, PlayCard | undefined>;
 
 export type RapportValue = -3 | -2 | -1 | 0 | 1 | 2 | 3;
 export interface Rapport {
 	name: string; // max-length 25
-	description: string; // max-length 
+	description: string; // max-length
 	value: RapportValue;
 	overflow: boolean;
 }

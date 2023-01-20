@@ -70,34 +70,9 @@
 									['text-gray-800 border-gray-800']: $page.url.pathname === '/'
 								}
 							)}
-							title="Your Characters"
+							title="Manage Characters"
 						>
 							<span class="w-11 h-11 inline-flex justify-center items-center shrink-0">
-								<People />
-							</span>
-							<span
-								class={classNames(
-									'ml-2 font-display font-bold text-sm tracking-wide truncate transition-all duration-[250ms] ease-out',
-									{
-										hidden: !expanded
-									}
-								)}>Your Characters</span
-							>
-						</a>
-					</li>
-
-					<li>
-						<a
-							href="/create"
-							class={classNames(
-								'relative flex flex-row items-center px-2 lg:px-4 h-11 border-l-4 border-transparent hover:border-gray-800',
-								{
-									['text-gray-800 border-gray-800']: $page.url.pathname.includes('/create')
-								}
-							)}
-							title="Make a Character"
-						>
-							<span class="w-11 h-11 inline-flex justify-center items-center">
 								<AddPerson color="lime" />
 							</span>
 							<span
@@ -106,10 +81,11 @@
 									{
 										hidden: !expanded
 									}
-								)}>Make a Character</span
+								)}>Manage Characters</span
 							>
 						</a>
 					</li>
+
 					<li>
 						<a
 							href="/play-cards"
@@ -119,9 +95,9 @@
 									['text-gray-800 border-gray-800']: $page.url.pathname.includes('/play-cards')
 								}
 							)}
-							title="Make a Character"
+							title="Manage Play Cards"
 						>
-							<span class="w-11 h-11 inline-flex justify-center items-center">
+							<span class="w-11 h-11 inline-flex justify-center items-center shrink-0">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									fill="none"

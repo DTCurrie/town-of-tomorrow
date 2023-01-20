@@ -11,12 +11,12 @@ export const marshal = (): PlayCard => ({
 	bonusQuestions: [
 		'How do you apprehend suspects?',
 		'How do you protect others?',
-		'What make you handy in a chase?',
+		'What make you handy in a chase?'
 	],
 	bonusExamples: [
 		'ambush, find any trail, my robo-dog companion',
 		'sixth-sense, calm under pressure, my anti-ballistic shield',
-		'athletics, situational awareness, my offroad vehicle',
+		'athletics, situational awareness, my offroad vehicle'
 	],
 	unlockables: [
 		{
@@ -40,12 +40,12 @@ export const intelligence = (): PlayCard => ({
 	bonusQuestions: [
 		'What made you a great at intelligence gathering?',
 		'How do you respond to danger?',
-		'What gadgets do you have?',
+		'What gadgets do you have?'
 	],
 	bonusExamples: [
 		'disguises, roguish charm,  my spy-vision contacts',
 		'cool head, get out of the way, my trusty sidearm',
-		'laser watch, concealed taser, my secret comm device',
+		'laser watch, concealed taser, my secret comm device'
 	],
 	unlockables: [
 		{
@@ -70,12 +70,12 @@ export const investigator = (): PlayCard => ({
 	bonusQuestions: [
 		'What do you use to find clues?',
 		'How do you conduct interviews?',
-		'What unusual technique do you use in your investigations?',
+		'What unusual technique do you use in your investigations?'
 	],
 	bonusExamples: [
 		'forensics, attention to detail, my all-purpose scanner',
 		'interrogation, play dumb, my trusty recorder',
-		'meditation, encylopediac knowledge, my cyber-Watson computer',
+		'meditation, encylopediac knowledge, my cyber-Watson computer'
 	],
 	unlockables: [
 		{
@@ -99,12 +99,12 @@ export const researcher = (): PlayCard => ({
 	bonusQuestions: [
 		'What do you research?',
 		'Where is your favorite place to work?',
-		'What tools do you use?',
+		'What tools do you use?'
 	],
 	bonusExamples: [
 		'policy, scientific artifacts, my therapeutic process',
 		'library, out in the field, my private lab',
-		'sketchpad, backpacking supplies, my AI assistant',
+		'sketchpad, backpacking supplies, my AI assistant'
 	],
 	unlockables: [
 		{
@@ -128,12 +128,12 @@ export const agent = (): PlayCard => ({
 	bonusQuestions: [
 		'What is your responsibility in the Town?',
 		'What skills got you into your position?',
-		'What privileges come with the job?',
+		'What privileges come with the job?'
 	],
 	bonusExamples: [
 		'regulation, protecting government assets, my postal system',
 		'debate, knowing the rules, my way with people',
-		'clearance, insider knowledge, my standard issue sidearm',
+		'clearance, insider knowledge, my standard issue sidearm'
 	],
 	unlockables: [
 		{
@@ -157,12 +157,12 @@ export const corporate = (): PlayCard => ({
 	bonusQuestions: [
 		'What is your biggest strength?',
 		'What value do you add to the team?',
-		'What is your favorite thing about your role?',
+		'What is your favorite thing about your role?'
 	],
 	bonusExamples: [
 		'negotiation, time management, my great attitude',
 		'efficiency, good with people, my business network',
-		'company car, access to “gizmos”, my executive assistant',
+		'company car, access to “gizmos”, my executive assistant'
 	],
 	unlockables: [
 		{
@@ -186,12 +186,12 @@ export const military = (): PlayCard => ({
 	bonusQuestions: [
 		'What did you get specialized training in?',
 		'What special maneuver, skill, or trait did you learn?',
-		'How do you like to relax?',
+		'How do you like to relax?'
 	],
 	bonusExamples: [
 		'martial arts, small-unit tactics, my firearm collection',
 		'dodge, jury-rigging equipment, my steel nerves',
-		'video games, playing baseball,  my vintage motorcycle',
+		'video games, playing baseball,  my vintage motorcycle'
 	],
 	unlockables: [
 		{
@@ -215,12 +215,12 @@ export const security = (): PlayCard => ({
 	bonusQuestions: [
 		'How do you deal with a fight breaking out?',
 		'What do you use to detect danger?',
-		'What qualities have you picked up over the years?',
+		'What qualities have you picked up over the years?'
 	],
 	bonusExamples: [
 		'deescalation, jump right in, my stun baton',
 		'instincts, keen eye, my threat assessment monocle',
-		'paranoid, can take a punch,  my poker face',
+		'paranoid, can take a punch,  my poker face'
 	],
 	unlockables: [
 		{
@@ -245,12 +245,12 @@ export const ordnance = (): PlayCard => ({
 	bonusQuestions: [
 		'What is your favorite piece of equipment in your collection?',
 		'How do you maintain your equipment?',
-		'What is the most unexpected piece in your collection?',
+		'What is the most unexpected piece in your collection?'
 	],
 	bonusExamples: [
 		'grenade launcher, support drones, my hover-APC',
 		'repair kit, firearms workshop , my mechanic friend',
-		'rubber ducky, fancy wine, my weaponized robo-kitten',
+		'rubber ducky, fancy wine, my weaponized robo-kitten'
 	],
 	unlockables: [
 		{
@@ -273,12 +273,12 @@ export const inventor = (): PlayCard => ({
 	bonusQuestions: [
 		'What is your process for inventing?',
 		'How would you generally describe your inventions?',
-		'What is your most important invention?',
+		'What is your most important invention?'
 	],
 	bonusExamples: [
 		'tinkering, careful planning, my mechanical intuition',
 		'eclectic, a junkyard of unfinished projects, my android farm',
-		'cold fusion, anti-gravity boots, my portal gun',
+		'cold fusion, anti-gravity boots, my portal gun'
 	],
 	unlockables: [
 		{
@@ -301,12 +301,12 @@ export const analyst = (): PlayCard => ({
 	bonusQuestions: [
 		'How do you normally conduct your analysis?',
 		'What technology do you use for your work?',
-		'What trick, skill, or quality have you picked up through your work?',
+		'What trick, skill, or quality have you picked up through your work?'
 	],
 	bonusExamples: [
 		'statistics, modeling and simulation, my predictive algorithm',
 		'notebook, machine learning, my super computer',
-		'life hacking, counting cards, my ability to solve puzzles',
+		'life hacking, counting cards, my ability to solve puzzles'
 	],
 	unlockables: [
 		{
@@ -330,12 +330,12 @@ export const engineer = (): PlayCard => ({
 	bonusQuestions: [
 		'What is your favorite part of the engineering process?',
 		'What is your specialty?',
-		'What makes you feel pride in your work?',
+		'What makes you feel pride in your work?'
 	],
 	bonusExamples: [
 		'design, putting things together, my omnitool',
 		'MacGyvering, software engineering, my auto-fabricator',
-		'problem solving, lots of patents, my robotic assistant',
+		'problem solving, lots of patents, my robotic assistant'
 	],
 	unlockables: [
 		{
@@ -359,12 +359,12 @@ export const mentor = (): PlayCard => ({
 	bonusQuestions: [
 		'What kind of work do you do?',
 		'Who do you mentor?',
-		'What are you known in the Town for?',
+		'What are you known in the Town for?'
 	],
 	bonusExamples: [
 		'school teacher, advising at the Compound, my offsite lab',
 		'math students, Dr. Eugene Putz, my niece Sara',
-		'empathy, a selection of unique outfits, my portable hologram device',
+		'empathy, a selection of unique outfits, my portable hologram device'
 	],
 	unlockables: [
 		{
@@ -388,12 +388,12 @@ export const proprietor = (): PlayCard => ({
 	bonusQuestions: [
 		'What kind of business do you operate?',
 		'How do you interact with customers?',
-		'Who or what do you rely on to succeed?',
+		'Who or what do you rely on to succeed?'
 	],
 	bonusExamples: [
 		'mechanic, the local salon, my bar Archimedes’ Screw',
 		'gossip, let’s make a deal, my customers are family',
-		'jeweler’s tools, delivery boy Rod Hobson, my multi-function work truck',
+		'jeweler’s tools, delivery boy Rod Hobson, my multi-function work truck'
 	],
 	unlockables: [
 		{
@@ -417,12 +417,12 @@ export const politician = (): PlayCard => ({
 	bonusQuestions: [
 		'How do you serve the town?',
 		'What is your platform?',
-		'Where do you prefer to work from?',
+		'Where do you prefer to work from?'
 	],
 	bonusExamples: [
 		'mayor, Government representative, my activism',
 		'workplace safety, science free from influence, my recreation initiative',
-		'town hall, the local diner, my office at the Compound',
+		'town hall, the local diner, my office at the Compound'
 	],
 	unlockables: [
 		{
@@ -462,7 +462,7 @@ export const customPlayCard: Omit<PlayCard, 'job' | 'bonuses' | 'bonusQuestions'
 	bonusExamples: [
 		'What is your specialty? What do you do? How do you do your job?',
 		'What makes you unique? Who do work with? Where do you work?',
-		'What do you know? What traits do you have? What tools do you use?',
+		'What do you know? What traits do you have? What tools do you use?'
 	],
 	unlockables: [
 		{
@@ -473,16 +473,14 @@ export const customPlayCard: Omit<PlayCard, 'job' | 'bonuses' | 'bonusQuestions'
 		},
 		{
 			name: 'Second Unlockable',
-			description: 'Create another Custom Move based on your Bonuses or something unique about you. This could be one of the common mechanics or something special, work with the Director to make sure it makes sense.',
+			description:
+				'Create another Custom Move based on your Bonuses or something unique about you. This could be one of the common mechanics or something special, work with the Director to make sure it makes sense.',
 			unlocked: false
 		}
 	]
-}
+};
 
-export const getOthers = (
-	playCards: PlayCards | undefined,
-	index: number
-): OtherPlayCards => {
+export const getOthers = (playCards: PlayCards | undefined, index: number): OtherPlayCards => {
 	const others = [...(playCards ?? [undefined, undefined, undefined, undefined])];
 	return others.filter((_, i) => i !== index) as [
 		PlayCard | undefined,

@@ -10,18 +10,19 @@ import type { Details } from '$lib/details';
 import type { LayoutLoad } from './$types';
 
 export const load = (async ({ params }) => {
-    const id = parseInt(params.id, 10);
+	const id = parseInt(params.id, 10);
 
-    if (id) {
-        try {
-            const details = writable<Details | undefined>();
-            const character = liveQuery(async () => browser ? await db.characters.get({ id }) : undefined);
-            return { id, character, details };
-        } catch (err) {
-            throw error(500, `Error reading Character from DB:/n/t${err}`);
-        }
-    }
+	if (id) {
+		try {
+			const details = writable<Details | undefined>();
+			const character = liveQuery(async () =>
+				browser ? await db.characters.get({ id }) : undefined
+			);
+			return { id, character, details };
+		} catch (err) {
+			throw error(500, `Error reading Character from DB:/n/t${err}`);
+		}
+	}
 
-    throw error(404, 'Invalid Character ID');
+	throw error(404, 'Invalid Character ID');
 }) satisfies LayoutLoad;
-

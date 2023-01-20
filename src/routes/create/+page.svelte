@@ -55,9 +55,7 @@
 		[]
 	);
 
-	$: avatarUrl = `https://api.dicebear.com/5.x/lorelei/svg?seed=${encodeURIComponent(
-		name
-	)}?size=96`;
+	$: avatarUrl = `https://api.dicebear.com/5.x/micah/svg?seed=${encodeURIComponent(name)}?size=96`;
 
 	$: {
 		if (name && !avatar) {

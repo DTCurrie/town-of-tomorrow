@@ -22,7 +22,7 @@
 		let count = 0;
 
 		for (const card of playCards ?? []) {
-			if (card === undefined) {
+			if (!card) {
 				continue;
 			}
 

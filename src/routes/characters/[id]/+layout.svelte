@@ -7,7 +7,7 @@
 	import type { Gear, PlayCard, Rapport } from '$lib/db';
 	import { getIndex, getOthers, type OtherPlayCards } from '$lib/play-cards';
 
-	import { updatePlayCard } from '$lib/api/characters';
+	import { deleteCharacter, updatePlayCard } from '$lib/api/characters';
 	import { createPlayCard } from '$lib/api/play-cards';
 
 	import ArmorInfo from '$lib/components/armor/ArmorInfo.svelte';
@@ -23,8 +23,12 @@
 	import type { LayoutData } from './$types';
 	import Details from '$lib/components/Details.svelte';
 	import type { PlayCardAddData } from '$lib/details';
+	import { jsonToData } from '$lib/export';
+	import { tick } from 'svelte';
 
 	export let data: LayoutData;
+
+	let removing = false;
 
 	$: character = data.character;
 	$: details = data.details;
@@ -46,10 +50,39 @@
 
 	const selectTab = (tab: string) => goto(`/characters/${data.id}/${tab}`);
 	const closeDetails = () => ($details = undefined);
+
+	$: exportCharacter = async () => {
+		const data = jsonToData($character);
+
+		if (data) {
+			const url = `${location.origin}/import?data=${data}`;
+			await navigator.clipboard.writeText(url);
+			await tick();
+		}
+	};
 </script>
 
 {#if $character}
-	<h1 class="md:text-2xl font-bold">{$character.name}</h1>
+	<div class="flex flex-col lg:flex-row gap-2 lg:justify-between">
+		<h1 class="md:text-2xl font-bold">{$character.name}</h1>
+		<div class="flex flex-row gap-2">
+			{#if removing}
+				<Button
+					color="rose"
+					classes="w-24"
+					on:click={async () => {
+						await deleteCharacter($character?.id);
+						goto('/');
+					}}
+				>
+					Confirm
+				</Button>
+			{:else}
+				<Button color="rose" classes="w-24" on:click={() => (removing = true)}>Remove</Button>
+			{/if}
+			<Button color="cyan" classes="w-40" on:click={exportCharacter}>Copy Import URL</Button>
+		</div>
+	</div>
 
 	<div class="flex flex-row w-full h-full">
 		<div class="flex flex-col w-full h-full grow">

@@ -751,7 +751,7 @@ export const generatePitfall = (): string => {
 };
 
 export const generateAvatar = (name: string): string =>
-	`https://api.dicebear.com/5.x/lorelei/svg?seed=${encodeURIComponent(name)}?size=96`;
+	`https://api.dicebear.com/5.x/micah/svg?seed=${encodeURIComponent(name)}?size=96`;
 
 export const generateAlly = (): Rapport => {
 	const name = generateRandomName();

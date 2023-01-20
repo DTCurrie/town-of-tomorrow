@@ -6,6 +6,8 @@
 	import Avatar from '$lib/elements/Avatar.svelte';
 
 	import type { PageData } from './$types';
+	import Button from '$lib/elements/Button.svelte';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 
@@ -15,6 +17,13 @@
 {#if $characters}
 	<h1 class="text-2xl font-bold">Your Characters</h1>
 	<div class="grid gap-2 md:grid-cols-2 lg:grid-cols-3 w-full">
+		<Button
+			classes="w-full h-full min-h-[5rem] rounded-lg"
+			color="lime"
+			on:click={() => goto('/create')}
+		>
+			Create Character
+		</Button>
 		{#each $characters as character (character.id)}
 			<div class="flex flex-col w-full p-2 rounded-lg bg-white shadow">
 				<div class="flex flex-row">
