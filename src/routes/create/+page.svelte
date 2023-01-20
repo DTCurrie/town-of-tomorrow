@@ -34,10 +34,14 @@
 	let pitfall = '';
 	let avatar = '';
 
-	let playCardSlots: [PlayCard | null, PlayCard | null, PlayCard | null] = [null, null, null];
-	let allPlayCards: PlayCards = [null, null, null, null];
+	let playCardSlots: [PlayCard | undefined, PlayCard | undefined, PlayCard | undefined] = [
+		undefined,
+		undefined,
+		undefined
+	];
+	let allPlayCards: PlayCards = [undefined, undefined, undefined, undefined];
 
-	let unlockable: Unlockable | null;
+	let unlockable: Unlockable | undefined;
 
 	let ally: Rapport = { name: '', value: 2, description: '', overflow: false };
 	let rival: Rapport = { name: '', value: -2, description: '', overflow: false };
@@ -77,7 +81,7 @@
 		}
 	};
 
-	const hasCardChanged = (current: PlayCard | null, original: PlayCard | null) => {
+	const hasCardChanged = (current: PlayCard | undefined, original: PlayCard | undefined) => {
 		log('create hasCardChanged', false, { current, original });
 		if (!current || !original) {
 			return false;

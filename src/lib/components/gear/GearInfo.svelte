@@ -6,7 +6,7 @@
 	import type { Character, Gear } from '$lib/db';
 	import Button from '$lib/elements/Button.svelte';
 
-	export let gear: Gear | null;
+	export let gear: Gear | undefined;
 	export let character: Character | undefined;
 	export let index: number;
 	export let removing: boolean = false;

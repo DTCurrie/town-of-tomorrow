@@ -7,7 +7,7 @@
 	import { rapportValues } from '$lib/rapport';
 	import Button from '$lib/elements/Button.svelte';
 
-	export let rapport: Rapport | null;
+	export let rapport: Rapport | undefined;
 	export let character: Character | undefined;
 	export let index: number;
 	export let removing: boolean = false;

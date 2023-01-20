@@ -10,7 +10,7 @@
 		}
 	};
 
-	export let type: 'button' | 'submit' | 'reset' | null | undefined = 'button';
+	export let type: 'button' | 'submit' | 'reset' | undefined | undefined = 'button';
 	export let classes: string = '';
 	export let color = 'gray';
 	export let disabled = false;

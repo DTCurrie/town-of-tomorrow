@@ -11,7 +11,7 @@
 <h2 class="text-xl mt-2">Play Cards:</h2>
 
 <SelectedPlayCardList
-	playCards={$character?.playCards ?? [null, null, null, null]}
+	playCards={$character?.playCards ?? [undefined, undefined, undefined, undefined]}
 	on:select-play-card={({ detail }) => ($details = detail)}
 	on:add-play-card={({ detail }) => ($details = detail)}
 	on:create-play-card={({ detail }) => ($details = detail)}

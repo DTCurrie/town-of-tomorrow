@@ -6,7 +6,7 @@
 	import TextInput from '$lib/elements/inputs/TextInput.svelte';
 	import Button from '$lib/elements/Button.svelte';
 
-	export let weapon: Weapon | null;
+	export let weapon: Weapon | undefined;
 	export let character: Character | undefined;
 	export let index: number;
 	export let removing: boolean = false;

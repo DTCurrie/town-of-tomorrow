@@ -21,8 +21,8 @@ export const createCharacter = async (character: Character) => {
 
     try {
         return await db.characters.add(character);
-    } catch (error) {
-        console.error('error creating character', { character, error });
+    } catch (err) {
+        error('error creating character', false, { character, err });
         return -1;
     }
 }
@@ -31,8 +31,8 @@ export const updateCharacter = async (id: number, next?: Partial<Character>) => 
     log('api/characters updateCharacter', false, { id, next });
     try {
         return await db.characters.update(id, { ...next });
-    } catch (error) {
-        console.error('error updating character', { next, error });
+    } catch (err) {
+        error('error updating character', false, { next, err });
         return -1;
     }
 };
@@ -123,7 +123,7 @@ export const updateNotes = async (character: Character | undefined, notes: strin
 
 export const updatePlayCard = async (
     character: Character | undefined,
-    playCard: PlayCard | null,
+    playCard: PlayCard | undefined,
     playCardIndex: PlayCardIndex
 ) => {
     log('api/characters updatePlayCard', false, { character, playCard, index: playCardIndex });
@@ -157,7 +157,7 @@ export const removePlayCard = async (character: Character | undefined, playCardI
         return;
     }
 
-    next.playCards[playCardIndex] = null;
+    next.playCards[playCardIndex] = undefined;
     return await updateCharacter(character.id, next);
 };
 

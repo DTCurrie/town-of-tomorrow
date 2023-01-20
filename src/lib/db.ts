@@ -2,6 +2,8 @@ import { browser } from '$app/environment';
 import { generateCharacter } from '$lib/generate';
 import Dexie, { type Table } from 'dexie';
 
+import { error } from '$lib/logs';
+
 export type JobType = 'Detective' | 'Liaison' | 'Specialist' | 'Hot Shot' | 'Sage';
 export type JobHealth = 1 | 2 | 3;
 
@@ -40,8 +42,8 @@ export interface PlayCard {
 }
 
 export type PlayCardIndex = 0 | 1 | 2 | 3;
-export type PlayCards = [PlayCard | null, PlayCard | null, PlayCard | null, PlayCard | null] &
-	Record<PlayCardIndex, PlayCard | null>;
+export type PlayCards = [PlayCard | undefined, PlayCard | undefined, PlayCard | undefined, PlayCard | undefined] &
+	Record<PlayCardIndex, PlayCard | undefined>;
 
 export type RapportValue = -3 | -2 | -1 | 0 | 1 | 2 | 3;
 export interface Rapport {
@@ -108,8 +110,8 @@ if (import.meta.env.DEV) {
 					generateCharacter()
 				]);
 			}
-		} catch (error) {
-			console.error('error generating characters', error);
+		} catch (err) {
+			error('error generating characters', false, err);
 		}
 	})();
 }

@@ -2,7 +2,7 @@ import { getColorClass, type Color } from './color';
 import type { Job, PlayCard, PlayCardIndex, PlayCards } from './db';
 import { detective, hotShot, liaison, sage, specialist } from './jobs';
 
-export type OtherPlayCards = [PlayCard | null, PlayCard | null, PlayCard | null];
+export type OtherPlayCards = [PlayCard | undefined, PlayCard | undefined, PlayCard | undefined];
 
 export const marshal = (): PlayCard => ({
 	name: 'Marshal',
@@ -483,11 +483,11 @@ export const getOthers = (
 	playCards: PlayCards | undefined,
 	index: number
 ): OtherPlayCards => {
-	const others = [...(playCards ?? [null, null, null, null])];
+	const others = [...(playCards ?? [undefined, undefined, undefined, undefined])];
 	return others.filter((_, i) => i !== index) as [
-		PlayCard | null,
-		PlayCard | null,
-		PlayCard | null
+		PlayCard | undefined,
+		PlayCard | undefined,
+		PlayCard | undefined
 	];
 };
 

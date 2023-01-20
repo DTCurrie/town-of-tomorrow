@@ -10,6 +10,6 @@ export type DetailComponent =
     'armor-info' |
     'rapport-info';
 
-export type PlayCardAddData = { others: OtherPlayCards, selected: PlayCard | null };
+export type PlayCardAddData = { others: OtherPlayCards, selected: PlayCard | undefined };
 export type DetailType = Gear | Rapport | PlayCard | PlayCardAddData;
-export type Details = { data: DetailType; index: number; component: DetailComponent };
+export type Details = { data?: DetailType; index: number; component: DetailComponent };

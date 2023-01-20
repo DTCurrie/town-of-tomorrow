@@ -14,7 +14,7 @@
 
 	export let others: OtherPlayCards;
 	export let classes = '';
-	export let playCard: PlayCard | null;
+	export let playCard: PlayCard | undefined;
 
 	export let save = () => {
 		status = validate();

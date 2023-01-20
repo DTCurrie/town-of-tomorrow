@@ -8,7 +8,7 @@
 	import { removePlayCard, updateFaults, updateMerits, updateUnlocked } from '$lib/api/characters';
 
 	export let character: Character | undefined;
-	export let playCard: PlayCard | null;
+	export let playCard: PlayCard | undefined;
 	export let index: PlayCardIndex;
 
 	export let classes = '';

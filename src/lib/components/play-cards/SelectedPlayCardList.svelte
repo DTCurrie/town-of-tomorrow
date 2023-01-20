@@ -7,7 +7,7 @@
 
 	export let playCards: PlayCards;
 
-	export let select = (data: PlayCard | null, index: number) =>
+	export let select = (data: PlayCard | undefined, index: number) =>
 		dispatch('select-play-card', {
 			component: 'play-card-info',
 			data: data as PlayCard,
@@ -24,7 +24,7 @@
 	export let create = (index: number) =>
 		dispatch('create-play-card', {
 			component: 'play-card-create',
-			data: null,
+			data: undefined,
 			index: getIndex(index)
 		});
 

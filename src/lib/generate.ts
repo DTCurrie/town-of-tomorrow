@@ -720,7 +720,7 @@ export const generateDescription = (name: string): string => {
 };
 
 export const generatePlayCards = (): PlayCards => {
-	const cards: PlayCards = [null, null, null, null];
+	const cards: PlayCards = [undefined, undefined, undefined, undefined];
 
 	for (let i = 0; i < 3; i++) {
 		// Pick a random Play Card that hasn't been chosen yet

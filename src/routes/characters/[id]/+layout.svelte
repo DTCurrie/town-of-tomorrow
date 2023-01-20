@@ -4,7 +4,6 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
-	import { clickOutside } from '$lib/click-outside';
 	import type { Gear, PlayCard, Rapport } from '$lib/db';
 	import { getIndex, getOthers, type OtherPlayCards } from '$lib/play-cards';
 
@@ -19,32 +18,34 @@
 	import RapportInfo from '$lib/components/rapport/RapportInfo.svelte';
 	import WeaponInfo from '$lib/components/weapons/WeaponInfo.svelte';
 
-	import Chevron from '$lib/elements/icons/Chevron.svelte';
 	import Button from '$lib/elements/Button.svelte';
 
-	import type { PlayCardAddData } from './utils';
 	import type { LayoutData } from './$types';
+	import Details from '$lib/components/Details.svelte';
+	import type { PlayCardAddData } from '$lib/details';
 
 	export let data: LayoutData;
 
 	$: character = data.character;
 	$: details = data.details;
 
-	$: showDetails = $details !== null;
-
 	$: index = $details?.index ?? -1;
 	$: gear = $details && ($details.data as Gear);
 	$: playCard = $details && ($details.data as PlayCard);
 	$: rapport = $details && ($details.data as Rapport);
 	$: addPlayCard = {
-		others: (($details?.data as PlayCardAddData)?.others ?? [null, null, null]) as OtherPlayCards,
+		others: (($details?.data as PlayCardAddData)?.others ?? [
+			undefined,
+			undefined,
+			undefined
+		]) as OtherPlayCards,
 		selected: ($details?.data as PlayCardAddData)?.selected
 	};
 
 	$: tab = $page.url.pathname.split('/').reverse()[0];
 
 	const selectTab = (tab: string) => goto(`/characters/${data.id}/${tab}`);
-	const closeDetails = () => ($details = null);
+	const closeDetails = () => ($details = undefined);
 </script>
 
 {#if $character}
@@ -115,77 +116,55 @@
 			<slot />
 		</div>
 	</div>
-	<div
-		class={classNames('fixed top-0 flex flex-col z-50 transition-all duration-[250ms] ease-out', {
-			'right-0 pl-[72px] lg:pl-0': showDetails,
-			'max-md:-right-full md:right-[-24rem] lg:right-[-28rem] xl:right-[-32rem]': !showDetails
-		})}
-	>
-		<div
-			id="details"
-			class="flex flex-col max-md:w-full md:w-[24rem] lg:w-[28rem] xl:w-[32rem] grow-0 h-full min-h-screen max-h-screen overflow-y-auto ml-auto bg-pattern shadow-lg"
-			aria-expanded={details ? 'true' : false}
-			use:clickOutside={() => closeDetails()}
-		>
-			<button
-				class="relative flex flex-row items-center w-full h-11 mr-auto border-l-4 border-transparent hover:border-gray-800"
-				on:click|preventDefault={() => closeDetails()}
-				aria-label="details"
-				aria-controls="details"
-			>
-				<span class="w-11 h-11 inline-flex justify-center items-center rotate-90">
-					<Chevron />
-				</span>
-			</button>
-			{#if $details}
-				<div class="flex p-2 w-full h-full">
-					{#if $details.component === 'gear-info'}
-						<GearInfo bind:character={$character} bind:gear {index} />
-					{:else if $details.component === 'weapon-info'}
-						<WeaponInfo bind:character={$character} bind:weapon={gear} {index} />
-					{:else if $details.component === 'armor-info'}
-						<ArmorInfo bind:character={$character} bind:armor={gear} {index} />
-					{:else if $details.component === 'rapport-info'}
-						<RapportInfo bind:character={$character} bind:rapport {index} />
-					{:else if $details.component === 'play-card-info'}
-						<SelectedPlayCardInfo
-							bind:playCard
-							bind:character={$character}
-							index={getIndex(index)}
-							showName={true}
-							showUnlocked
-							showMerits
-							showFaults
-							showRemove
-						/>
-					{:else if $details.component === 'play-card-add'}
-						<PlayCardInput
-							others={addPlayCard.others}
-							bind:playCard={addPlayCard.selected}
-							on:saved={({ detail }) => {
-								updatePlayCard($character, detail, getIndex(index));
-								closeDetails();
-							}}
-						>
-							<Button type="submit" classes="w-32" color="lime">Add Play Card</Button>
-						</PlayCardInput>
-					{:else if $details.component === 'play-card-create'}
-						<NewPlayCard
-							on:created={async ({ detail }) => {
-								const id = await createPlayCard(detail);
-								$details = {
-									component: 'play-card-add',
-									data: {
-										others: getOthers($character?.playCards, getIndex(index)),
-										selected: { ...detail, id }
-									},
-									index
-								};
-							}}
-						/>
-					{/if}
-				</div>
-			{/if}
-		</div>
-	</div>
+	<Details bind:details={$details}>
+		{#if $details}
+			<div class="flex p-2 w-full h-full">
+				{#if $details.component === 'gear-info'}
+					<GearInfo bind:character={$character} bind:gear {index} />
+				{:else if $details.component === 'weapon-info'}
+					<WeaponInfo bind:character={$character} bind:weapon={gear} {index} />
+				{:else if $details.component === 'armor-info'}
+					<ArmorInfo bind:character={$character} bind:armor={gear} {index} />
+				{:else if $details.component === 'rapport-info'}
+					<RapportInfo bind:character={$character} bind:rapport {index} />
+				{:else if $details.component === 'play-card-info'}
+					<SelectedPlayCardInfo
+						bind:playCard
+						bind:character={$character}
+						index={getIndex(index)}
+						showName={true}
+						showUnlocked
+						showMerits
+						showFaults
+						showRemove
+					/>
+				{:else if $details.component === 'play-card-add'}
+					<PlayCardInput
+						others={addPlayCard.others}
+						bind:playCard={addPlayCard.selected}
+						on:saved={({ detail }) => {
+							updatePlayCard($character, detail, getIndex(index));
+							closeDetails();
+						}}
+					>
+						<Button type="submit" classes="w-32" color="lime">Add Play Card</Button>
+					</PlayCardInput>
+				{:else if $details.component === 'play-card-create'}
+					<NewPlayCard
+						on:created={async ({ detail }) => {
+							const id = await createPlayCard(detail);
+							$details = {
+								component: 'play-card-add',
+								data: {
+									others: getOthers($character?.playCards, getIndex(index)),
+									selected: { ...detail, id }
+								},
+								index
+							};
+						}}
+					/>
+				{/if}
+			</div>
+		{/if}
+	</Details>
 {/if}

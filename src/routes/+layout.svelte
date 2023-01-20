@@ -85,6 +85,7 @@
 							>
 						</a>
 					</li>
+
 					<li>
 						<a
 							href="/create"
@@ -106,6 +107,43 @@
 										hidden: !expanded
 									}
 								)}>Make a Character</span
+							>
+						</a>
+					</li>
+					<li>
+						<a
+							href="/play-cards"
+							class={classNames(
+								'relative flex flex-row items-center px-2 lg:px-4 h-11 border-l-4 border-transparent hover:border-gray-800',
+								{
+									['text-gray-800 border-gray-800']: $page.url.pathname.includes('/play-cards')
+								}
+							)}
+							title="Make a Character"
+						>
+							<span class="w-11 h-11 inline-flex justify-center items-center">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="text-lime-700"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v2.25A2.25 2.25 0 006 10.5zm0 9.75h2.25A2.25 2.25 0 0010.5 18v-2.25a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25V18A2.25 2.25 0 006 20.25zm9.75-9.75H18a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0018 3.75h-2.25A2.25 2.25 0 0013.5 6v2.25a2.25 2.25 0 002.25 2.25z"
+									/>
+								</svg>
+							</span>
+							<span
+								class={classNames(
+									'ml-2 font-display font-bold text-sm tracking-wide truncate transition-all duration-[250ms] ease-out',
+									{
+										hidden: !expanded
+									}
+								)}>Manage Play Cards</span
 							>
 						</a>
 					</li>
