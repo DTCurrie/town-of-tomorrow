@@ -7,7 +7,7 @@ import { browser } from '$app/environment';
 import { db } from '$lib/db';
 import type { Details } from '$lib/details';
 
-import type { PageLoad } from './$types';
+import type { LayoutLoad } from './$types';
 
 export const load = (async () => {
 	try {
@@ -19,4 +19,4 @@ export const load = (async () => {
 	} catch (err) {
 		throw error(500, `Error reading custom play cards from DB:/n/t${err}`);
 	}
-}) satisfies PageLoad;
+}) satisfies LayoutLoad;

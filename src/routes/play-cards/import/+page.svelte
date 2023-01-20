@@ -1,19 +1,28 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+
 	import { error } from '$lib/logs';
+
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 
-	$: character = data.character;
+	$: details = data.details;
+	$: playCard = data.playCard;
 
 	$: {
-		if (browser && character) {
-			if (!character.id) {
-				error('Invalid Character', false, { character });
+		if (browser && playCard) {
+			if (!playCard.id) {
+				error('Invalid Play Card', false, { playCard });
 			} else {
-				goto(`/characters/${character.id}/info`);
+				$details = {
+					component: 'play-card-info',
+					data: playCard,
+					index: 0
+				};
+
+				goto(`/play-cards`);
 			}
 		}
 	}

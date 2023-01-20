@@ -58,7 +58,7 @@
 	{#if $details}
 		<div class="flex p-2 w-full h-full">
 			{#if $details.component === 'play-card-info'}
-				<PlayCardInfo bind:playCard showRemove={playCard?.id !== undefined} />
+				<PlayCardInfo bind:playCard showActions={playCard?.id !== undefined} />
 			{:else if $details.component === 'play-card-create'}
 				<NewPlayCard
 					on:created={async ({ detail }) => {

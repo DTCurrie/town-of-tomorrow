@@ -55,7 +55,7 @@
 		const data = jsonToData($character);
 
 		if (data) {
-			const url = `${location.origin}/import?data=${data}`;
+			const url = `${location.origin}/characters/import?data=${data}`;
 			await navigator.clipboard.writeText(url);
 			await tick();
 		}

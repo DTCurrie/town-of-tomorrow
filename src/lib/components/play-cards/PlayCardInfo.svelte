@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, tick } from 'svelte';
 	import classNames from 'classnames';
 
 	import type { PlayCard } from '$lib/db';
@@ -9,11 +9,13 @@
 
 	import Button from '$lib/elements/Button.svelte';
 	import { error } from '$lib/logs';
+	import { jsonToData } from '$lib/export';
+	import GearCard from '../gear/GearCard.svelte';
 
 	export let playCard: PlayCard | undefined;
 
 	export let classes = '';
-	export let showRemove = false;
+	export let showActions = false;
 
 	export let removed = () => dispatch('removed');
 
@@ -29,6 +31,16 @@
 			}
 			await deletePlayCard(playCard.id);
 			removed();
+		}
+	};
+
+	$: exportPlayCard = async () => {
+		const data = jsonToData(playCard);
+
+		if (data) {
+			const url = `${location.origin}/play-cards/import?data=${data}`;
+			await navigator.clipboard.writeText(url);
+			await tick();
 		}
 	};
 </script>
@@ -85,25 +97,28 @@
 				</div>
 			</div>
 
-			{#if showRemove}
+			{#if showActions}
 				<div
 					class={classNames(
 						'mt-auto rounded-b-lg border-t-4',
 						getJobColorClass('border', playCard.job)
 					)}
 				>
-					<div class="flex flex-row w-full px-2 pb-2 mt-2">
+					<div class="flex flex-row w-full px-2 pb-2 mt-2 gap-2">
 						{#if removing}
-							<Button color="cyan" classes="w-20 ml-auto" on:click={() => (removing = false)}>
-								Cancel
-							</Button>
-							<Button color="rose" classes="w-20 ml-2" on:click={() => confirmDelete()}>
+							<Button color="rose" classes="w-20 ml-auto" on:click={() => confirmDelete()}>
 								Confirm
 							</Button>
+							<Button color="cyan" classes="w-20" on:click={() => (removing = false)}>
+								Cancel
+							</Button>
 						{:else}
-							<Button color="rose" classes="w-20 ml-auto" on:click={() => (removing = true)}
-								>Remove</Button
-							>
+							<Button color="rose" classes="w-20 ml-auto" on:click={() => (removing = true)}>
+								Remove
+							</Button>
+							<Button color="cyan" classes="w-40" on:click={() => exportPlayCard()}>
+								Export Play Card
+							</Button>
 						{/if}
 					</div>
 
