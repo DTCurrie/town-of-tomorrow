@@ -1,6 +1,10 @@
 <script lang="ts">
-	import { updateWeapon, removeWeapon } from '$lib/api/characters';
 	import type { Character, Weapon } from '$lib/db';
+	import { logError } from '$lib/logs';
+	import { errorToast, successToast } from '$lib/toast';
+
+	import { updateWeapon, removeWeapon } from '$lib/api/characters';
+
 	import NumberInput from '$lib/elements/inputs/NumberInput.svelte';
 	import Textarea from '$lib/elements/inputs/Textarea.svelte';
 	import TextInput from '$lib/elements/inputs/TextInput.svelte';
@@ -28,11 +32,31 @@
 		weaponRating = 0;
 		weaponDescription = '';
 	};
+
+	const update = async () => {
+		try {
+			await updateWeapon(character, newWeapon, index);
+			successToast(`Updated ${newWeapon.name}!`);
+		} catch (error) {
+			logError('Error updating Weapon', false, { weapon, newWeapon, character, index });
+			errorToast('Error updating Weapon, please try again!');
+		}
+	};
+
+	const remove = async () => {
+		try {
+			await removeWeapon(character, index);
+			successToast(`Removed ${weapon?.name}!`);
+		} catch (error) {
+			logError('Error removing Weapon', false, { weapon, newWeapon, character, index });
+			errorToast('Error removing Weapon, please try again!');
+		}
+	};
 </script>
 
 <div class="flex flex-col w-full h-full rounded-lg bg-white">
 	{#if editing}
-		<form on:submit|preventDefault={() => updateWeapon(character, newWeapon, index)}>
+		<form on:submit|preventDefault={update}>
 			<div
 				class="flex flew-row items-center w-full gap-0.5 bg-rose-700 rounded-t-lg border-x-2 border-t-2 border-rose-700"
 			>
@@ -103,7 +127,7 @@
 				<Button
 					classes="w-20 ml-auto"
 					color="rose"
-					on:click={() => (removing ? removeWeapon(character, index) : (removing = true))}
+					on:click={() => (removing ? remove() : (removing = true))}
 				>
 					{#if removing}
 						Confirm

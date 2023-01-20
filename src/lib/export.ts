@@ -1,5 +1,5 @@
 import LZString from 'lz-string';
-import { error } from '$lib/logs';
+import { logError } from '$lib/logs';
 
 export const jsonToData = <T = unknown>(json: T) => {
 	try {
@@ -7,7 +7,7 @@ export const jsonToData = <T = unknown>(json: T) => {
 		const data = LZString.compressToEncodedURIComponent(str);
 		return data;
 	} catch (err) {
-		error('Error encoding json data', false, { json, err });
+		logError('Error encoding json data', false, { json, err });
 	}
 };
 
@@ -19,6 +19,6 @@ export const dataToJson = async <T = unknown>(data: string): Promise<T | undefin
 		}
 		return JSON.parse(json) as T;
 	} catch (err) {
-		error('Error parsing blob data', false, { data, err });
+		logError('Error parsing blob data', false, { data, err });
 	}
 };

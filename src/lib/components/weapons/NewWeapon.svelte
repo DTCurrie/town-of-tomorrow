@@ -8,6 +8,7 @@
 	import Textarea from '$lib/elements/inputs/Textarea.svelte';
 	import Button from '$lib/elements/Button.svelte';
 	import { log } from '$lib/logs';
+	import { errorToast } from '$lib/toast';
 
 	const dispatch = createEventDispatcher();
 
@@ -50,7 +51,10 @@
 		if (!status) {
 			create();
 			resetNewWeapon();
+			return;
 		}
+
+		errorToast(status);
 	};
 
 	$: newWeapon = {

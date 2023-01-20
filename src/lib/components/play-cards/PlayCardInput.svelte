@@ -6,23 +6,16 @@
 	import { browser } from '$app/environment';
 
 	import { db, type PlayCard } from '$lib/db';
+	import { log } from '$lib/logs';
 	import { getJobColorClass, standardPlayCards, type OtherPlayCards } from '$lib/play-cards';
+	import { errorToast } from '$lib/toast';
 
 	import Select from '$lib/elements/inputs/Select.svelte';
 	import TextInput from '$lib/elements/inputs/TextInput.svelte';
-	import { log } from '$lib/logs';
 
 	export let others: OtherPlayCards;
 	export let classes = '';
 	export let playCard: PlayCard | undefined;
-
-	export let save = () => {
-		status = validate();
-
-		if (!status) {
-			dispatch('saved', newPlayCard);
-		}
-	};
 
 	const dispatch = createEventDispatcher();
 	const customPlayCards = liveQuery(async () =>
@@ -51,6 +44,17 @@
 		}
 
 		return (status = '');
+	};
+
+	const save = () => {
+		status = validate();
+
+		if (!status) {
+			dispatch('saved', newPlayCard);
+			return;
+		}
+
+		errorToast(status);
 	};
 
 	$: newPlayCard = {

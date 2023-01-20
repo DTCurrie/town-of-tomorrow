@@ -1,16 +1,10 @@
 <script lang="ts">
-	import type { PlayCard } from '$lib/db';
 	import { standardPlayCards } from '$lib/play-cards';
 
-	import { createPlayCard } from '$lib/api/play-cards';
-
-	import NewPlayCard from '$lib/components/play-cards/NewPlayCard.svelte';
 	import PlayCardCard from '$lib/components/play-cards/PlayCardCard.svelte';
-	import PlayCardInfo from '$lib/components/play-cards/PlayCardInfo.svelte';
-	import Details from '$lib/components/Details.svelte';
+	import Button from '$lib/elements/Button.svelte';
 
 	import type { PageData } from './$types';
-	import Button from '$lib/elements/Button.svelte';
 
 	export let data: PageData;
 
@@ -18,7 +12,6 @@
 	$: details = data.details;
 
 	$: playCards = [...($customPlayCards ?? []), ...standardPlayCards.map((c) => c())];
-	$: playCard = $details && ($details.data as PlayCard);
 </script>
 
 <h1 class="md:text-2xl font-bold">Your Play Cards</h1>
@@ -54,23 +47,3 @@
 		{/if}
 	</div>
 </div>
-<Details bind:details={$details}>
-	{#if $details}
-		<div class="flex p-2 w-full h-full">
-			{#if $details.component === 'play-card-info'}
-				<PlayCardInfo bind:playCard showActions={playCard?.id !== undefined} />
-			{:else if $details.component === 'play-card-create'}
-				<NewPlayCard
-					on:created={async ({ detail }) => {
-						const id = await createPlayCard(detail);
-						$details = {
-							component: 'play-card-info',
-							data: { ...detail, id },
-							index: 0
-						};
-					}}
-				/>
-			{/if}
-		</div>
-	{/if}
-</Details>

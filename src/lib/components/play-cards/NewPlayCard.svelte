@@ -1,13 +1,16 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import classNames from 'classnames';
+
 	import type { Job, PlayCard, Unlockables } from '$lib/db';
 	import { jobs } from '$lib/jobs';
 	import { log } from '$lib/logs';
+	import { customPlayCard, getJobColorClass } from '$lib/play-cards';
+	import { errorToast } from '$lib/toast';
+
 	import Button from '$lib/elements/Button.svelte';
 	import Select from '$lib/elements/inputs/Select.svelte';
 	import TextInput from '$lib/elements/inputs/TextInput.svelte';
-	import { customPlayCard, getJobColorClass } from '$lib/play-cards';
 	import Textarea from '$lib/elements/inputs/Textarea.svelte';
 
 	export let create = () => dispatch('created', newPlayCard);
@@ -86,7 +89,10 @@
 		if (!status) {
 			create();
 			resetNewPlayCard();
+			return;
 		}
+
+		errorToast(status);
 	};
 
 	$: newPlayCard = {

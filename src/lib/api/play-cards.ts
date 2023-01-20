@@ -1,5 +1,5 @@
 import { db, type PlayCard } from '$lib/db';
-import { error, log } from '$lib/logs';
+import { logError, log } from '$lib/logs';
 
 export const createPlayCard = async (playCard: PlayCard) => {
 	log('api/play-cards createPlayCard', false, { playCard });
@@ -7,7 +7,7 @@ export const createPlayCard = async (playCard: PlayCard) => {
 	try {
 		return await db.customPlayCards.add(playCard);
 	} catch (err) {
-		error('error creating play card', false, { playCard, err });
+		logError('error creating play card', false, { playCard, err });
 		return -1;
 	}
 };
@@ -18,6 +18,6 @@ export const deletePlayCard = async (id: number) => {
 	try {
 		await db.customPlayCards.delete(id);
 	} catch (err) {
-		error('error deleting play card', false, { id, err });
+		logError('error deleting play card', false, { id, err });
 	}
 };

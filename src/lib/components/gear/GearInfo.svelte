@@ -1,9 +1,13 @@
 <script lang="ts">
+	import type { Character, Gear } from '$lib/db';
+	import { logError } from '$lib/logs';
+	import { errorToast, successToast } from '$lib/toast';
+
 	import { updateGear, removeGear } from '$lib/api/characters';
+
 	import NumberInput from '$lib/elements/inputs/NumberInput.svelte';
 	import Textarea from '$lib/elements/inputs/Textarea.svelte';
 	import TextInput from '$lib/elements/inputs/TextInput.svelte';
-	import type { Character, Gear } from '$lib/db';
 	import Button from '$lib/elements/Button.svelte';
 
 	export let gear: Gear | undefined;
@@ -28,11 +32,31 @@
 		pieceRating = 0;
 		pieceDescription = '';
 	};
+
+	const update = async () => {
+		try {
+			await updateGear(character, newGear, index);
+			successToast(`Updated ${newGear.name}!`);
+		} catch (error) {
+			logError('Error updating Gear', false, { gear, newGear, character, index });
+			errorToast('Error updating Gear, please try again!');
+		}
+	};
+
+	const remove = async () => {
+		try {
+			await removeGear(character, index);
+			successToast(`Removed ${gear?.name}!`);
+		} catch (error) {
+			logError('Error removing Gear', false, { gear, newGear, character, index });
+			errorToast('Error removing Gear, please try again!');
+		}
+	};
 </script>
 
 <div class="flex flex-col w-full h-full rounded-lg bg-white">
 	{#if editing}
-		<form on:submit|preventDefault={() => updateGear(character, newGear, index)}>
+		<form on:submit|preventDefault={update}>
 			<div
 				class="flex flew-row items-center w-full gap-0.5 bg-cyan-700 rounded-t-lg border-x-2 border-t-2 border-cyan-700"
 			>
@@ -102,7 +126,7 @@
 				<Button
 					classes="w-20 ml-auto"
 					color="rose"
-					on:click={() => (removing ? removeGear(character, index) : (removing = true))}
+					on:click={() => (removing ? remove() : (removing = true))}
 				>
 					{#if removing}
 						Confirm

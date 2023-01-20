@@ -1,11 +1,16 @@
 <script lang="ts">
 	import classNames from 'classnames';
-	import { updateRapport, removeRapport } from '$lib/api/characters';
-	import Textarea from '$lib/elements/inputs/Textarea.svelte';
-	import TextInput from '$lib/elements/inputs/TextInput.svelte';
+
 	import type { Character, Rapport, RapportValue } from '$lib/db';
 	import { rapportValues } from '$lib/rapport';
+
+	import { updateRapport, removeRapport } from '$lib/api/characters';
+
+	import Textarea from '$lib/elements/inputs/Textarea.svelte';
+	import TextInput from '$lib/elements/inputs/TextInput.svelte';
 	import Button from '$lib/elements/Button.svelte';
+	import { errorToast, successToast } from '$lib/toast';
+	import { logError } from '$lib/logs';
 
 	export let rapport: Rapport | undefined;
 	export let character: Character | undefined;
@@ -33,12 +38,30 @@
 		rapportOverflow = false;
 	};
 
-	const update = (value: RapportValue) => updateRapport(character, { ...rapport!, value }, index);
+	const update = async () => {
+		try {
+			await updateRapport(character, newRapport, index);
+			successToast(`Updated ${newRapport.name}!`);
+		} catch (error) {
+			logError('Error updating Rapport', false, { rapport, newRapport, character, index });
+			errorToast('Error updating Rapport, please try again!');
+		}
+	};
+
+	const remove = async () => {
+		try {
+			await removeRapport(character, index);
+			successToast(`Removed ${rapport?.name}!`);
+		} catch (error) {
+			logError('Error removing Rapport', false, { rapport, character, index });
+			errorToast('Error removing Rapport, please try again!');
+		}
+	};
 </script>
 
 <div class="flex flex-col w-full h-full rounded-lg bg-white">
 	{#if editing}
-		<form on:submit|preventDefault={() => updateRapport(character, newRapport, index)}>
+		<form on:submit|preventDefault={update}>
 			<div
 				class="flex flew-row items-center w-full gap-0.5 bg-gray-700 rounded-t-lg border-x-2 border-t-2 border-gray-700"
 			>
@@ -166,7 +189,7 @@
 				<Button
 					classes="w-20 ml-auto"
 					color="rose"
-					on:click={() => (removing ? removeRapport(character, index) : (removing = true))}
+					on:click={() => (removing ? remove : (removing = true))}
 				>
 					{#if removing}
 						Confirm

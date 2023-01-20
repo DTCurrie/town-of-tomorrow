@@ -1,11 +1,16 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import classNames from 'classnames';
 
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
 	import type { Gear, PlayCard, Rapport } from '$lib/db';
+	import type { PlayCardAddData } from '$lib/details';
+	import { jsonToData } from '$lib/export';
+	import { logError } from '$lib/logs';
 	import { getIndex, getOthers, type OtherPlayCards } from '$lib/play-cards';
+	import { errorToast, successToast } from '$lib/toast';
 
 	import { deleteCharacter, updatePlayCard } from '$lib/api/characters';
 	import { createPlayCard } from '$lib/api/play-cards';
@@ -17,14 +22,11 @@
 	import SelectedPlayCardInfo from '$lib/components/play-cards/SelectedPlayCardInfo.svelte';
 	import RapportInfo from '$lib/components/rapport/RapportInfo.svelte';
 	import WeaponInfo from '$lib/components/weapons/WeaponInfo.svelte';
+	import Details from '$lib/components/Details.svelte';
 
 	import Button from '$lib/elements/Button.svelte';
 
 	import type { LayoutData } from './$types';
-	import Details from '$lib/components/Details.svelte';
-	import type { PlayCardAddData } from '$lib/details';
-	import { jsonToData } from '$lib/export';
-	import { tick } from 'svelte';
 
 	export let data: LayoutData;
 
@@ -56,8 +58,15 @@
 
 		if (data) {
 			const url = `${location.origin}/characters/import?data=${data}`;
-			await navigator.clipboard.writeText(url);
-			await tick();
+
+			try {
+				await navigator.clipboard.writeText(url);
+				await tick();
+				successToast(`Copied import link for ${$character?.name}`);
+			} catch (err) {
+				logError('Error copying to clipboard', false, { url });
+				errorToast('Error copying import link, please try again!');
+			}
 		}
 	};
 </script>
@@ -71,8 +80,14 @@
 					color="rose"
 					classes="w-24"
 					on:click={async () => {
-						await deleteCharacter($character?.id);
-						goto('/');
+						try {
+							await deleteCharacter($character?.id);
+							successToast(`Removed ${$character?.name}`);
+							goto('/');
+						} catch (error) {
+							logError('Error deleting Character', false, { character });
+							errorToast('Error deleting Character, please try again!');
+						}
 					}}
 				>
 					Confirm

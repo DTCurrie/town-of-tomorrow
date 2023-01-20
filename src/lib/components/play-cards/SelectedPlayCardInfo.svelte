@@ -1,11 +1,16 @@
 <script lang="ts">
 	import classNames from 'classnames';
+
 	import type { Character, PlayCard, PlayCardIndex } from '$lib/db';
+	import { logError } from '$lib/logs';
+	import { getJobColorClass } from '$lib/play-cards';
+	import { errorToast, successToast } from '$lib/toast';
+
+	import { removePlayCard, updateFaults, updateMerits, updateUnlocked } from '$lib/api/characters';
+
 	import Merits from '$lib/components/Merits.svelte';
 	import Faults from '$lib/components/Faults.svelte';
-	import { getJobColorClass } from '$lib/play-cards';
 	import Button from '$lib/elements/Button.svelte';
-	import { removePlayCard, updateFaults, updateMerits, updateUnlocked } from '$lib/api/characters';
 
 	export let character: Character | undefined;
 	export let playCard: PlayCard | undefined;
@@ -64,8 +69,23 @@
 										<input
 											type="checkbox"
 											bind:checked={unlockable.unlocked}
-											on:input|preventDefault={() =>
-												updateUnlocked(character, index, unlockable, i)}
+											on:input|preventDefault={async () => {
+												try {
+													await updateUnlocked(character, index, unlockable, i);
+													successToast(
+														`${unlockable.unlocked ? 'Unlocked' : 'Locked'} ${unlockable.name}!`
+													);
+												} catch (err) {
+													logError('Error updating Unlockable', false, {
+														character,
+														playCard,
+														unlockable,
+														err
+													});
+
+													errorToast(`Error updating ${unlockable.name}, please try again!`);
+												}
+											}}
 										/>
 										<span class="font-bold">{unlockable.name}</span>
 									</label>
@@ -91,13 +111,29 @@
 						{#if showMerits}
 							<Merits
 								merits={playCard.merits ?? 0}
-								on:set-merits={({ detail }) => updateMerits(character, index, detail)}
+								on:set-merits={async ({ detail }) => {
+									try {
+										await updateMerits(character, index, detail);
+										successToast(`${playCard?.name} Merits updated to ${detail}!`);
+									} catch (err) {
+										logError('Error updating Merits', false, { character, playCard, detail, err });
+										errorToast('Error updating Merits, please try again!');
+									}
+								}}
 							/>
 						{/if}
 						{#if showFaults}
 							<Faults
 								faults={playCard.faults ?? 0}
-								on:set-faults={({ detail }) => updateFaults(character, index, detail)}
+								on:set-faults={async ({ detail }) => {
+									try {
+										await updateFaults(character, index, detail);
+										successToast(`${playCard?.name} Faults updated to ${detail}!`);
+									} catch (err) {
+										logError('Error updating Faults', false, { character, playCard, detail, err });
+										errorToast('Error updating Faults, please try again!');
+									}
+								}}
 							/>
 						{/if}
 					</div>
@@ -112,7 +148,19 @@
 							<Button
 								color="rose"
 								classes="w-20 ml-2"
-								on:click={() => removePlayCard(character, index)}
+								on:click={async () => {
+									try {
+										await removePlayCard(character, index);
+										successToast(`Removed ${playCard?.name}!`);
+									} catch (err) {
+										logError('Error removing Play Card', false, {
+											character,
+											playCard,
+											err
+										});
+										errorToast('Error removing Play Card, please try again!');
+									}
+								}}
 							>
 								Confirm
 							</Button>

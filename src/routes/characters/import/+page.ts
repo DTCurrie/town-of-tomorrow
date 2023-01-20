@@ -1,26 +1,34 @@
 import { error } from '@sveltejs/kit';
 
-import { createCharacter } from '$lib/api/characters';
+import { browser } from '$app/environment';
+
 import type { Character } from '$lib/db';
 import { dataToJson } from '$lib/export';
+import { logError } from '$lib/logs';
+
+import { createCharacter } from '$lib/api/characters';
 
 import type { PageLoad } from './$types';
-import { browser } from '$app/environment';
 
 export const load = (async ({ url }) => {
 	const data = url.searchParams.get('data');
 
 	if (data) {
-		const characterData = await dataToJson<Character>(data);
-		if (characterData) {
-			delete characterData.id;
-			const id = browser && (await createCharacter(characterData));
-			const character: Character = {
-				id: parseInt(id.toString(), 10),
-				...characterData
-			};
+		try {
+			const characterData = await dataToJson<Character>(data);
+			if (characterData) {
+				delete characterData.id;
+				const id =
+					browser && (await createCharacter({ ...characterData, createdOn: new Date(Date.now()) }));
+				const character: Character = {
+					...characterData,
+					id: parseInt(id.toString(), 10)
+				};
 
-			return { character };
+				return { character };
+			}
+		} catch (error) {
+			logError('Error importing Character', false, { data, url, error });
 		}
 	}
 

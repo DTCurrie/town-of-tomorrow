@@ -2,12 +2,14 @@
 	import classNames from 'classnames';
 	import { DateTime } from 'luxon';
 
+	import { goto } from '$app/navigation';
+
 	import { getJobColorClass } from '$lib/play-cards';
+
 	import Avatar from '$lib/elements/Avatar.svelte';
+	import Button from '$lib/elements/Button.svelte';
 
 	import type { PageData } from './$types';
-	import Button from '$lib/elements/Button.svelte';
-	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 
@@ -20,12 +22,15 @@
 		<Button
 			classes="w-full h-full min-h-[5rem] rounded-lg"
 			color="lime"
-			on:click={() => goto('/create')}
+			on:click={() => goto('/characters/create')}
 		>
 			Create Character
 		</Button>
 		{#each $characters as character (character.id)}
-			<div class="flex flex-col w-full p-2 rounded-lg bg-white shadow">
+			<button
+				class="flex flex-col w-full p-2 rounded-lg bg-white shadow group"
+				on:click={() => goto(`/characters/${character.id}`)}
+			>
 				<div class="flex flex-row">
 					<div
 						class={classNames(
@@ -55,19 +60,16 @@
 					</div>
 					<div class="flex flex-col w-full justify-center p-2">
 						<h3 class="flex flex-col gap-1 font-bold">
-							<a
-								href={`/characters/${character.id}`}
-								class="underline hover:no-underline font-bold overflow-x-hidden truncate"
-							>
+							<p class="underline group-hover:no-underline font-bold overflow-x-hidden truncate">
 								{character.name}
-							</a>
+							</p>
 							<time class="text-sm text-gray-700"
 								>{DateTime.fromJSDate(character.createdOn).toFormat('dd LLL yyyy')}</time
 							>
 						</h3>
 					</div>
 				</div>
-			</div>
+			</button>
 		{/each}
 	</div>
 {/if}

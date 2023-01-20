@@ -1,13 +1,16 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { Armor } from '$lib/db';
 	import classNames from 'classnames';
+
+	import type { Armor } from '$lib/db';
+	import { log } from '$lib/logs';
+	import { errorToast } from '$lib/toast';
+
 	import Chevron from '$lib/elements/icons/Chevron.svelte';
 	import TextInput from '$lib/elements/inputs/TextInput.svelte';
 	import NumberInput from '$lib/elements/inputs/NumberInput.svelte';
 	import Textarea from '$lib/elements/inputs/Textarea.svelte';
 	import Button from '$lib/elements/Button.svelte';
-	import { log } from '$lib/logs';
 
 	const dispatch = createEventDispatcher();
 
@@ -50,7 +53,10 @@
 		if (!status) {
 			create();
 			resetNewArmor();
+			return;
 		}
+
+		errorToast(status);
 	};
 
 	$: newArmor = {

@@ -3,7 +3,19 @@
 
 	import { createCharacter } from '$lib/api/characters';
 
-	import type { Armor, Gear, PlayCard, PlayCards, Rapport, Unlockable, Weapon } from '$lib/db';
+	import { log, logError } from '$lib/logs';
+	import { getOthers } from '$lib/play-cards';
+	import { errorToast, successToast } from '$lib/toast';
+	import type {
+		Armor,
+		Character,
+		Gear,
+		PlayCard,
+		PlayCards,
+		Rapport,
+		Unlockable,
+		Weapon
+	} from '$lib/db';
 
 	import ArmorList from '$lib/components/armor/ArmorList.svelte';
 	import NewArmor from '$lib/components/armor/NewArmor.svelte';
@@ -22,9 +34,6 @@
 	import Textarea from '$lib/elements/inputs/Textarea.svelte';
 	import UrlInput from '$lib/elements/inputs/UrlInput.svelte';
 	import Button from '$lib/elements/Button.svelte';
-
-	import { log } from '$lib/logs';
-	import { getOthers } from '$lib/play-cards';
 
 	let status = '';
 
@@ -55,16 +64,16 @@
 		[]
 	);
 
-	$: avatarUrl = `https://api.dicebear.com/5.x/micah/svg?seed=${encodeURIComponent(name)}?size=96`;
+	$: encodedName = encodeURIComponent(name);
+	$: avatarUrl = `https://api.dicebear.com/5.x/micah/svg?size=96&seed=${encodedName}`;
 
 	$: {
-		if (name && !avatar) {
+		if ((name && !avatar) || avatar) {
 			avatar = avatarUrl;
 		}
 	}
 
 	const handleUnlockable = () => {
-		log('create handleUnlockable', false, { allPlayCards, unlockable });
 		for (const card of allPlayCards) {
 			if (!card) {
 				continue;
@@ -80,7 +89,6 @@
 	};
 
 	const hasCardChanged = (current: PlayCard | undefined, original: PlayCard | undefined) => {
-		log('create hasCardChanged', false, { current, original });
 		if (!current || !original) {
 			return false;
 		}
@@ -96,7 +104,7 @@
 	};
 
 	const validate = () => {
-		log('create validate', false, {
+		log('character/create validate', false, {
 			allPlayCards,
 			name,
 			description,
@@ -147,10 +155,28 @@
 	};
 
 	const addCharacter = async () => {
+		const character: Character = {
+			playCards: allPlayCards,
+			name,
+			description,
+			pitfall: pitfall,
+			rapport: [ally, rival],
+			fieldOfStudy,
+			gear,
+			weapons,
+			armor,
+			avatar,
+			damage: 0,
+			xp: 0,
+			notes: '',
+			createdOn: new Date(Date.now())
+		};
+
 		try {
 			validate();
 
 			if (status) {
+				errorToast(status);
 				return;
 			}
 
@@ -165,30 +191,17 @@
 				card.faults = 0;
 			}
 
-			const id = await createCharacter({
-				playCards: allPlayCards,
-				name,
-				description,
-				pitfall: pitfall,
-				rapport: [ally, rival],
-				fieldOfStudy,
-				gear,
-				weapons,
-				armor,
-				avatar,
-				damage: 0,
-				xp: 0,
-				notes: '',
-				createdOn: new Date(Date.now())
-			});
+			const id = await createCharacter(character);
 
 			if (id >= 0) {
+				successToast(`Created ${name}`);
 				goto(`/characters/${id}`);
 			} else {
-				status = 'Your character could not be created, please try again!';
+				throw new Error('Invalid ID');
 			}
 		} catch (error) {
-			status = `Failed to add ${name}: ${error}`;
+			logError('Failed to add Character', false, { character, error });
+			errorToast('Your character could not be created, please try again!');
 		}
 	};
 </script>
@@ -377,10 +390,10 @@
 		</p>
 
 		<div class="flex flex-col lg:flex-row gap-2 items-center">
-			<div class="flex flex-col gap-2">
+			<div class="flex flex-col w-full gap-2">
 				<p class="font-bold">Ally:</p>
 				<!-- svelte-ignore a11y-label-has-associated-control -->
-				<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
+				<label class="flex flex-col lg:flex-row w-full lg:items-center">
 					Name:
 					<TextInput bind:value={ally.name} classes="lg:ml-2" maxlength="25" required />
 				</label>
@@ -391,10 +404,10 @@
 				</label>
 			</div>
 
-			<div class="flex flex-col gap-2">
+			<div class="flex flex-col w-full gap-2">
 				<p class="font-bold">Rival:</p>
 				<!-- svelte-ignore a11y-label-has-associated-control -->
-				<label class="flex flex-col lg:flex-row w-full lg:items-center lg:w-1/2">
+				<label class="flex flex-col lg:flex-row w-full lg:items-center">
 					Name:
 					<TextInput bind:value={rival.name} classes="lg:ml-2" maxlength="25" required />
 				</label>
@@ -436,14 +449,7 @@
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label>
 			Avatar:
-			<UrlInput
-				bind:value={avatar}
-				on:blur={() => {
-					if (!avatar) {
-						avatar = avatarUrl;
-					}
-				}}
-			/>
+			<UrlInput bind:value={avatar} />
 
 			<img alt="avatar preview" class="w-20 h-20 object-cover rounded-full" src={avatarUrl} />
 		</label>
@@ -452,8 +458,6 @@
 		{#if status}
 			<p class="bg-red-700 text-white p-2 mb-2">{status}</p>
 		{/if}
-		<Button type="submit" classes="w-64 ml-auto" color="lime" on:click={addCharacter}
-			>Save Character Sheet</Button
-		>
+		<Button type="submit" classes="w-64 ml-auto" color="lime">Save Character</Button>
 	</div>
 </form>

@@ -1,5 +1,9 @@
 <script lang="ts">
 	import classNames from 'classnames';
+
+	import { logError } from '$lib/logs';
+	import { errorToast, successToast } from '$lib/toast';
+
 	import {
 		updateCritical,
 		updateDamage,
@@ -9,10 +13,12 @@
 		updatePitfall,
 		updateXp
 	} from '$lib/api/characters';
-	import Button from '$lib/elements/Button.svelte';
+
 	import DamageInfo from '$lib/components/DamageInfo.svelte';
-	import Textarea from '$lib/elements/inputs/Textarea.svelte';
 	import XpInfo from '$lib/components/XpInfo.svelte';
+	import Button from '$lib/elements/Button.svelte';
+	import Textarea from '$lib/elements/inputs/Textarea.svelte';
+
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -75,8 +81,14 @@
 					color="lime"
 					disabled={!descriptionChanged}
 					on:click={async () => {
-						await updateDescription($character, newDescription);
-						editingDescription = false;
+						try {
+							await updateDescription($character, newDescription);
+							editingDescription = false;
+							successToast('Updated Description!');
+						} catch (error) {
+							logError('Error updating Description', false, { newDescription, character });
+							errorToast('Error updating Description, please try again!');
+						}
 					}}
 				>
 					Save Description
@@ -113,8 +125,14 @@
 					color="lime"
 					disabled={!pitfallChanged}
 					on:click={async () => {
-						await updatePitfall($character, newPitfall);
-						editingPitfall = false;
+						try {
+							await updatePitfall($character, newPitfall);
+							editingPitfall = false;
+							successToast('Updated Pitfall!');
+						} catch (error) {
+							logError('Error updating Pitfall', false, { newPitfall, character });
+							errorToast('Error updating Pitfall, please try again!');
+						}
 					}}
 				>
 					Save Pitfall
@@ -165,8 +183,14 @@
 					color="lime"
 					disabled={!notesChanged}
 					on:click={async () => {
-						await updateNotes($character, newNotes);
-						editingNotes = false;
+						try {
+							await updateNotes($character, newNotes);
+							editingNotes = false;
+							successToast('Updated Notes!');
+						} catch (error) {
+							logError('Error updating Notes', false, { newNotes, character });
+							errorToast('Error updating Notes, please try again!');
+						}
 					}}
 				>
 					Save Notes

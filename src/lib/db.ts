@@ -2,7 +2,7 @@ import { browser } from '$app/environment';
 import { generateCharacter } from '$lib/generate';
 import Dexie, { type Table } from 'dexie';
 
-import { error } from '$lib/logs';
+import { logError } from '$lib/logs';
 
 export type JobType = 'Detective' | 'Liaison' | 'Specialist' | 'Hot Shot' | 'Sage';
 export type JobHealth = 1 | 2 | 3;
@@ -116,7 +116,7 @@ if (import.meta.env.DEV) {
 				]);
 			}
 		} catch (err) {
-			error('error generating characters', false, err);
+			logError('error generating characters', false, err);
 		}
 	})();
 }

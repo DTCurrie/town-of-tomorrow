@@ -1,9 +1,13 @@
 <script lang="ts">
+	import type { Character, Armor } from '$lib/db';
+	import { logError } from '$lib/logs';
+	import { errorToast, successToast } from '$lib/toast';
+
 	import { updateArmor, removeArmor } from '$lib/api/characters';
+
 	import NumberInput from '$lib/elements/inputs/NumberInput.svelte';
 	import Textarea from '$lib/elements/inputs/Textarea.svelte';
 	import TextInput from '$lib/elements/inputs/TextInput.svelte';
-	import type { Character, Armor } from '$lib/db';
 	import Button from '$lib/elements/Button.svelte';
 
 	export let armor: Armor | undefined;
@@ -28,11 +32,31 @@
 		pieceRating = 0;
 		pieceDescription = '';
 	};
+
+	const update = async () => {
+		try {
+			await updateArmor(character, newArmor, index);
+			successToast(`Updated ${newArmor.name}!`);
+		} catch (error) {
+			logError('Error updating Armor', false, { armor, newArmor, character, index });
+			errorToast('Error updating Armor, please try again!');
+		}
+	};
+
+	const remove = async () => {
+		try {
+			await removeArmor(character, index);
+			successToast(`Removed ${armor?.name}!`);
+		} catch (error) {
+			logError('Error removing Armor', false, { armor, newArmor, character, index });
+			errorToast('Error removing Armor, please try again!');
+		}
+	};
 </script>
 
 <div class="flex flex-col w-full h-full rounded-lg bg-white">
 	{#if editing}
-		<form on:submit|preventDefault={() => updateArmor(character, newArmor, index)}>
+		<form on:submit|preventDefault={update}>
 			<div
 				class="flex flew-row items-center w-full gap-0.5 bg-lime-700 rounded-t-lg border-x-2 border-t-2 border-lime-700"
 			>
@@ -75,14 +99,10 @@
 					</div>
 				</label>
 				<div class="flex flex-row w-full gap-2 ml-auto mt-auto p-2 border-t-4 border-lime-700">
-					<Button classes="w-20 ml-auto" color="rose" on:click={() => resetNewArmor()}
-						>Cancel</Button
-					>
-					<Button
-						classes="w-20"
-						color="lime"
-						on:click={() => updateArmor(character, newArmor, index)}>Save</Button
-					>
+					<Button classes="w-20 ml-auto" color="rose" on:click={() => resetNewArmor()}>
+						Cancel
+					</Button>
+					<Button type="submit" classes="w-20" color="lime">Save</Button>
 				</div>
 			</div>
 		</form>
@@ -107,7 +127,7 @@
 				<Button
 					classes="w-20 ml-auto"
 					color="rose"
-					on:click={() => (removing ? removeArmor(character, index) : (removing = true))}
+					on:click={() => (removing ? remove() : (removing = true))}
 				>
 					{#if removing}
 						Confirm

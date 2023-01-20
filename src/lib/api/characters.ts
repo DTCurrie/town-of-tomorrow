@@ -13,7 +13,7 @@ import {
 	type PlayCards,
 	type Gear
 } from '$lib/db';
-import { error, log } from '$lib/logs';
+import { logError, log } from '$lib/logs';
 import { isValidIndex } from '$lib/play-cards';
 
 export const createCharacter = async (character: Character) => {
@@ -22,7 +22,7 @@ export const createCharacter = async (character: Character) => {
 	try {
 		return await db.characters.add(character);
 	} catch (err) {
-		error('error creating character', false, { character, err });
+		logError('error creating character', false, { character, err });
 		return -1;
 	}
 };
@@ -30,14 +30,14 @@ export const createCharacter = async (character: Character) => {
 export const deleteCharacter = async (id?: number) => {
 	log('api/characters deleteCharacter', false, { id });
 	if (!id) {
-		error('api/characters deleteCharacter invalid ID', false, { id });
+		logError('api/characters deleteCharacter invalid ID', false, { id });
 		return;
 	}
 
 	try {
 		await db.characters.delete(id);
 	} catch (err) {
-		error('error deleting character', false, { id, err });
+		logError('error deleting character', false, { id, err });
 	}
 };
 
@@ -46,7 +46,7 @@ export const updateCharacter = async (id: number, next?: Partial<Character>) => 
 	try {
 		return await db.characters.update(id, { ...next });
 	} catch (err) {
-		error('error updating character', false, { next, err });
+		logError('error updating character', false, { next, err });
 		return -1;
 	}
 };
@@ -54,7 +54,7 @@ export const updateCharacter = async (id: number, next?: Partial<Character>) => 
 export const updateDescription = async (character: Character | undefined, description: string) => {
 	log('api/characters updateDescription', false, { character, description });
 	if (!character || !character.id) {
-		error('api/characters updateDescription invalid character', false, { character });
+		logError('api/characters updateDescription invalid character', false, { character });
 		return;
 	}
 
@@ -66,7 +66,7 @@ export const updateDescription = async (character: Character | undefined, descri
 export const updatePitfall = async (character: Character | undefined, pitfall: string) => {
 	log('api/characters updatePitfall', false, { character, pitfall });
 	if (!character || !character.id) {
-		error('api/characters updatePitfall invalid character', false, { character });
+		logError('api/characters updatePitfall invalid character', false, { character });
 		return;
 	}
 
@@ -78,7 +78,7 @@ export const updatePitfall = async (character: Character | undefined, pitfall: s
 export const updateDamage = async (character: Character | undefined, damage: number) => {
 	log('api/characters updateDamage', false, { character, damage });
 	if (!character || !character.id) {
-		error('api/characters updateDamage invalid character', false, { character });
+		logError('api/characters updateDamage invalid character', false, { character });
 		return;
 	}
 
@@ -90,7 +90,7 @@ export const updateDamage = async (character: Character | undefined, damage: num
 export const updateCritical = async (character: Character | undefined, value: boolean) => {
 	log('api/characters updateCritical', false, { character, value });
 	if (!character || !character.id) {
-		error('api/characters updateCritical invalid character', false, { character });
+		logError('api/characters updateCritical invalid character', false, { character });
 		return;
 	}
 
@@ -102,7 +102,7 @@ export const updateCritical = async (character: Character | undefined, value: bo
 export const updateDead = async (character: Character | undefined, value: boolean) => {
 	log('api/characters updateDead', false, { character, value });
 	if (!character || !character.id) {
-		error('api/characters updateDead invalid character', false, { character });
+		logError('api/characters updateDead invalid character', false, { character });
 		return;
 	}
 
@@ -114,7 +114,7 @@ export const updateDead = async (character: Character | undefined, value: boolea
 export const updateXp = async (character: Character | undefined, xp: Xp) => {
 	log('api/characters updateXp', false, { character, xp });
 	if (!character || !character.id) {
-		error('api/characters updateXp invalid character', false, { character });
+		logError('api/characters updateXp invalid character', false, { character });
 		return;
 	}
 
@@ -126,7 +126,7 @@ export const updateXp = async (character: Character | undefined, xp: Xp) => {
 export const updateNotes = async (character: Character | undefined, notes: string) => {
 	log('api/characters updateNotes', false, { character, notes });
 	if (!character || !character.id) {
-		error('api/characters updateNotes invalid character', false, { character });
+		logError('api/characters updateNotes invalid character', false, { character });
 		return;
 	}
 
@@ -142,7 +142,7 @@ export const updatePlayCard = async (
 ) => {
 	log('api/characters updatePlayCard', false, { character, playCard, index: playCardIndex });
 	if (!character || !character.id) {
-		error('api/characters updatePlayCard invalid character', false, { character });
+		logError('api/characters updatePlayCard invalid character', false, { character });
 		return;
 	}
 
@@ -158,12 +158,12 @@ export const removePlayCard = async (
 ) => {
 	log('api/characters removePlayCard', false, { character, playCardIndex });
 	if (!character || !character.id) {
-		error('api/characters removePlayCard invalid character', false, { character });
+		logError('api/characters removePlayCard invalid character', false, { character });
 		return;
 	}
 
 	if (playCardIndex === undefined || !isValidIndex(playCardIndex)) {
-		error('api/characters removePlayCard invalid play card index', false, {
+		logError('api/characters removePlayCard invalid play card index', false, {
 			character,
 			playCardIndex
 		});
@@ -173,7 +173,7 @@ export const removePlayCard = async (
 	const next: Pick<Character, 'playCards'> = { playCards: character.playCards };
 
 	if (!next.playCards[playCardIndex]) {
-		error('api/characters removePlayCard invalid play card index', false, {
+		logError('api/characters removePlayCard invalid play card index', false, {
 			character,
 			playCardIndex
 		});
@@ -192,12 +192,12 @@ export const updateUnlocked = async (
 ) => {
 	log('api/characters updateUnlocked', false, { character, unlockable });
 	if (!character || !character.id) {
-		error('api/characters updateUnlocked invalid character', false, { character });
+		logError('api/characters updateUnlocked invalid character', false, { character });
 		return;
 	}
 
 	if (playCardIndex === undefined || !isValidIndex(playCardIndex)) {
-		error('api/characters updateUnlocked invalid play card index', false, {
+		logError('api/characters updateUnlocked invalid play card index', false, {
 			character,
 			playCardIndex
 		});
@@ -208,7 +208,7 @@ export const updateUnlocked = async (
 	const playCard = next.playCards[playCardIndex];
 
 	if (!playCard) {
-		error('api/characters updateUnlocked invalid play card index', false, {
+		logError('api/characters updateUnlocked invalid play card index', false, {
 			character,
 			playCardIndex
 		});
@@ -229,12 +229,12 @@ export const updateMerits = async (
 ) => {
 	log('api/characters updateMerits', false, { character, playCardIndex, value });
 	if (!character || !character.id) {
-		error('api/characters updateMerits invalid character', false, { character });
+		logError('api/characters updateMerits invalid character', false, { character });
 		return;
 	}
 
 	if (playCardIndex === undefined || !isValidIndex(playCardIndex)) {
-		error('api/characters updateMerits invalid play card index', false, {
+		logError('api/characters updateMerits invalid play card index', false, {
 			character,
 			playCardIndex
 		});
@@ -245,7 +245,7 @@ export const updateMerits = async (
 	const playCard = next.playCards[playCardIndex];
 
 	if (!playCard) {
-		error('api/characters updateMerits invalid play card index', false, {
+		logError('api/characters updateMerits invalid play card index', false, {
 			character,
 			playCard: playCardIndex
 		});
@@ -264,12 +264,12 @@ export const updateFaults = async (
 ) => {
 	log('api/characters updateFaults', false, { character, playCard: playCardIndex, value });
 	if (!character || !character.id) {
-		error('api/characters updateFaults invalid character', false, { character });
+		logError('api/characters updateFaults invalid character', false, { character });
 		return;
 	}
 
 	if (playCardIndex === undefined || !isValidIndex(playCardIndex)) {
-		error('api/characters updateFaults invalid play card index', false, {
+		logError('api/characters updateFaults invalid play card index', false, {
 			character,
 			playCardIndex
 		});
@@ -280,7 +280,7 @@ export const updateFaults = async (
 	const playCard = next.playCards[playCardIndex];
 
 	if (!playCard) {
-		error('api/characters updateFaults invalid play card index', false, {
+		logError('api/characters updateFaults invalid play card index', false, {
 			character,
 			playCard: playCardIndex
 		});
@@ -295,7 +295,7 @@ export const updateFaults = async (
 export const createWeapon = async (character: Character | undefined, weapon: Weapon) => {
 	log('api/characters createWeapon', false, { character, weapon });
 	if (!character || !character.id) {
-		error('api/characters createWeapon invalid character', false, { character });
+		logError('api/characters createWeapon invalid character', false, { character });
 		return;
 	}
 
@@ -311,7 +311,7 @@ export const updateWeapon = async (
 ) => {
 	log('api/characters updateWeapon', false, { character, weapon, index: weaponIndex });
 	if (!character || !character.id) {
-		error('api/characters updateWeapon invalid character', false, { character });
+		logError('api/characters updateWeapon invalid character', false, { character });
 		return;
 	}
 
@@ -324,7 +324,7 @@ export const updateWeapon = async (
 export const removeWeapon = async (character: Character | undefined, weaponIndex: number) => {
 	log('api/characters removeWeapon', false, { character, index: weaponIndex });
 	if (!character || !character.id) {
-		error('api/characters removeWeapon invalid character', false, { character });
+		logError('api/characters removeWeapon invalid character', false, { character });
 		return;
 	}
 
@@ -337,7 +337,7 @@ export const removeWeapon = async (character: Character | undefined, weaponIndex
 export const createArmor = async (character: Character | undefined, armor: Armor) => {
 	log('api/characters createArmor', false, { character, armor });
 	if (!character || !character.id) {
-		error('api/characters createArmor invalid character', false, { character });
+		logError('api/characters createArmor invalid character', false, { character });
 		return;
 	}
 
@@ -353,7 +353,7 @@ export const updateArmor = async (
 ) => {
 	log('api/characters updateArmor', false, { character, piece, index: armorIndex });
 	if (!character || !character.id) {
-		error('api/characters updateArmor invalid character', false, { character });
+		logError('api/characters updateArmor invalid character', false, { character });
 		return;
 	}
 
@@ -366,7 +366,7 @@ export const updateArmor = async (
 export const removeArmor = async (character: Character | undefined, armorIndex: number) => {
 	log('api/characters removeArmor', false, { character, index: armorIndex });
 	if (!character || !character.id) {
-		error('api/characters removeArmor invalid character', false, { character });
+		logError('api/characters removeArmor invalid character', false, { character });
 		return;
 	}
 
@@ -379,7 +379,7 @@ export const removeArmor = async (character: Character | undefined, armorIndex: 
 export const createGear = async (character: Character | undefined, gear: Armor) => {
 	log('api/characters createGear', false, { character, gear });
 	if (!character || !character.id) {
-		error('api/characters createGear invalid character', false, { character });
+		logError('api/characters createGear invalid character', false, { character });
 		return;
 	}
 
@@ -395,7 +395,7 @@ export const updateGear = async (
 ) => {
 	log('api/characters updateGear', false, { character, piece, index: gearIndex });
 	if (!character || !character.id) {
-		error('api/characters updateGear invalid character', false, { character });
+		logError('api/characters updateGear invalid character', false, { character });
 		return;
 	}
 
@@ -408,7 +408,7 @@ export const updateGear = async (
 export const removeGear = async (character: Character | undefined, gearIndex: number) => {
 	log('api/characters removeGear', false, { character, index: gearIndex });
 	if (!character || !character.id) {
-		error('api/characters removeGear invalid character', false, { character });
+		logError('api/characters removeGear invalid character', false, { character });
 		return;
 	}
 
@@ -425,14 +425,14 @@ export const updateRapport = async (
 ) => {
 	log('api/characters updateRapport', false, { character, rapport });
 	if (!character || !character.id) {
-		error('api/characters updateRapport invalid character', false, { character });
+		logError('api/characters updateRapport invalid character', false, { character });
 		return;
 	}
 
 	const next = { rapport: [...character.rapport] };
 
 	if (rapportIndex === -1) {
-		error('api/characters updateRapport invalid rapport index', false, { character, rapport });
+		logError('api/characters updateRapport invalid rapport index', false, { character, rapport });
 		return;
 	}
 
@@ -443,7 +443,7 @@ export const updateRapport = async (
 export const createRapport = async (character: Character | undefined, rapport: Rapport) => {
 	log('api/characters createRapport', false, { character, rapport });
 	if (!character || !character.id) {
-		error('api/characters updateDescription invalid character', false, { character });
+		logError('api/characters updateDescription invalid character', false, { character });
 		return;
 	}
 
@@ -455,7 +455,7 @@ export const createRapport = async (character: Character | undefined, rapport: R
 export const removeRapport = async (character: Character | undefined, rapportIndex: number) => {
 	log('api/characters removeRapport', false, { character, index: rapportIndex });
 	if (!character || !character.id) {
-		error('api/characters updateDescription invalid character', false, { character });
+		logError('api/characters updateDescription invalid character', false, { character });
 		return;
 	}
 

@@ -17,11 +17,15 @@ const printMessage = (type: MessageType, message: string, once?: boolean, args: 
 
 export const log = (message: string, once?: boolean, ...args: unknown[]) =>
 	printMessage('log', message, once, args);
-export const info = (message: string, once?: boolean, ...args: unknown[]) =>
+
+export const logInfo = (message: string, once?: boolean, ...args: unknown[]) =>
 	printMessage('info', message, once, args);
-export const warn = (message: string, once?: boolean, ...args: unknown[]) =>
+
+export const logWarning = (message: string, once?: boolean, ...args: unknown[]) =>
 	printMessage('warn', message, once, args);
-export const error = (message: string, once?: boolean, ...args: unknown[]) =>
+
+export const logError = (message: string, once?: boolean, ...args: unknown[]) =>
 	printMessage('error', message, once, args);
-export const dir = (message: string, once?: boolean, ...args: unknown[]) =>
+
+export const logDir = (message: string, once?: boolean, ...args: unknown[]) =>
 	printMessage('dir', message, once, args);

@@ -2,7 +2,8 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 
-	import { error } from '$lib/logs';
+	import { logError } from '$lib/logs';
+	import { errorToast } from '$lib/toast';
 
 	import type { PageData } from './$types';
 
@@ -13,7 +14,8 @@
 	$: {
 		if (browser && character) {
 			if (!character.id) {
-				error('Invalid Character', false, { character });
+				logError('Invalid Character', false, { character });
+				errorToast('Error importing Character, please try again!');
 			} else {
 				goto(`/characters/${character.id}/info`);
 			}

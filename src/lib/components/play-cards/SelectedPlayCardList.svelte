@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+
 	import type { PlayCard, PlayCards } from '$lib/db';
 	import { getIndex, getOthers } from '$lib/play-cards';
 	import SelectedPlayCard from '$lib/components/play-cards/SelectedPlayCard.svelte';

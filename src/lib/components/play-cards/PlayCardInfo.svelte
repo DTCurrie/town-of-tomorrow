@@ -3,14 +3,14 @@
 	import classNames from 'classnames';
 
 	import type { PlayCard } from '$lib/db';
+	import { jsonToData } from '$lib/export';
+	import { logError } from '$lib/logs';
 	import { getJobColorClass } from '$lib/play-cards';
+	import { errorToast, successToast } from '$lib/toast';
 
 	import { deletePlayCard } from '$lib/api/play-cards';
 
 	import Button from '$lib/elements/Button.svelte';
-	import { error } from '$lib/logs';
-	import { jsonToData } from '$lib/export';
-	import GearCard from '../gear/GearCard.svelte';
 
 	export let playCard: PlayCard | undefined;
 
@@ -26,11 +26,12 @@
 	const confirmDelete = async () => {
 		if (playCard && playCard.id !== undefined) {
 			try {
+				await deletePlayCard(playCard.id);
+				removed();
 			} catch (err) {
-				error('Error deleting Play Card', false, { playCard, err });
+				logError('Error deleting Play Card', false, { playCard, err });
+				errorToast('Error deleting Play Card, please try again!');
 			}
-			await deletePlayCard(playCard.id);
-			removed();
 		}
 	};
 
@@ -39,8 +40,15 @@
 
 		if (data) {
 			const url = `${location.origin}/play-cards/import?data=${data}`;
-			await navigator.clipboard.writeText(url);
-			await tick();
+
+			try {
+				await navigator.clipboard.writeText(url);
+				await tick();
+				successToast(`Copied import link for ${playCard?.name}`);
+			} catch (err) {
+				logError('Error copying to clipboard', false, { url });
+				errorToast('Error copying import link, please try again!');
+			}
 		}
 	};
 </script>
@@ -117,7 +125,7 @@
 								Remove
 							</Button>
 							<Button color="cyan" classes="w-40" on:click={() => exportPlayCard()}>
-								Export Play Card
+								Copy Import Link
 							</Button>
 						{/if}
 					</div>

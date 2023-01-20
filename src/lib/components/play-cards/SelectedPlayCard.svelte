@@ -1,7 +1,8 @@
 <script lang="ts">
+	import classNames from 'classnames';
+
 	import type { PlayCard } from '$lib/db';
 	import { getJobColorClass } from '$lib/play-cards';
-	import classNames from 'classnames';
 
 	export let playCard: PlayCard;
 

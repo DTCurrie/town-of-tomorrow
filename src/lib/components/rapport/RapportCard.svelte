@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Character, Rapport } from '$lib/db';
+	import type { Rapport } from '$lib/db';
 	import { rapportValues } from '$lib/rapport';
 	import classNames from 'classnames';
 

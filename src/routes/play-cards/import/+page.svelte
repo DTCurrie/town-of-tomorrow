@@ -2,7 +2,8 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 
-	import { error } from '$lib/logs';
+	import { logError } from '$lib/logs';
+	import { errorToast } from '$lib/toast';
 
 	import type { PageData } from './$types';
 
@@ -14,7 +15,8 @@
 	$: {
 		if (browser && playCard) {
 			if (!playCard.id) {
-				error('Invalid Play Card', false, { playCard });
+				logError('Invalid Play Card', false, { playCard });
+				errorToast('Error importing Play Card, please try again!');
 			} else {
 				$details = {
 					component: 'play-card-info',

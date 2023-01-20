@@ -7,7 +7,7 @@
 	export let faults: number;
 	export let readonly = false;
 
-	export let setMerits = (value: number) => dispatch('set-faults', value);
+	export let setFaults = (value: number) => dispatch('set-faults', value);
 </script>
 
 <label>
@@ -19,7 +19,7 @@
 				checked={(faults ?? 0) >= i + 1}
 				on:click|preventDefault={() => {
 					if (!readonly) {
-						setMerits(i + 1);
+						setFaults(i + 1);
 					}
 				}}
 				aria-label={`Set faults to ${i + 1}`}

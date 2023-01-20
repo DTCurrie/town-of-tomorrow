@@ -1,5 +1,6 @@
 <script lang="ts">
 	import classNames from 'classnames';
+	import SvelteToast from '@zerodevx/svelte-toast/SvelteToast.svelte';
 
 	import { page } from '$app/stores';
 
@@ -7,7 +8,6 @@
 
 	import AddPerson from '$lib/elements/icons/AddPerson.svelte';
 	import Chevron from '$lib/elements/icons/Chevron.svelte';
-	import People from '$lib/elements/icons/People.svelte';
 	import Avatar from '$lib/elements/Avatar.svelte';
 	import Pattern from '$lib/elements/Pattern.svelte';
 
@@ -190,4 +190,5 @@
 	>
 		<slot />
 	</main>
+	<SvelteToast />
 </div>
