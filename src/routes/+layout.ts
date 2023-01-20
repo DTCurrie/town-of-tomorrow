@@ -8,7 +8,7 @@ import { db } from '$lib/db';
 import type { LayoutLoad } from './$types';
 
 // export const prerender = true;
-export const trailingSlash = 'always';
+// export const trailingSlash = 'always';
 
 export const load = (async () => {
 	try {

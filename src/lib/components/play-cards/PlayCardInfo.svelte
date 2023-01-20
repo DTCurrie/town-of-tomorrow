@@ -2,6 +2,8 @@
 	import { createEventDispatcher, tick } from 'svelte';
 	import classNames from 'classnames';
 
+	import { base } from '$app/paths';
+
 	import type { PlayCard } from '$lib/db';
 	import { jsonToData } from '$lib/export';
 	import { logError } from '$lib/logs';
@@ -39,7 +41,7 @@
 		const data = jsonToData(playCard);
 
 		if (data) {
-			const url = `${location.origin}/play-cards/import?data=${data}`;
+			const url = `${base}/play-cards/import?data=${data}`;
 
 			try {
 				await navigator.clipboard.writeText(url);

@@ -3,6 +3,7 @@
 	import { DateTime } from 'luxon';
 
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	import { getJobColorClass } from '$lib/play-cards';
 
@@ -22,14 +23,14 @@
 		<Button
 			classes="w-full h-full min-h-[5rem] rounded-lg"
 			color="lime"
-			on:click={() => goto('/characters/create/')}
+			on:click={() => goto(`${base}/characters/create/`)}
 		>
 			Create Character
 		</Button>
 		{#each $characters as character (character.id)}
 			<button
 				class="flex flex-col w-full p-2 rounded-lg bg-white shadow group"
-				on:click={() => goto(`/characters/${character.id}/`)}
+				on:click={() => goto(`${base}/characters/${character.id}/`)}
 			>
 				<div class="flex flex-row">
 					<div

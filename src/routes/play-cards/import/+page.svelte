@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	import { logError } from '$lib/logs';
 	import { errorToast } from '$lib/toast';
@@ -24,7 +25,7 @@
 					index: 0
 				};
 
-				goto(`/play-cards/`);
+				goto(`${base}/play-cards/`);
 			}
 		}
 	}

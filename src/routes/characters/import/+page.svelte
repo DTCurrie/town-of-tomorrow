@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	import { logError } from '$lib/logs';
 	import { errorToast } from '$lib/toast';
@@ -17,7 +18,7 @@
 				logError('Invalid Character', false, { character });
 				errorToast('Error importing Character, please try again!');
 			} else {
-				goto(`/characters/${character.id}/info/`);
+				goto(`${base}/characters/${character.id}/info/`);
 			}
 		}
 	}
