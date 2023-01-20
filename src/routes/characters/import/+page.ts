@@ -12,10 +12,13 @@ import type { PageLoad } from './$types';
 
 export const load = (async ({ url }) => {
 	const data = browser && url.searchParams.get('data');
+	console.log('data', { data });
 
 	if (data) {
 		try {
 			const characterData = await dataToJson<Character>(data);
+			console.log('characterData', { characterData });
+
 			if (characterData) {
 				delete characterData.id;
 				const id =
@@ -25,10 +28,12 @@ export const load = (async ({ url }) => {
 					id: parseInt(id.toString(), 10)
 				};
 
+				console.log('character', { character });
 				return { character };
 			}
-		} catch (error) {
-			logError('Error importing Character', false, { data, url, error });
+		} catch (err) {
+			logError('Error importing Character', false, { data, url, error: err });
+			throw error(500, 'Invalid Character data');
 		}
 	}
 
