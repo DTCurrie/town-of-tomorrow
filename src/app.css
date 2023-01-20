@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-  :root {
-    --toastContainerTop: auto;
-    --toastContainerRight: 0.5rem;
-    --toastContainerBottom: 0.5rem;
-    --toastContainerLeft: auto;
-  }
+:root {
+	--toastContainerTop: auto;
+	--toastContainerRight: 0.5rem;
+	--toastContainerBottom: 0.5rem;
+	--toastContainerLeft: auto;
+}
 
 body {
 	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
