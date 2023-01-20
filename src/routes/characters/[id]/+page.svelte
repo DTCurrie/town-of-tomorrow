@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 
 	import type { PageData } from './$types';
@@ -12,7 +11,7 @@
 		const hasPath =
 			path === 'info' || path === 'play-cards' || path === 'gear' || path === 'rapport';
 		if (!hasPath) {
-			goto(`${base}/characters/${data.id}/info/`);
+			goto(`/characters/${data.id}/info/`);
 		}
 	}
 </script>

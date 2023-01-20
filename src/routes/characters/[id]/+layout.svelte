@@ -3,7 +3,6 @@
 	import classNames from 'classnames';
 
 	import { goto } from '$app/navigation';
-	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 
 	import type { Gear, PlayCard, Rapport } from '$lib/db';
@@ -51,14 +50,14 @@
 
 	$: tab = $page.url.pathname.split('/').reverse()[0];
 
-	const selectTab = (tab: string) => goto(`${base}/characters/${data.id}/${tab}/`);
+	const selectTab = (tab: string) => goto(`/characters/${data.id}/${tab}/`);
 	const closeDetails = () => ($details = undefined);
 
 	$: exportCharacter = async () => {
 		const data = jsonToData($character);
 
 		if (data) {
-			const url = `${base}/characters/import?data=${data}`;
+			const url = `${$page.url.origin}/characters/import?data=${data}`;
 
 			try {
 				await navigator.clipboard.writeText(url);
@@ -84,7 +83,7 @@
 						try {
 							await deleteCharacter($character?.id);
 							successToast(`Removed ${$character?.name}`);
-							goto(`${base}/`);
+							goto(`/`);
 						} catch (error) {
 							logError('Error deleting Character', false, { character });
 							errorToast('Error deleting Character, please try again!');

@@ -2,7 +2,7 @@
 	import { createEventDispatcher, tick } from 'svelte';
 	import classNames from 'classnames';
 
-	import { base } from '$app/paths';
+	import { page } from '$app/stores';
 
 	import type { PlayCard } from '$lib/db';
 	import { jsonToData } from '$lib/export';
@@ -24,7 +24,6 @@
 	const dispatch = createEventDispatcher();
 
 	let removing = false;
-
 	const confirmDelete = async () => {
 		if (playCard && playCard.id !== undefined) {
 			try {
@@ -41,7 +40,7 @@
 		const data = jsonToData(playCard);
 
 		if (data) {
-			const url = `${base}/play-cards/import?data=${data}`;
+			const url = `${$page.url.origin}/play-cards/import?data=${data}`;
 
 			try {
 				await navigator.clipboard.writeText(url);

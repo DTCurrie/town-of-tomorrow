@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { base } from '$app/paths';
 
 	import { createCharacter } from '$lib/api/characters';
 
@@ -196,7 +195,7 @@
 
 			if (id >= 0) {
 				successToast(`Created ${name}`);
-				goto(`${base}/characters/${id}/`);
+				goto(`/characters/${id}/`);
 			} else {
 				throw new Error('Invalid ID');
 			}
