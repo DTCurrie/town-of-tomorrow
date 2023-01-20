@@ -11,7 +11,7 @@
 		const hasPath =
 			path === 'info' || path === 'play-cards' || path === 'gear' || path === 'rapport';
 		if (!hasPath) {
-			goto(`/characters/${data.id}/info`);
+			goto(`/characters/${data.id}/info/`);
 		}
 	}
 </script>

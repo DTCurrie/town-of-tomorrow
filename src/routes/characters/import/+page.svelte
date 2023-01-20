@@ -17,7 +17,7 @@
 				logError('Invalid Character', false, { character });
 				errorToast('Error importing Character, please try again!');
 			} else {
-				goto(`/characters/${character.id}/info`);
+				goto(`/characters/${character.id}/info/`);
 			}
 		}
 	}

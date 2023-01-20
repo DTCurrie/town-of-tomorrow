@@ -7,6 +7,9 @@ import { db } from '$lib/db';
 
 import type { LayoutLoad } from './$types';
 
+// export const prerender = true;
+export const trailingSlash = 'always';
+
 export const load = (async () => {
 	try {
 		const characters = liveQuery(async () => (browser ? await db.characters.toArray() : []));

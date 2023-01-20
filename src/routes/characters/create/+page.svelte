@@ -195,7 +195,7 @@
 
 			if (id >= 0) {
 				successToast(`Created ${name}`);
-				goto(`/characters/${id}`);
+				goto(`/characters/${id}/`);
 			} else {
 				throw new Error('Invalid ID');
 			}

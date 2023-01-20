@@ -50,7 +50,7 @@
 
 	$: tab = $page.url.pathname.split('/').reverse()[0];
 
-	const selectTab = (tab: string) => goto(`/characters/${data.id}/${tab}`);
+	const selectTab = (tab: string) => goto(`/characters/${data.id}/${tab}/`);
 	const closeDetails = () => ($details = undefined);
 
 	$: exportCharacter = async () => {

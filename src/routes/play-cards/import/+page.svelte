@@ -24,7 +24,7 @@
 					index: 0
 				};
 
-				goto(`/play-cards`);
+				goto(`/play-cards/`);
 			}
 		}
 	}

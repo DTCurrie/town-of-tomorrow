@@ -11,7 +11,7 @@ import { createCharacter } from '$lib/api/characters';
 import type { PageLoad } from './$types';
 
 export const load = (async ({ url }) => {
-	const data = url.searchParams.get('data');
+	const data = browser && url.searchParams.get('data');
 
 	if (data) {
 		try {
