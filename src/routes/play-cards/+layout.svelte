@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { PlayCard } from '$lib/db';
+	import { logError } from '$lib/logs';
+	import { successToast } from '$lib/toast';
 
 	import { createPlayCard } from '$lib/api/play-cards';
 
@@ -8,8 +10,6 @@
 	import Details from '$lib/components/Details.svelte';
 
 	import type { PageData } from './$types';
-	import { successToast } from '$lib/toast';
-	import { logError } from '$lib/logs';
 
 	export let data: PageData;
 
@@ -23,7 +23,11 @@
 	{#if $details}
 		<div class="flex p-2 w-full h-full">
 			{#if $details.component === 'play-card-info'}
-				<PlayCardInfo bind:playCard showActions={playCard?.id !== undefined} />
+				<PlayCardInfo
+					bind:playCard
+					showActions={playCard?.id !== undefined}
+					on:removed={() => ($details = undefined)}
+				/>
 			{:else if $details.component === 'play-card-create'}
 				<NewPlayCard
 					on:created={async ({ detail }) => {

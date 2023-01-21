@@ -26,6 +26,13 @@
 		>
 			Create Character
 		</Button>
+		<Button
+			classes="w-full h-full min-h-[5rem] rounded-lg"
+			color="cyan"
+			on:click={() => goto(`/characters/import/`)}
+		>
+			Import Character
+		</Button>
 		{#each $characters as character (character.id)}
 			<button
 				class="flex flex-col w-full p-2 rounded-lg bg-white shadow group"

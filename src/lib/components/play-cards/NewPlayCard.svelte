@@ -54,12 +54,27 @@
 			return (status = 'Enter your first Bonus question!');
 		}
 
+		let examples = newPlayCard.bonusExamples[0].split(',');
+		if (examples.length !== 3 || examples.some((v) => !v)) {
+			return (status = 'Enter three examples for your first Bonus question!');
+		}
+
 		if (!newPlayCard.bonusQuestions[1]) {
 			return (status = 'Enter your second Bonus question!');
 		}
 
+		examples = newPlayCard.bonusExamples[1].split(',');
+		if (examples.length !== 3 || examples.some((v) => !v)) {
+			return (status = 'Enter three examples for your second Bonus question!');
+		}
+
 		if (!newPlayCard.bonusQuestions[2]) {
 			return (status = 'Enter your third Bonus question!');
+		}
+
+		examples = newPlayCard.bonusExamples[2].split(',');
+		if (examples.length !== 3 || examples.some((v) => !v)) {
+			return (status = 'Enter three examples for your third Bonus question!');
 		}
 
 		if (!newPlayCard.unlockables[0].name) {
@@ -100,7 +115,13 @@
 		job: newPlayCardJob,
 		bonuses: ['', '', ''],
 		bonusQuestions: newPlayCardBonusQuestions.map((v) => v.trim()),
-		bonusExamples: newPlayCardBonusExamples.map((v) => v.trim()),
+		bonusExamples: newPlayCardBonusExamples.map((v) =>
+			v
+				.split(',')
+				.map((e) => e.trim())
+				.join(', ')
+				.trim()
+		),
 		unlockables: newPlayCardUnlockables.map((v) => ({
 			...v,
 			name: v.name.trim(),
@@ -180,13 +201,14 @@
 								/>
 							</label>
 							<label class="w-full ">
-								<p>Answer Examples (Optional):</p>
+								<p>Answer Examples:</p>
 								<p class="text-sm text-gray-700 italic" />
 								<TextInput
 									bind:value={newPlayCardBonusExamples[i]}
 									placeholder="something, some other thing, my specific thing"
 									aria-label="Examples for Bonus question #{i}"
 									maxlength="80"
+									required
 								/>
 							</label>
 						</li>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	import { standardPlayCards } from '$lib/play-cards';
 
 	import PlayCardCard from '$lib/components/play-cards/PlayCardCard.svelte';
@@ -31,6 +33,13 @@
 						})}
 				>
 					Create Play Card
+				</Button>
+				<Button
+					classes="w-full h-full min-h-[10.375rem] rounded-lg"
+					color="cyan"
+					on:click={() => goto('/play-cards/import/')}
+				>
+					Import Play Card
 				</Button>
 				{#each playCards as card}
 					<PlayCardCard
