@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
+
 	import type { Character, Weapon } from '$lib/db';
 	import { logError } from '$lib/logs';
 	import { errorToast, successToast } from '$lib/toast';
@@ -15,6 +17,11 @@
 	export let index: number;
 	export let removing: boolean = false;
 	export let editing: boolean = false;
+
+	export let edited = () => dispatch('edited', newWeapon);
+	export let removed = () => dispatch('removed');
+
+	const dispatch = createEventDispatcher();
 
 	let weaponName = '';
 	let weaponRating = 0;
@@ -37,6 +44,8 @@
 		try {
 			await updateWeapon(character, newWeapon, index);
 			successToast(`Updated ${newWeapon.name}!`);
+			edited();
+			editing = false;
 		} catch (error) {
 			logError('Error updating Weapon', false, { weapon, newWeapon, character, index });
 			errorToast('Error updating Weapon, please try again!');
@@ -47,6 +56,7 @@
 		try {
 			await removeWeapon(character, index);
 			successToast(`Removed ${weapon?.name}!`);
+			removed();
 		} catch (error) {
 			logError('Error removing Weapon', false, { weapon, newWeapon, character, index });
 			errorToast('Error removing Weapon, please try again!');
@@ -92,7 +102,7 @@
 					<div class="flex w-full h-full">
 						<Textarea
 							bind:value={weaponDescription}
-							classes="h-full border-0 overflow-auto whitespace-spaces"
+							classes="h-full min-h-[10rem] border-0 overflow-auto whitespace-spaces"
 							maxlength="240"
 							placeholder="Description"
 						/>

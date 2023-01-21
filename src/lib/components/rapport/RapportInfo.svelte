@@ -1,7 +1,8 @@
 <script lang="ts">
 	import classNames from 'classnames';
+	import { createEventDispatcher } from 'svelte';
 
-	import type { Character, Rapport, RapportValue } from '$lib/db';
+	import type { Character, Rapport } from '$lib/db';
 	import { rapportValues } from '$lib/rapport';
 
 	import { updateRapport, removeRapport } from '$lib/api/characters';
@@ -17,6 +18,11 @@
 	export let index: number;
 	export let removing: boolean = false;
 	export let editing: boolean = false;
+
+	export let edited = () => dispatch('edited', newRapport);
+	export let removed = () => dispatch('removed');
+
+	const dispatch = createEventDispatcher();
 
 	let rapportName = '';
 	let rapportValue = 0;
@@ -42,6 +48,8 @@
 		try {
 			await updateRapport(character, newRapport, index);
 			successToast(`Updated ${newRapport.name}!`);
+			edited();
+			editing = false;
 		} catch (error) {
 			logError('Error updating Rapport', false, { rapport, newRapport, character, index });
 			errorToast('Error updating Rapport, please try again!');
@@ -52,6 +60,7 @@
 		try {
 			await removeRapport(character, index);
 			successToast(`Removed ${rapport?.name}!`);
+			removed();
 		} catch (error) {
 			logError('Error removing Rapport', false, { rapport, character, index });
 			errorToast('Error removing Rapport, please try again!');
@@ -107,7 +116,7 @@
 					<div class="flex w-full h-full">
 						<Textarea
 							bind:value={rapportDescription}
-							classes="h-full border-0 overflow-auto whitespace-spaces"
+							classes="h-full min-h-[10rem] border-0 overflow-auto whitespace-spaces"
 							maxlength="240"
 							placeholder="Description"
 						/>
@@ -189,7 +198,7 @@
 				<Button
 					classes="w-20 ml-auto"
 					color="rose"
-					on:click={() => (removing ? remove : (removing = true))}
+					on:click={() => (removing ? remove() : (removing = true))}
 				>
 					{#if removing}
 						Confirm

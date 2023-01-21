@@ -36,9 +36,9 @@
 	$: details = data.details;
 
 	$: index = $details?.index ?? -1;
-	$: gear = $details && ($details.data as Gear);
-	$: playCard = $details && ($details.data as PlayCard);
-	$: rapport = $details && ($details.data as Rapport);
+	$: gear = $details?.data as Gear;
+	$: playCard = $details?.data as PlayCard;
+	$: rapport = $details?.data as Rapport;
 	$: addPlayCard = {
 		others: (($details?.data as PlayCardAddData)?.others ?? [
 			undefined,
@@ -168,17 +168,41 @@
 		{#if $details}
 			<div class="flex p-2 w-full h-full">
 				{#if $details.component === 'gear-info'}
-					<GearInfo bind:character={$character} bind:gear {index} />
+					<GearInfo
+						character={$character}
+						bind:gear
+						{index}
+						on:edited={({ detail }) => (gear = detail)}
+						on:removed={() => closeDetails()}
+					/>
 				{:else if $details.component === 'weapon-info'}
-					<WeaponInfo bind:character={$character} bind:weapon={gear} {index} />
+					<WeaponInfo
+						character={$character}
+						bind:weapon={gear}
+						{index}
+						on:edited={({ detail }) => (gear = detail)}
+						on:removed={() => closeDetails()}
+					/>
 				{:else if $details.component === 'armor-info'}
-					<ArmorInfo bind:character={$character} bind:armor={gear} {index} />
+					<ArmorInfo
+						character={$character}
+						bind:armor={gear}
+						{index}
+						on:edited={({ detail }) => (gear = detail)}
+						on:removed={() => closeDetails()}
+					/>
 				{:else if $details.component === 'rapport-info'}
-					<RapportInfo bind:character={$character} bind:rapport {index} />
+					<RapportInfo
+						character={$character}
+						bind:rapport
+						{index}
+						on:edited={({ detail }) => (rapport = detail)}
+						on:removed={() => closeDetails()}
+					/>
 				{:else if $details.component === 'play-card-info'}
 					<SelectedPlayCardInfo
 						bind:playCard
-						bind:character={$character}
+						character={$character}
 						index={getIndex(index)}
 						showName={true}
 						showUnlocked
@@ -190,8 +214,8 @@
 					<PlayCardInput
 						others={addPlayCard.others}
 						bind:playCard={addPlayCard.selected}
-						on:saved={({ detail }) => {
-							updatePlayCard($character, detail, getIndex(index));
+						on:saved={async ({ detail }) => {
+							await updatePlayCard($character, detail, getIndex(index));
 							closeDetails();
 						}}
 					>

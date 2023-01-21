@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
+
 	import type { Character, Armor } from '$lib/db';
 	import { logError } from '$lib/logs';
 	import { errorToast, successToast } from '$lib/toast';
@@ -15,6 +17,11 @@
 	export let index: number;
 	export let removing: boolean = false;
 	export let editing: boolean = false;
+
+	export let edited = () => dispatch('edited', newArmor);
+	export let removed = () => dispatch('removed');
+
+	const dispatch = createEventDispatcher();
 
 	let pieceName = '';
 	let pieceRating = 0;
@@ -37,6 +44,8 @@
 		try {
 			await updateArmor(character, newArmor, index);
 			successToast(`Updated ${newArmor.name}!`);
+			edited();
+			editing = false;
 		} catch (error) {
 			logError('Error updating Armor', false, { armor, newArmor, character, index });
 			errorToast('Error updating Armor, please try again!');
@@ -47,6 +56,7 @@
 		try {
 			await removeArmor(character, index);
 			successToast(`Removed ${armor?.name}!`);
+			removed();
 		} catch (error) {
 			logError('Error removing Armor', false, { armor, newArmor, character, index });
 			errorToast('Error removing Armor, please try again!');
@@ -92,7 +102,7 @@
 					<div class="flex w-full h-full">
 						<Textarea
 							bind:value={pieceDescription}
-							classes="h-full border-0 overflow-auto whitespace-spaces"
+							classes="h-full min-h-[10rem] border-0 overflow-auto whitespace-spaces"
 							maxlength="240"
 							placeholder="Description"
 						/>
