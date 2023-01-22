@@ -104,6 +104,7 @@
 			<ul class="relative flex text-sm font-medium text-center border-b border-black my-2">
 				<li class={classNames('relative ', tab === 'info' && 'z-10')}>
 					<button
+						aria-current={tab === 'info' ? 'page' : undefined}
 						class={classNames(
 							'rounded-t-lg bg-white w-16 md:w-24 py-3 shadow hover:underline',
 							tab === 'info' && 'font-bold underline shadow-lg'
@@ -120,7 +121,7 @@
 					)}
 				>
 					<button
-						aria-current="page"
+						aria-current={tab === 'play-cards' ? 'page' : undefined}
 						class={classNames(
 							'rounded-t-lg bg-white w-24 md:w-24 py-3 shadow hover:underline',
 							tab === 'play-cards' && 'font-bold underline shadow-lg'
@@ -134,9 +135,10 @@
 					class={classNames('relative max-md:-translate-x-4 md:-left-1', tab === 'gear' && 'z-10')}
 				>
 					<button
+						aria-current={tab === 'gear' ? 'page' : undefined}
 						class={classNames(
 							'rounded-t-lg bg-white w-16 md:w-24 py-3 shadow hover:underline',
-							tab === 'play-cards' && 'font-bold underline shadow-lg'
+							tab === 'gear' && 'font-bold underline shadow-lg'
 						)}
 						on:click|preventDefault={() => selectTab('gear')}
 					>
@@ -144,6 +146,7 @@
 					</button>
 				</li>
 				<li
+					aria-current={tab === 'rapport' ? 'page' : undefined}
 					class={classNames(
 						'relative max-md:-translate-x-5 md:-left-1',
 						tab === 'rapport' && 'z-10'
