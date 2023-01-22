@@ -103,7 +103,7 @@
 		<div class={classNames('flex flex-col w-full h-full rounded-lg shadow-lg', classes)}>
 			<div
 				class={classNames(
-					'flex flex-col h-full border-4 rounded-b-lg',
+					'flex flex-col h-full border-4 rounded-b-lg bg-white',
 					getJobColorClass('border', playCard.job)
 				)}
 			>
