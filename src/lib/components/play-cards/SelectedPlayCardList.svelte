@@ -39,13 +39,12 @@
 				<SelectedPlayCard {playCard} select={() => select(playCard, i)} />
 			</li>
 		{:else}
-			<div class="flex flex-col w-full h-full p-2 gap-2 rounded-lg bg-white shadow">
-				<Button classes="w-full h-full min-h-[3rem]" color="cyan" on:click={() => add(i)}>
-					Add Play Card
-				</Button>
-				<Button classes="w-full h-full min-h-[3rem]" color="lime" on:click={() => create(i)}>
-					Create Play Card
-				</Button>
+			<div class="flex flex-col w-full h-full p-2 justify-between rounded-lg bg-white shadow">
+				<p class="font-display font-bold">Play Card #{i + 1}</p>
+				<div class="flex flex-col w-full gap-2">
+					<Button classes="w-full" color="cyan" on:click={() => add(i)}>Add Play Card</Button>
+					<Button classes="w-full" color="lime" on:click={() => create(i)}>Create Play Card</Button>
+				</div>
 			</div>
 		{/if}
 	{/each}
